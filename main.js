@@ -151,20 +151,13 @@ function setupAuthLogic() {
             const email = ($('login-email').value || '').toString().trim().toLowerCase();
             const password = ($('login-password').value || '').toString();
 
-            // Debug: log what we're checking
-            console.log('Login attempt:', { email, password });
-            console.log('Stored users:', getLocalUsers());
-
             // Try server login first
             const result = await apiPost('/login', { email, password });
-            console.log('API result:', result);
             
             if (result === null) {
                 // Network error -> fallback to localStorage
                 const users = getLocalUsers();
-                console.log('Checking localStorage, users:', users);
                 const user = users.find(u => u.email === email && u.password === password);
-                console.log('Found user:', user);
                 if (user) {
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('isLoggedIn', 'true');
@@ -217,10 +210,6 @@ function setupAuthLogic() {
                 const newUser = { name, email, password };
                 users.push(newUser);
                 setLocalUsers(users);
-                
-                // Verify it was saved
-                console.log('Account saved:', newUser);
-                console.log('All users:', getLocalUsers());
                 
                 showMsg('signup-msg', 'Account created! Redirecting to login...', 'success');
                 setTimeout(() => { window.location.href = 'login.html'; }, 1500);
