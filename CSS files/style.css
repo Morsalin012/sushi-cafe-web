@@ -1,0 +1,55 @@
+/* GLOBAL STYLE FOR ALL PAGES */
+
+:root{
+  --bright-blue:#51e2f5;
+  --blue-green:#9df9ef;
+  --dusty-white:#edf756;
+  --pink-sand:#ffa8b6;
+  --text-dark:#071029;
+  --muted:#6b7280;
+  --glass:rgba(255,255,255,0.6);
+  --radius:16px;
+  --card-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+body{
+  font-family:Inter, sans-serif;
+  margin:0;
+  background:linear-gradient(180deg,#ffffff,#f6fbff);
+  color:var(--text-dark);
+}
+
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(8px);
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+
+nav a{
+  margin-left:18px;
+  text-decoration:none;
+  color:var(--text-dark);
+  font-weight:600;
+  padding:8px 14px;
+  border-radius:10px;
+}
+
+nav a.active,
+nav a:hover{
+  background:linear-gradient(90deg,var(--pink-sand),var(--bright-blue));
+  color:#04111a;
+}
+
+/* PAGE WRAPPER */
+.page{
+  max-width:1200px;
+  margin:0 auto;
+  padding:30px;
+}
