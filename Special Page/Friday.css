@@ -1,17 +1,26 @@
 h1{
-    color:rgb(232, 25, 25);
+    color:rgb(248, 244, 244);
     margin-bottom: 30px;
     font-size: 32px;
     font-weight: bold;
 }
 
     body{
-        
-      background-color:white;
-      text-align:center;
-      font-family: Arial, Helvetica, sans-serif;
-      padding: 50px;
-      color: rgb(100,0,0);
+    background: url("https://static.vecteezy.com/system/resources/previews/008/920/047/large_2x/dark-blue-grungy-abstract-cement-concrete-wall-texture-background-photo.jpg");
+    
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    /*background: linear-gradient(to bottom, #ffffff, #ffe6e6); 
+    text-align:center;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 50px;
+    color: rgb(100,0,0);*/
+
 
     }
 
@@ -24,8 +33,8 @@ h1{
 
     .card{
         text-align: center;
-        background-color:#f8f5f5;
-        box-shadow: 100px;
+        background: linear-gradient(to bottom right, #ffffff, #f3d6d6);
+        box-shadow: 0px 0px 12px rgba(0,0,0,0.15);
         border-radius: 16px;
         width:300px;
         padding:20px;
@@ -56,8 +65,8 @@ h1{
 
     form{
       text-align: left;
-      background-color:#f8f5f5;
-      box-shadow: 12px;
+      background:linear-gradient(to bottom right, #ffffff, #ffd6c9);
+      box-shadow: 0px 0px 12px rgba(0,0,0,0.15);
       border-radius: 16px;
       width:300px;
       padding:30px;
@@ -79,15 +88,15 @@ h1{
       font-size: 16px;
       border-radius: 10px;
       box-sizing: border-box;
-      border: #080808;
+      border:1px solid #b85c5c;
       margin-bottom: 15px;
       color: #000;
-      background-color: #fff;
+      background:linear-gradient(to right, #ffffff, #ffecec);
 
     }
 
     form button{
-      background: orangered;
+      background:  linear-gradient(to right, orangered, #ff7043);
       color:white;
       font-weight: bold;
       font-size: 20px;
@@ -104,7 +113,7 @@ h1{
     }
 
     form button:hover{
-      background: darkorange;
+      background: linear-gradient(to right, #ff8c42, darkorange);
     }
 
    
@@ -113,7 +122,7 @@ h1{
     padding: 15px;
     border: 2px solid chocolate;
     border-radius: 16px;
-    background-color: #f8f5f5;
+    background:linear-gradient(to bottom right, #ffffff, #fce0cc);
     margin-top: 15px;
 }
 
@@ -124,7 +133,7 @@ h1{
     font-size: 16px;
     border: 2px solid chocolate;
     border-radius: 10px;
-    background-color: #fff;
+    background: linear-gradient(to right, #ffffff, #ffe8d7);
     color: #000;
 }
 

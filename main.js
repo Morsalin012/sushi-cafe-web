@@ -151,7 +151,30 @@ document.addEventListener('DOMContentLoaded', function() {
       window.location.href = 'login.html';
         });
     }
+
+
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ===============================
 // Authentication Check Function
@@ -179,3 +202,34 @@ function getCurrentUser() {
 function isLoggedIn() {
   return localStorage.getItem('isLoggedIn') === 'true';
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
