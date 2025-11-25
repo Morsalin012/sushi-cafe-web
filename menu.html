@@ -13,25 +13,108 @@
 
 <body>
 
-<header>
-  <h2>Haru Sora Café</h2>
-  <nav>
-    <a href="home.html">Home</a>
-    <a href="menu.html" class="active">Menu</a>
-    <a href="about.html">About</a>
-    <a href="reserve.html">Reserve</a>
-    <a href="#" onclick="logout()">Logout</a>
-  </nav>
-</header>
+<section id="menu" class="menu">
+      <div class="menu-head">
+        <div>
+          <h2 style="font-size:22px;margin-bottom:6px">Our Menu</h2>
+          <p style="color:var(--muted)">Sushi, Rolls, Coffee, and Sweet Treats — thoughtfully sourced and crafted daily.</p>
+        </div>
+        <div class="cats">
+          <span class="cat">All</span>
+          <span class="cat">Sushi</span>
+          <span class="cat">Rolls</span>
+          <span class="cat">Coffee</span>
+          <span class="cat">Desserts</span>
+        </div>
+      </div>
 
-<div class="page">
-  <h1>Our Menu</h1>
-  <p>Sushi, rolls, coffee & desserts freshly prepared.</p>
+      <div class="menu-grid">
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1200&q=80" alt="Tuna Nigiri">
+          <h3>Tuna Nigiri <span class="tag">Chef's Pick</span></h3>
+          <p>Premium A-grade tuna slices on seasoned sushi rice. Simple, pristine, perfect.</p>
+          <div class="price">৳ 420</div>
+        </article>
 
-  <!-- You can paste your full menu-grid here -->
-</div>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=1200&q=80" alt="Dragon Roll">
+          <h3>Dragon Roll</h3>
+          <p>Eel, avocado, cucumber, topped with sweet glaze and sesame.</p>
+          <div class="price">৳ 520</div>
+        </article>
 
-<script src="logout.js"></script>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=80" alt="Sashimi Platter">
+          <h3>Sashimi Platter</h3>
+          <p>Assortment of sashimi selected by our chef — ideal for sharing.</p>
+          <div class="price">৳ 1150</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80" alt="Spicy Tuna Roll">
+          <h3>Spicy Tuna Roll</h3>
+          <p>Hand-rolled with chili mayo and scallions — a fan favourite.</p>
+          <div class="price">৳ 380</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80" alt="Vegetarian Roll">
+          <h3>Yasai Roll (Vegetarian)</h3>
+          <p>Seasonal vegetables, avocado, and sesame — bright and fresh.</p>
+          <div class="price">৳ 320</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80" alt="Crunch Roll">
+          <h3>Crunch Roll</h3>
+          <p>Tempura crunch, cucumber, and house special sauce.</p>
+          <div class="price">৳ 390</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" alt="Cappuccino">
+          <h3>Cappuccino</h3>
+          <p>Rich espresso balanced with silky steamed milk and microfoam.</p>
+          <div class="price">৳ 220</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80" alt="Mocha Latte">
+          <h3>Mocha Latte</h3>
+          <p>Chocolatey, bittersweet, and smooth — a café classic.</p>
+          <div class="price">৳ 260</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1523942839745-7848c839b661?auto=format&fit=crop&w=1200&q=80" alt="Matcha Latte">
+          <h3>Matcha Latte</h3>
+          <p>Stone-ground matcha whisked to order with steamed milk.</p>
+          <div class="price">৳ 240</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1200&q=80" alt="Mochi">
+          <h3>Sakura Mochi</h3>
+          <p>Sweet rice cake wrapped in salted cherry leaf — seasonal favorite.</p>
+          <div class="price">৳ 150</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1542827630-5b9b7b8b6b46?auto=format&fit=crop&w=1200&q=80" alt="Green Tea Cake">
+          <h3>Matcha Cheesecake</h3>
+          <p>Creamy, slightly tangy cheesecake with matcha infusion.</p>
+          <div class="price">৳ 280</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1509223197845-458d87318791?auto=format&fit=crop&w=1200&q=80" alt="Iced Coffee">
+          <h3>Iced Cold Brew</h3>
+          <p>Slow-steeped cold brew — bright, smooth, and refreshing.</p>
+          <div class="price">৳ 210</div>
+        </article>
+
+      </div>
+    </section>
 
 </body>
 </html>
