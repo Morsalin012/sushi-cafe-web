@@ -1,120 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sakura Mocha Rolls — Premium Sushi & Coffee Experience</title>
-  <link rel="stylesheet" href="CSS files/home.css">
-</head>
-<script>
-  // Check if user is logged in
-  if (localStorage.getItem('isLoggedIn') !== 'true') {
-     window.location.href = 'login.html';
-  }
-</script>
-<body>
-  <!-- Header -->
-  <header>
-    <div class="logo">🍣Sakura Mocha Rolls- Premium Sushi & Coffee Experience☕</div>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#menu">Menu</a>
-      <a href="#about">About</a>
+=======
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Haru Sora Café — Handcrafted Sushi & Artisan Coffee</title>
 
-      
-      <a href="#contact" class="btn">Reserve</a>
-      <a href="#" id="logoutBtn" class="btn">Logout</a>
-    </nav>
-  </header>
+  <style>
+    :root{
+      --bright-blue:#51e2f5;
+      --blue-green:#9df9ef;
+      --dusty-white:#edf756;
+      --pink-sand:#ffa8B6;
+>>>>>>> fb83914b70dec16f0bc40dd1e205887ef96b57b3
 
-  <!-- Hero Section -->
-  <section id="home" class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-text">
-      <h1>Premium Sushi & Coffee Experience</h1>
-      <p>Authentic Japanese sushi meets artisan coffee — only at Sakura Mocha Rolls.</p>
-      <a href="#menu" class="btn">Explore Menu</a>
+      --bg:#fff;
+      --muted:#6b7280;
+      --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
+      --glass: rgba(255,255,255,0.6);
+      --radius:14px;
+      --max-width:1200px;
+    }
 
-      <a href="#" id="FridaySpecialBtn" class="btn sushi-btn">Friday Special</a>
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#0f172a;
+      background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
 
+    .container{max-width:var(--max-width);margin:0 auto;padding:24px}
 
+    /* Header */
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;background:transparent;position:sticky;top:12px;z-index:40
+    }
 
-    </div>
-  </section>
+    /* Logo (SVG + text) */
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo-wrap{width:56px;height:56px;background:linear-gradient(135deg,var(--bright-blue),var(--blue-green));border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(81,226,245,0.18)}
+    .brand h1{font-size:18px;color:#071029;letter-spacing:0.2px}
+    .brand p{font-size:12px;color:var(--muted);margin-top:2px}
 
-  <!-- Menu Section -->
-  <section id="menu" class="menu">
-    <h2>Our Menu</h2>
-    <div class="menu-items">
-      <!-- Sushi -->
-      <div class="menu-item">
-        <img src="https://uncutrecipes.com/Images-Recipes-Japanese/Dragon-Roll.webp" alt="Dragon Roll">
-        <h3>Dragon Roll</h3>
-        <p>Eel, avocado, cucumber, and a touch of sweet sauce.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Sushi Platter">
-        <h3>Sushi Platter</h3>
-        <p>Assorted nigiri, sashimi, and rolls — ideal for sharing.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c" alt="Tuna Nigiri">
-        <h3>Tuna Nigiri</h3>
-        <p>Premium tuna slices on seasoned rice.</p>
-      </div>
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:#071029;text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600}
+    nav a.btn{background:linear-gradient(90deg,var(--pink-sand),var(--bright-blue));color:#061124}
+    nav a.ghost{background:transparent;color:var(--muted);font-weight:600}
 
-      <!-- Coffee -->
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93" alt="Cappuccino">
-        <h3>Cappuccino</h3>
-        <p>Rich espresso topped with silky milk foam.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348" alt="Mocha Latte">
-        <h3>Mocha Latte</h3>
-        <p>A chocolatey delight with espresso and steamed milk.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1523942839745-7848c839b661" alt="Matcha Latte">
-        <h3>Matcha Latte</h3>
-        <p>Earthy Japanese green tea blended with milk.</p>
-      </div>
+    /* HERO */
+    .hero{
+      margin-top:8px;border-radius:16px;overflow:hidden;position:relative;background:#f8fbff;
+      display:grid;grid-template-columns:1fr 480px;gap:24px;align-items:center;padding:32px
+    }
 
+    /* left: text */
+    .hero-left{padding:18px}
+    .eyebrow{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,var(--blue-green),var(--bright-blue));color:#04202a;font-weight:700;font-size:13px;margin-bottom:12px}
+    .hero-title{font-size:40px;line-height:1.02;margin-bottom:12px}
+    .hero-sub{color:var(--muted);margin-bottom:18px}
+    .hero-cta{display:flex;gap:12px}
+    .hero-cta a{padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,var(--bright-blue),var(--blue-green));color:#04111a}
+    .btn-secondary{background:transparent;border:2px solid rgba(7,18,41,0.06);color:var(--muted)}
 
-      <div class="menu-item">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9DuU6xs-GRMKka2lN21Xpy0LuQSb3lFyDUg&s" alt="Edomae Sushi">
-        <h3>Matcha Latte</h3>
-        <p>Traditional Tokyo master sushi craftsmanship.</p>
-      </div>
+    /* right: collage */
+    .hero-collage{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .collage-item{border-radius:12px;overflow:hidden;box-shadow:var(--card-shadow);height:150px}
+    .collage-item img{width:100%;height:100%;object-fit:cover;display:block}
 
+    /* Menu styles (kept here just in case you merge later) */
+    .menu{margin-top:34px;padding:28px;border-radius:12px;background:linear-gradient(180deg, rgba(13,30,50,0.02), rgba(255,255,255,0.6));box-shadow:var(--card-shadow)}
+    .menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:linear-gradient(180deg,var(--glass),#ffffff);border-radius:12px;padding:14px;border:1px solid rgba(7,18,41,0.04)}
+    .card img{width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+    .card h3{font-size:18px;margin-bottom:6px}
+    .card p{font-size:14px;color:var(--muted);margin-bottom:10px}
+    .price{font-weight:800;color:#041124}
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;font-size:12px;background:linear-gradient(90deg,var(--pink-sand),var(--bright-blue));color:#041124;margin-left:8px}
 
-    </div>
-  </section>
+    /* Categories bar */
+    .cats{display:flex;gap:10px;margin-bottom:16px}
+    .cat{padding:8px 12px;border-radius:999px;background:rgba(7,18,41,0.03);font-weight:700;color:var(--muted)}
 
-  <!-- About -->
-  <section id="about" class="about">
-    <h2>About Us</h2>
-    <p>Sakura Mocha Rolls combines two passions — handcrafted sushi and specialty coffee. From traditional rolls to artisan brews, we bring harmony to every plate and cup.</p>
-  </section>
+    /* Footer */
+    footer{margin-top:28px;text-align:center;padding:22px;border-radius:12px;color:var(--muted);font-size:14px}
 
-  <!-- Contact -->
-  <section id="contact" class="contact">
-    <h2>Contact & Reservations</h2>
-    <p>📍 123 Sushi & Coffee Street, Dhaka<br>📞 +880 123 456 789</p>
-    <a href="tel:+880123456789" class="btn">Call Now</a>
-  </section>
+    /* Responsive */
+    @media(max-width:1000px){
+      .hero{grid-template-columns:1fr;}
+      .menu-grid{grid-template-columns:repeat(2,1fr)}
+      .container{padding:18px}
+    }
+    @media(max-width:640px){
+      nav{display:none}
+      .menu-grid{grid-template-columns:1fr}
+      .hero-title{font-size:28px}
+      .collage-item{height:110px}
+    }
+  </style>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Sakura Mocha Rolls — Premium Sushi & Coffee Experience</p>
-  </footer>
   <script>
-    // Logout functionality
-    document.getElementById('logoutBtn').addEventListener('click', function() {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = '../Login-SignUp page/login.html';
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <div class="brand">
+        <div class="logo-wrap" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#51e2f5"/>
+                <stop offset="1" stop-color="#9df9ef"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.95"/>
+            <g transform="translate(4,4)" fill="#fff">
+              <path d="M28 8c2 2 4 3 6 3s3-1 3-3-1-3-3-3-4 1-6 3z"/>
+              <path d="M8 28c2-2 3-4 3-6s-1-3-3-3-3 1-3 3 1 4 3 6z"/>
+              <path d="M48 28c-2-2-3-4-3-6s1-3 3-3 3 1 3 3-1 4-3 6z"/>
+            </g>
+            <path d="M17 45c6-7 19-9 27-4" stroke="#041124" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Haru Sora Café</h1>
+          <p>Handcrafted Sushi · Artisan Coffee</p>
+        </div>
+      </div>
+
+      <nav>
+        <a href="home.html" class="ghost">Home</a>
+        <a href="menu.html" class="ghost">Menu</a>
+        <a href="#about" class="ghost">About</a>
+        <a href="#contact" class="btn">Reserve</a>
+        <a href="#" id="logoutBtn" class="btn">Logout</a>
+      </nav>
+    </header>
+
+    <section id="home" class="hero">
+      <div class="hero-left">
+        <span class="eyebrow">New — Seasonal Sakura Menu</span>
+        <h2 class="hero-title">Where Japanese tradition meets modern café craft.</h2>
+        <p class="hero-sub">Savor handcrafted sushi, small-batch brews, and seasonal delights in a calm, modern setting. Reserve a table or order for pickup.</p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="menu.html">Explore Menu</a>
+          <a class="btn-secondary" href="#contact">Reserve a Seat</a>
+        </div>
+      </div>
+
+      <div class="hero-collage" aria-hidden="true">
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80" alt="Sushi Platter"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" alt="Mocha Latte"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=1200&q=80" alt="Chef preparing sushi"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1523942839745-7848c839b661?auto=format&fit=crop&w=1200&q=80" alt="Matcha Latte"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // Logout Logic
+    document.getElementById('logoutBtn').addEventListener('click', function(e){
+      e.preventDefault();
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userName');
-    window.location.href = 'login.html';
+      window.location.href = '../Login-SignUp page/login.html';
     });
   </script>
 </body>
