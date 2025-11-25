@@ -1,181 +1,298 @@
-// ===============================
-// Tiny DOM helpers
-// ===============================
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+// ============================================
+// Shared Utilities & Setup
+// ============================================
 
-// Initialize users array in localStorage if it doesn't exist
-if (!localStorage.getItem('users')) {
-  localStorage.setItem('users', JSON.stringify([]));
+const apiKey = ""; // API Key for Gemini (populated by environment)
+
+// DOM Helpers
+const $ = (id) => document.getElementById(id);
+const $$ = (selector) => document.querySelectorAll(selector);
+
+// LocalStorage Helpers
+const getLocalUsers = () => JSON.parse(localStorage.getItem('users') || '[]');
+const setLocalUsers = (users) => localStorage.setItem('users', JSON.stringify(users));
+
+// Global Init on DOM Load
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. Initialize Icons (Lucide)
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    // 2. Generate Background Graffiti Pattern
+    const patternContainer = document.getElementById('bg-pattern');
+    if (patternContainer) {
+        const icons = ['coffee', 'utensils-crossed', 'fish', 'bean', 'soup', 'cup-soda', 'candy-cane', 'ice-cream'];
+        for(let i=0; i<90; i++) {
+            const iconName = icons[Math.floor(Math.random() * icons.length)];
+            const size = Math.floor(Math.random() * 20) + 18; 
+            const rotation = Math.floor(Math.random() * 360);
+            
+            const el = document.createElement('i');
+            el.setAttribute('data-lucide', iconName);
+            el.classList.add('mini-icon');
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+            el.style.transform = `rotate(${rotation}deg)`;
+            
+            patternContainer.appendChild(el);
+        }
+        // Re-run icon creation for the new elements
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    // 3. Attach Global Event Listeners (Password Toggle, View Switching)
+    setupPasswordToggles();
+    setupAuthLogic();
+    setupAILogic();
+    checkRedirects();
+});
+
+// ============================================
+// UI Functions
+// ============================================
+
+function togglePassword(inputId) {
+    const input = $(inputId);
+    if(input) {
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
 }
 
-// ===============================
-// Single DOMContentLoaded event listener
-// ===============================
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if user is already logged in and redirect from login/signup pages
-  if (window.location.pathname.includes('login.html') || 
-      window.location.pathname.includes('sign-up.html')) {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-      window.location.href = 'home.html';
-    }
-  }
-
-  // ===============================
-  // Password visibility toggles with SVG icons
-  // ===============================
-  $$('[data-toggle="visibility"]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const input = btn.parentElement.querySelector('input');
-        if (!input) return;
-
-      const showing = input.type === 'text';
-      input.type = showing ? 'password' : 'text';
-      btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
-      
-      // Toggle SVG icon for open/closed eye
-      const svg = btn.querySelector('svg');
-            if (svg) {
-        if (showing) {
-          svg.innerHTML = '<ellipse cx="12" cy="12" rx="8" ry="5"/><circle cx="12" cy="12" r="2.5"/>';
-          svg.setAttribute('stroke', '#888');
-        } else {
-          svg.innerHTML = '<ellipse cx="12" cy="12" rx="8" ry="5"/><path d="M4 4l16 16"/>';
-          svg.setAttribute('stroke', '#e05d5d');
-        }
+function setupPasswordToggles() {
+    // Attach to any button with class .toggle-password
+    $$('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // Find sibling input
+            const inputWrapper = btn.closest('.input-wrapper');
+            const input = inputWrapper.querySelector('input');
+            if (input) {
+                input.type = input.type === 'password' ? 'text' : 'password';
             }
         });
     });
+}
 
-  // ===============================
-  // Login Form Handler
-  // ===============================
-  const loginForm = $('#loginForm');
+function showMsg(elementId, text, type) {
+    const el = $(elementId);
+    if (!el) return;
+    el.textContent = text;
+    el.className = `message ${type}`;
+    el.style.display = 'block';
+}
+
+// Function to switch sub-views (Used in login.html mainly)
+window.switchView = function(viewId) {
+    $$('.view').forEach(el => el.classList.remove('active'));
+    $$('.message').forEach(el => { el.style.display = 'none'; el.textContent = ''; });
+    
+    const target = $(viewId);
+    if (target) {
+        target.classList.add('active');
+    }
+}
+
+// ============================================
+// Authentication Logic
+// ============================================
+
+function setupAuthLogic() {
+    
+    // LOGIN FORM
+    const loginForm = $('loginForm');
     if (loginForm) {
-    loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-      
-      const email = $('#login-email').value;
-      const password = $('#login-password').value;
-      const statusDiv = $('.status');
-      
-      // Check if user exists in localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const email = $('login-email').value;
+            const password = $('login-password').value;
+            const users = getLocalUsers();
+            
             const user = users.find(u => u.email === email && u.password === password);
 
             if (user) {
-        // Successful login
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', user.name);
-        
-        statusDiv.textContent = 'Login successful! Redirecting...';
-        statusDiv.style.color = '#4caf50';
-        
-        setTimeout(() => {
-          window.location.href = 'home.html';
-        }, 1000);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('isLoggedIn', 'true');
+                showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 800);
             } else {
-        // Failed login
-        statusDiv.textContent = 'Invalid email or password. Please try again.';
-        statusDiv.style.color = '#e05d5d';
+                showMsg('login-msg', 'Invalid email or password.', 'error');
             }
         });
     }
 
-  // ===============================
-  // Sign-up Form Handler
-  // ===============================
-  const signupForm = $('#signupForm');
+    // SIGNUP FORM
+    const signupForm = $('signupForm');
     if (signupForm) {
-    signupForm.addEventListener('submit', function(e) {
+        signupForm.addEventListener('submit', (e) => {
             e.preventDefault();
-      
-      const name = $('#name').value;
-      const email = $('#signup-email').value;
-      const password = $('#signup-password').value;
-      const confirmPassword = $('#signup-confirm-password').value;
-      const mismatchHint = $('#password-mismatch-hint');
-      const statusDiv = $('.status');
+            const name = $('signup-name').value;
+            const email = $('signup-email').value;
+            const password = $('signup-password').value;
+            const users = getLocalUsers();
 
-      // Check if passwords match
-            if (password !== confirmPassword) {
-        mismatchHint.style.display = 'block';
-        return false;
+            if (users.some(u => u.email === email)) {
+                showMsg('signup-msg', 'This email is already registered.', 'error');
+                return;
+            }
+
+            users.push({ name, email, password });
+            setLocalUsers(users);
+            
+            showMsg('signup-msg', 'Account created! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+            e.target.reset();
+        });
+    }
+
+    // FORGOT PASSWORD FORM (In login.html)
+    const forgotForm = $('forgotForm');
+    if (forgotForm) {
+        forgotForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = $('forgot-email').value;
+            const users = getLocalUsers();
+            if (users.some(u => u.email === email)) {
+                $('reset-email-display').textContent = email;
+                $('resetForm').dataset.email = email;
+                switchView('view-reset');
             } else {
-        mismatchHint.style.display = 'none';
+                showMsg('forgot-msg', 'No account found with that email.', 'error');
             }
-
-      // Check if user already exists
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const userExists = users.some(user => user.email === email);
-      
-      if (userExists) {
-        statusDiv.textContent = 'An account with this email already exists.';
-        statusDiv.style.color = '#e05d5d';
-        return false;
-            }
-
-      if (name && email && password.length >= 8) {
-        // Store user data
-        const newUser = { name, email, password };
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        // Show success message and redirect to login page
-        statusDiv.textContent = 'Account created successfully! Please log in.';
-        statusDiv.style.color = '#4caf50';
-        setTimeout(() => {
-          window.location.href = 'login.html';
-        }, 1500);
-      }
         });
     }
 
-  // ===============================
-  // Logout Functionality
-  // ===============================
-  const logoutBtn = $('#logoutBtn');
-    if (logoutBtn) {
-    logoutBtn.addEventListener('click', function(e) {
+    // RESET PASSWORD FORM (In login.html)
+    const resetForm = $('resetForm');
+    if (resetForm) {
+        resetForm.addEventListener('submit', (e) => {
             e.preventDefault();
-      
-      // Clear all user data
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userName');
-      
-      // Redirect to login page
-      window.location.href = 'login.html';
+            const email = e.target.dataset.email;
+            const newPass = $('reset-password').value;
+            let users = getLocalUsers();
+            const idx = users.findIndex(u => u.email === email);
+            
+            if (idx !== -1) {
+                users[idx].password = newPass;
+                setLocalUsers(users);
+                showMsg('reset-msg', 'Password updated!', 'success');
+                setTimeout(() => {
+                    $('forgotForm').reset();
+                    $('resetForm').reset();
+                    switchView('view-login');
+                }, 1500);
+            }
         });
     }
-});
 
-// ===============================
-// Authentication Check Function
-// (Call this at the top of protected pages)
-// ===============================
-function checkAuthentication() {
-  if (localStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = 'login.html';
-    return false;
-  }
-  return true;
+    // LOGOUT BUTTON (In home.html)
+    const logoutBtn = $('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+    }
 }
 
-// ===============================
-// Get Current User Info
-// ===============================
-function getCurrentUser() {
-  const userData = localStorage.getItem('currentUser');
-  return userData ? JSON.parse(userData) : null;
+function checkRedirects() {
+    const path = window.location.pathname;
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    // Protect Home Page
+    if (path.includes('home.html') && !isLoggedIn) {
+        window.location.href = 'login.html';
+    }
+
+    // Redirect Logged In Users away from Auth Pages
+    if ((path.includes('login.html') || path.includes('sign-up.html')) && isLoggedIn) {
+        // Optional: redirect to home if they are already logged in
+        // window.location.href = 'home.html'; 
+    }
+    
+    // Update Greeting on Home Page
+    if (path.includes('home.html') && isLoggedIn) {
+        const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        const greetingEl = $('home-greeting');
+        if (greetingEl && user.name) {
+            greetingEl.textContent = `Hello, ${user.name.split(' ')[0]}.`;
+        }
+    }
 }
 
-// ===============================
-// Check if User is Logged In
-// ===============================
-function isLoggedIn() {
-  return localStorage.getItem('isLoggedIn') === 'true';
+// ============================================
+// AI Logic (Gemini)
+// ============================================
+
+async function callGemini(promptText) {
+    if (!apiKey) {
+      alert("API Key is missing. This feature works in the preview environment.");
+      return "I'm sorry, I cannot connect to the kitchen right now.";
+    }
+
+    const systemPrompt = "You are an expert chef and barista at a high-end fusion cafe called 'Sushi & Mocha'. " +
+                         "Your goal is to suggest ONE specific sushi roll and ONE specific coffee/espresso drink pairing based on the user's mood or description. " +
+                         "Be elegant, poetic, and brief (max 2-3 sentences). Explain why the pairing works with their mood. " +
+                         "Format the output with Markdown, bolding the food items.";
+
+    const payload = {
+      contents: [{ parts: [{ text: promptText }] }],
+      systemInstruction: { parts: [{ text: systemPrompt }] }
+    };
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || "The chef is pondering...";
+    } catch (e) {
+      console.error(e);
+      return "The connection to the kitchen was lost.";
+    }
+}
+
+function setupAILogic() {
+    const aiForm = $('aiForm');
+    if (aiForm) {
+        aiForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const prompt = $('ai-prompt').value;
+            const resultDiv = $('ai-result');
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+
+            // UI Loading State
+            btn.disabled = true;
+            btn.innerHTML = 'Consulting the Chef<span class="loading-dots"></span>';
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<span style="color:var(--text-muted)">Thinking...</span>';
+
+            // Call API
+            const answer = await callGemini(prompt);
+
+            // Render result
+            if (typeof marked !== 'undefined') {
+                resultDiv.innerHTML = marked.parse(answer);
+            } else {
+                resultDiv.textContent = answer;
+            }
+            
+            // Reset UI
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        });
+    }
 }
