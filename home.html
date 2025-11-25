@@ -1,53 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Haru Sora Café — Full Menu</title>
-  <link rel="stylesheet" href="menu.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Haru Sora Café — Handcrafted Sushi & Artisan Coffee</title>
+
+  <!-- Color palette (from your request) -->
+  <style>
+    :root{
+      --bright-blue:#51e2f5;
+      --blue-green:#9df9ef;
+      --dusty-white:#edf756; /* as provided */
+      --pink-sand:#ffa8B6;
+
+      --bg:#fff;
+      --muted:#6b7280;
+      --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
+      --glass: rgba(255,255,255,0.6);
+      --radius:14px;
+      --max-width:1200px;
+    }
+
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#0f172a;
+      background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+
+    .container{max-width:var(--max-width);margin:0 auto;padding:24px}
+
+    /* Header */
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;background:transparent;position:sticky;top:12px;z-index:40
+    }
+
+    /* Logo (SVG + text) */
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo-wrap{width:56px;height:56px;background:linear-gradient(135deg,var(--bright-blue),var(--blue-green));border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(81,226,245,0.18)}
+    .brand h1{font-size:18px;color:#071029;letter-spacing:0.2px}
+    .brand p{font-size:12px;color:var(--muted);margin-top:2px}
+
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:#071029;text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600}
+    nav a.btn{background:linear-gradient(90deg,var(--pink-sand),var(--bright-blue));color:#061124}
+    nav a.ghost{background:transparent;color:var(--muted);font-weight:600}
+
+    /* HERO */
+    .hero{
+      margin-top:8px;border-radius:16px;overflow:hidden;position:relative;background:#f8fbff;
+      display:grid;grid-template-columns:1fr 480px;gap:24px;align-items:center;padding:32px
+    }
+
+    /* left: text */
+    .hero-left{padding:18px}
+    .eyebrow{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,var(--blue-green),var(--bright-blue));color:#04202a;font-weight:700;font-size:13px;margin-bottom:12px}
+    .hero-title{font-size:40px;line-height:1.02;margin-bottom:12px}
+    .hero-sub{color:var(--muted);margin-bottom:18px}
+    .hero-cta{display:flex;gap:12px}
+    .hero-cta a{padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,var(--bright-blue),var(--blue-green));color:#04111a}
+    .btn-secondary{background:transparent;border:2px solid rgba(7,18,41,0.06);color:var(--muted)}
+
+    /* right: collage */
+    .hero-collage{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .collage-item{border-radius:12px;overflow:hidden;box-shadow:var(--card-shadow);height:150px}
+    .collage-item img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* Menu */
+    .menu{margin-top:34px;padding:28px;border-radius:12px;background:linear-gradient(180deg, rgba(13,30,50,0.02), rgba(255,255,255,0.6));box-shadow:var(--card-shadow)}
+    .menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:linear-gradient(180deg,var(--glass),#ffffff);border-radius:12px;padding:14px;border:1px solid rgba(7,18,41,0.04)}
+    .card img{width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+    .card h3{font-size:18px;margin-bottom:6px}
+    .card p{font-size:14px;color:var(--muted);margin-bottom:10px}
+    .price{font-weight:800;color:#041124}
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;font-size:12px;background:linear-gradient(90deg,var(--pink-sand),var(--bright-blue));color:#041124;margin-left:8px}
+
+    /* Categories bar */
+    .cats{display:flex;gap:10px;margin-bottom:16px}
+    .cat{padding:8px 12px;border-radius:999px;background:rgba(7,18,41,0.03);font-weight:700;color:var(--muted)}
+
+    /* Footer */
+    footer{margin-top:28px;text-align:center;padding:22px;border-radius:12px;color:var(--muted);font-size:14px}
+
+    /* Responsive */
+    @media(max-width:1000px){
+      .hero{grid-template-columns:1fr;}
+      .menu-grid{grid-template-columns:repeat(2,1fr)}
+      .container{padding:18px}
+    }
+    @media(max-width:640px){
+      nav{display:none}
+      .menu-grid{grid-template-columns:1fr}
+      .hero-title{font-size:28px}
+      .collage-item{height:110px}
+    }
+  </style>
+
+  <!-- Simple client-side auth redirect (keeps your existing logic) -->
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = '../Login-SignUp page/login.html';
+    }
+  </script>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">Haru Sora Café</div>
-    <nav>
-      <a href="home.html">Home</a>
-      <a href="menu.html" class="active">Menu</a>
-      <a href="home.html#about">About</a>
-      <a href="home.html#contact">Contact</a>
-    </nav>
-  </header>
+  <div class="container">
 
-  <section class="hero">
-    <h1>Our Full Menu</h1>
-    <p>Explore all sushi, rolls, coffee, and seasonal desserts.</p>
-  </section>
+    <header>
+      <div class="brand">
+        <div class="logo-wrap" aria-hidden="true">
+          <!-- Inline SVG logo: cherry blossom + coffee swirl -->
+          <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#51e2f5"/>
+                <stop offset="1" stop-color="#9df9ef"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.95"/>
+            <!-- blossom petals -->
+            <g transform="translate(4,4)" fill="#fff">
+              <path d="M28 8c2 2 4 3 6 3s3-1 3-3-1-3-3-3-4 1-6 3z"/>
+              <path d="M8 28c2-2 3-4 3-6s-1-3-3-3-3 1-3 3 1 4 3 6z"/>
+              <path d="M48 28c-2-2-3-4-3-6s1-3 3-3 3 1 3 3-1 4-3 6z"/>
+            </g>
+            <!-- coffee swirl -->
+            <path d="M17 45c6-7 19-9 27-4" stroke="#041124" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Haru Sora Café</h1>
+          <p>Handcrafted Sushi · Artisan Coffee</p>
+        </div>
+      </div>
 
-  <section class="menu-grid">
-    <!-- Example menu cards -->
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80" />
-      <h3>Premium Sushi Platter</h3>
-      <p>Chef-selected sushi assortment.</p>
-    </div>
+      <nav>
+        <a href="#home" class="ghost">Home</a>
+        <a href="#menu" class="ghost">Menu</a>
+        <a href="#about" class="ghost">About</a>
+        <a href="#contact" class="btn">Reserve</a>
+        <a href="#" id="logoutBtn" class="btn">Logout</a>
+      </nav>
+    </header>
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=1200&q=80" />
-      <h3>Dragon Roll</h3>
-      <p>Eel, avocado, cucumber & sweet glaze.</p>
-    </div>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="hero-left">
+        <span class="eyebrow">New — Seasonal Sakura Menu</span>
+        <h2 class="hero-title">Where Japanese tradition meets modern café craft.</h2>
+        <p class="hero-sub">Savor handcrafted sushi, small-batch brews, and seasonal delights in a calm, modern setting. Reserve a table or order for pickup.</p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="#menu">Explore Menu</a>
+          <a class="btn-secondary" href="#contact">Reserve a Seat</a>
+        </div>
+      </div>
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" />
-      <h3>Mocha Latte</h3>
-      <p>Rich espresso with chocolate.</p>
-    </div>
+      <div class="hero-collage" aria-hidden="true">
+        <!-- Attractive, high-quality Unsplash images -->
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80" alt="Sushi Platter"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" alt="Mocha Latte"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=1200&q=80" alt="Chef preparing sushi"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1523942839745-7848c839b661?auto=format&fit=crop&w=1200&q=80" alt="Matcha Latte"></div>
+      </div>
+    </section>
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1200&q=80" />
-      <h3>Sakura Mochi</h3>
-      <p>Delicate cherry blossom dessert.</p>
-    </div>
-  </section>
+    <!-- MENU -->
+    <section id="menu" class="menu">
+      <div class="menu-head">
+        <div>
+          <h2 style="font-size:22px;margin-bottom:6px">Our Menu</h2>
+          <p style="color:var(--muted)">Sushi, Rolls, Coffee, and Sweet Treats — thoughtfully sourced and crafted daily.</p>
+        </div>
+        <div class="cats">
+          <span class="cat">All</span>
+          <span class="cat">Sushi</span>
+          <span class="cat">Rolls</span>
+          <span class="cat">Coffee</span>
+          <span class="cat">Desserts</span>
+        </div>
+      </div>
+
+      <div class="menu-grid">
+        <!-- Sushi -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1200&q=80" alt="Tuna Nigiri">
+          <h3>Tuna Nigiri <span class="tag">Chef's Pick</span></h3>
+          <p>Premium A-grade tuna slices on seasoned sushi rice. Simple, pristine, perfect.</p>
+          <div class="price">৳ 420</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=1200&q=80" alt="Dragon Roll">
+          <h3>Dragon Roll</h3>
+          <p>Eel, avocado, cucumber, topped with sweet glaze and sesame.</p>
+          <div class="price">৳ 520</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=80" alt="Sashimi Platter">
+          <h3>Sashimi Platter</h3>
+          <p>Assortment of sashimi selected by our chef — ideal for sharing.</p>
+          <div class="price">৳ 1150</div>
+        </article>
+
+        <!-- Rolls -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80" alt="Spicy Tuna Roll">
+          <h3>Spicy Tuna Roll</h3>
+          <p>Hand-rolled with chili mayo and scallions — a fan favourite.</p>
+          <div class="price">৳ 380</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80" alt="Vegetarian Roll">
+          <h3>Yasai Roll (Vegetarian)</h3>
+          <p>Seasonal vegetables, avocado, and sesame — bright and fresh.</p>
+          <div class="price">৳ 320</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80" alt="Crunch Roll">
+          <h3>Crunch Roll</h3>
+          <p>Tempura crunch, cucumber, and house special sauce.</p>
+          <div class="price">৳ 390</div>
+        </article>
+
+        <!-- Coffee -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" alt="Cappuccino">
+          <h3>Cappuccino</h3>
+          <p>Rich espresso balanced with silky steamed milk and microfoam.</p>
+          <div class="price">৳ 220</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80" alt="Mocha Latte">
+          <h3>Mocha Latte</h3>
+          <p>Chocolatey, bittersweet, and smooth — a café classic.</p>
+          <div class="price">৳ 260</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1523942839745-7848c839b661?auto=format&fit=crop&w=1200&q=80" alt="Matcha Latte">
+          <h3>Matcha Latte</h3>
+          <p>Stone-ground matcha whisked to order with steamed milk.</p>
+          <div class="price">৳ 240</div>
+        </article>
+
+        <!-- Desserts & Small Bites -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1200&q=80" alt="Mochi">
+          <h3>Sakura Mochi</h3>
+          <p>Sweet rice cake wrapped in salted cherry leaf — seasonal favorite.</p>
+          <div class="price">৳ 150</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1542827630-5b9b7b8b6b46?auto=format&fit=crop&w=1200&q=80" alt="Green Tea Cake">
+          <h3>Matcha Cheesecake</h3>
+          <p>Creamy, slightly tangy cheesecake with matcha infusion.</p>
+          <div class="price">৳ 280</div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1509223197845-458d87318791?auto=format&fit=crop&w=1200&q=80" alt="Iced Coffee">
+          <h3>Iced Cold Brew</h3>
+          <p>Slow-steeped cold brew — bright, smooth, and refreshing.</p>
+          <div class="price">৳ 210</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" style="margin-top:24px">
+      <div style="background:linear-gradient(180deg, rgba(157,249,239,0.15), rgba(81,226,245,0.04));padding:20px;border-radius:12px">
+        <h3>About Haru Sora</h3>
+        <p style="color:var(--muted);max-width:820px">Haru Sora ("Spring Sky") celebrates the union of traditional Japanese culinary craft and the warm, social culture of cafés. We roast small batches of coffee, source responsible seafood, and design seasonal menus that highlight delicate flavours and comforting textures.</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" style="margin-top:20px">
+      <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <h3>Contact & Reservations</h3>
+          <p style="color:var(--muted)">📍 123 Sushi & Coffee Street, Dhaka<br>📞 <a href="tel:+880123456789">+880 123 456 789</a></p>
+          <a href="tel:+880123456789" class="btn-primary" style="display:inline-block;margin-top:8px">Call Now</a>
+        </div>
+        <div style="flex:1;min-width:260px">
+          <iframe title="Haru Sora map" width="100%" height="180" style="border:0;border-radius:12px" src="https://www.google.com/maps?q=Dhaka&output=embed"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2025 Haru Sora Café — Handcrafted Sushi & Artisan Coffee · Designed with your palette in mind.
+    </footer>
+
+  </div>
+
+  <script>
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', function(e){
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userName');
+      window.location.href = '../Login-SignUp page/login.html';
+    });
+  </script>
 </body>
 </html>
 
