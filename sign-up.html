@@ -3,68 +3,95 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark light">
   <title>Sushi & Mocha — Sign Up</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
   <link rel="stylesheet" href="CSS files/main.css">
 </head>
 <body>
-  <main class="auth-bg">
+
+  <!-- Background Layer -->
+  <div class="bg-wrapper">
+    <div class="graffiti-container" id="bg-pattern"></div>
+    <div class="glow-spot glow-1"></div>
+    <div class="glow-spot glow-2"></div>
+  </div>
+
+  <div class="app-container">
     <section class="glass-card">
+      
+      <!-- Brand Header -->
       <header class="brand">
-        <div class="mark" aria-hidden="true"></div>
-        <h1>Sushi & Mocha</h1>
-        <p class="tagline">Taste and Tranquility</p>
+        <div class="brand-logo-container">
+          <div class="brand-ring"></div>
+          <div class="brand-ring-inner">
+            <div class="logo-composition">
+              <i data-lucide="coffee" class="logo-icon-1" size="20"></i>
+              <i data-lucide="fish" class="logo-icon-2" size="20"></i>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h1>Sushi & Mocha</h1>
+          <p>EST. 2024</p>
+        </div>
       </header>
 
-      <h2 class="page-title">Create Account</h2>
-
-      <form id="signupForm" class="form" novalidate>
-        <div class="field">
-          <label for="name">Full name</label>
-          <input id="name" name="name" type="text" autocomplete="name" required>
-          <p class="hint" hidden>Please enter a name.</p>
-        </div>
-
-        <div class="field">
-          <label for="signup-email">Email</label>
-          <input id="signup-email" name="email" type="email" autocomplete="email" required>
-          <p class="hint" hidden>Please enter a valid email.</p>
-        </div>
-
-        <div class="field">
-          <label for="signup-password">Password</label>
-          <div class="password">
-            <input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="8" required>
-            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">
-              <svg class="eye-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5"/><circle cx="12" cy="12" r="2.5"/></svg>
-            </button>
+      <!-- ================= SIGN UP VIEW ================= -->
+      <div id="view-signup" class="view active">
+        <!-- Navigate back to separate Login page -->
+        <a href="login.html" class="btn-back" style="text-decoration:none;">
+          <i data-lucide="arrow-left" size="16"></i> Back to Login
+        </a>
+        
+        <h2>Create Account</h2>
+        <p class="subtitle">Reserve your digital table today.</p>
+        
+        <form id="signupForm">
+          <div class="form-group">
+            <label>Full Name</label>
+            <div class="input-wrapper">
+              <i data-lucide="user" class="input-icon" size="18"></i>
+              <input type="text" id="signup-name" placeholder="John Doe" required>
+            </div>
           </div>
-          <p class="hint" hidden>Use at least 8 characters.</p>
-        </div>
-        <div class="field">
-          <label for="signup-confirm-password">Confirm Password</label>
-          <div class="password">
-            <input id="signup-confirm-password" name="confirm-password" type="password" autocomplete="new-password" minlength="8" required>
-            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">
-              <svg class="eye-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5"/><circle cx="12" cy="12" r="2.5"/></svg>
-            </button>
+
+          <div class="form-group">
+            <label>Email</label>
+            <div class="input-wrapper">
+              <i data-lucide="mail" class="input-icon" size="18"></i>
+              <input type="email" id="signup-email" placeholder="gourmet@example.com" required>
+            </div>
           </div>
-          <p class="hint" id="password-mismatch-hint" style="color:#e05d5d;display:none;">Please correct your password.</p>
+          
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-wrapper">
+              <i data-lucide="lock" class="input-icon" size="18"></i>
+              <input type="password" id="signup-password" placeholder="Min 8 characters" minlength="8" required>
+              <button type="button" class="toggle-password">
+                <i data-lucide="eye" size="18"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+
+        <div class="link-wrapper" style="justify-content: center;">
+          <span>Already have an account? <a href="login.html" class="highlight">Sign in</a></span>
         </div>
+        <div id="signup-msg" class="message"></div>
+      </div>
 
-        <div class="actions">
-          <button type="submit" class="cta">Create account</button>
-        </div>
-
-        <div class="status" aria-live="polite" aria-atomic="true"></div>
-      </form>
-
-      <p class="swap">
-        Already have an account?
-        <a href="login.html" rel="prev" class="link-strong">Sign in</a>
-      </p>
     </section>
-  </main>
-   <script src="main.js" defer></script>
+  </div>
+
+  <script src="main.js" defer></script>
 </body>
 </html>
