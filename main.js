@@ -116,10 +116,17 @@ window.switchView = function(viewId) {
 
 
 
-// Backend API base (change if your server runs elsewhere)
-const API_BASE = 'http://localhost:4000/api';
+// Backend API base - set to your deployed backend URL, or leave empty for localStorage-only mode
+// For GitHub Pages without a backend, set to empty string ''
+// For local development with backend, use 'http://localhost:4000/api'
+// For deployed backend, use something like 'https://your-app.onrender.com/api'
+const API_BASE = ''; // Empty = localStorage-only mode (works on GitHub Pages)
 
 async function apiPost(path, body) {
+    // If no backend configured, return null to trigger localStorage fallback
+    if (!API_BASE) {
+        return null;
+    }
     try {
         const res = await fetch(`${API_BASE}${path}`, {
             method: 'POST',
