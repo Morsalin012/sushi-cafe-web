@@ -5,59 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Reserve — Haru Sora Café</title>
   
+  <link rel="stylesheet" href="../CSS files/home.css">
   <style>
-    :root{
-      --bright-blue:#51e2f5;
-      --blue-green:#9df9ef;
-      --dusty-white:#edf756;
-      --pink-sand:#ffa8B6;
-      --bg:#fff;
-      --muted:#6b7280;
-    }
-    body{
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
-      margin: 0;
-      padding: 24px;
-      color: #0f172a;
-      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      height: 100vh;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    /* Header Styles (Matching Home/Menu) */
-    header{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 0;
-      margin-bottom: 40px;
-    }
-    .brand h2 { margin: 0; font-size: 24px; }
-    
-    nav { display: flex; align-items: center; gap: 12px; }
-    
-    /* Navigation Link Styles with Icon Support */
-    nav a {
-      text-decoration: none;
-      color: #0f172a;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      display: inline-flex; /* Aligns icon and text */
-      align-items: center;
-      gap: 6px;
-    }
+    /* Reserve page specific styles */
+    .brand h2 { margin: 0; font-size: 24px; color: var(--text-main); }
     
     nav a.active {
-      background: rgba(7,18,41,0.05);
-      color: var(--muted);
-    }
-    nav a.btn {
-      background: linear-gradient(90deg,var(--pink-sand),var(--bright-blue));
-      color: #061124;
+      background: rgba(255,230,220,0.1);
+      color: var(--text-muted);
     }
 
     /* Page Content */
@@ -67,22 +22,23 @@
       text-align: center;
       padding: 40px;
       border-radius: 16px;
-      background: #fff;
-      box-shadow: 0 8px 30px rgba(16,24,40,0.06);
-      border: 1px solid rgba(7,18,41,0.04);
+      background: var(--glass);
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255,230,220,0.1);
     }
     
-    h1 { margin-bottom: 20px; font-size: 32px; }
-    p { color: var(--muted); margin-bottom: 30px; font-size: 18px; }
+    h1 { margin-bottom: 20px; font-size: 32px; color: var(--text-main); }
+    p { color: var(--text-muted); margin-bottom: 30px; font-size: 18px; }
+    p strong { color: var(--accent-gold); }
     
     .call-btn {
       padding: 14px 24px;
-      background: linear-gradient(90deg,var(--bright-blue),var(--blue-green));
+      background: linear-gradient(90deg,var(--accent-gold),var(--accent-salmon));
       border-radius: 12px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      color: #04111a;
+      color: #1a120e;
       font-weight: 700;
       text-decoration: none;
       font-size: 18px;
