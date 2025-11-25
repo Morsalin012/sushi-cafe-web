@@ -172,10 +172,13 @@
     // Logout Logic
     document.getElementById('logoutBtn').addEventListener('click', function(e){
       e.preventDefault();
+      // Clear auth state used by the app and redirect to the login page at project root
       localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      // Also clear older/alternate keys if present
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userName');
-      window.location.href = '../Login-SignUp page/login.html';
+      window.location.href = '../login.html';
     });
   </script>
 </body>
