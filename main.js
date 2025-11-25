@@ -9,8 +9,23 @@ const $ = (id) => document.getElementById(id);
 const $$ = (selector) => document.querySelectorAll(selector);
 
 // LocalStorage Helpers
-const getLocalUsers = () => JSON.parse(localStorage.getItem('users') || '[]');
-const setLocalUsers = (users) => localStorage.setItem('users', JSON.stringify(users));
+// Normalize emails on load and save (trim + lowercase) to avoid mismatch issues
+const getLocalUsers = () => {
+    const raw = JSON.parse(localStorage.getItem('users') || '[]');
+    const normalized = raw.map(u => ({
+        ...u,
+        email: (u.email || '').toString().trim().toLowerCase()
+    }));
+    // Persist back if normalization changed anything
+    if (JSON.stringify(raw) !== JSON.stringify(normalized)) {
+        localStorage.setItem('users', JSON.stringify(normalized));
+    }
+    return normalized;
+};
+const setLocalUsers = (users) => {
+    const normalized = users.map(u => ({ ...u, email: (u.email || '').toString().trim().toLowerCase() }));
+    localStorage.setItem('users', JSON.stringify(normalized));
+};
 
 // Global Init on DOM Load
 document.addEventListener('DOMContentLoaded', () => {
@@ -99,29 +114,63 @@ window.switchView = function(viewId) {
 // Authentication Logic
 // ============================================
 
+
+
+// Backend API base (change if your server runs elsewhere)
+const API_BASE = 'http://localhost:4000/api';
+
+async function apiPost(path, body) {
+    try {
+        const res = await fetch(`${API_BASE}${path}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const json = await res.json().catch(() => ({}));
+        return { ok: res.ok, status: res.status, body: json };
+    } catch (e) {
+        // network error - return null to signal fallback
+        return null;
+    }
+}
+
 function setupAuthLogic() {
     
     // LOGIN FORM
     const loginForm = $('loginForm');
     if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = $('login-email').value;
-            const password = $('login-password').value;
-            const users = getLocalUsers();
-            
-            const user = users.find(u => u.email === email && u.password === password);
+            const email = ($('login-email').value || '').toString().trim().toLowerCase();
+            const password = ($('login-password').value || '').toString();
 
-            if (user) {
+            // Try server login first
+            const result = await apiPost('/login', { email, password });
+            if (result === null) {
+                // Network error -> fallback to localStorage
+                const users = getLocalUsers();
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
+                    setTimeout(() => window.location.href = encodeURI('Home page/home.html'), 800);
+                    return;
+                }
+                showMsg('login-msg', 'Invalid email or password.', 'error');
+                return;
+            }
+
+            if (result.ok) {
+                const user = result.body.user || { name: 'Guest', email };
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 localStorage.setItem('isLoggedIn', 'true');
                 showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'home.html';
-                }, 800);
-            } else {
+                setTimeout(() => window.location.href = encodeURI('Home page/home.html'), 800);
+            } else if (result.status === 401) {
                 showMsg('login-msg', 'Invalid email or password.', 'error');
+            } else {
+                showMsg('login-msg', result.body?.message || 'Login failed.', 'error');
             }
         });
     }
@@ -129,65 +178,103 @@ function setupAuthLogic() {
     // SIGNUP FORM
     const signupForm = $('signupForm');
     if (signupForm) {
-        signupForm.addEventListener('submit', (e) => {
+        signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = $('signup-name').value;
-            const email = $('signup-email').value;
-            const password = $('signup-password').value;
-            const users = getLocalUsers();
+            const name = $('signup-name').value || '';
+            const email = ($('signup-email').value || '').toString().trim().toLowerCase();
+            const password = ($('signup-password').value || '').toString();
 
-            if (users.some(u => u.email === email)) {
-                showMsg('signup-msg', 'This email is already registered.', 'error');
+            // Try server signup
+            const result = await apiPost('/signup', { name, email, password });
+            if (result === null) {
+                // Network error -> fallback to localStorage
+                const users = getLocalUsers();
+                if (users.some(u => u.email === email)) {
+                    showMsg('signup-msg', 'This email is already registered.', 'error');
+                    return;
+                }
+                users.push({ name, email, password });
+                setLocalUsers(users);
+                showMsg('signup-msg', 'Account created! Redirecting...', 'success');
+                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                e.target.reset();
                 return;
             }
 
-            users.push({ name, email, password });
-            setLocalUsers(users);
-            
-            showMsg('signup-msg', 'Account created! Redirecting...', 'success');
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
-            e.target.reset();
+            if (result.ok) {
+                showMsg('signup-msg', 'Account created! Redirecting...', 'success');
+                setTimeout(() => { window.location.href = 'login.html'; }, 1400);
+                e.target.reset();
+            } else if (result.status === 409) {
+                showMsg('signup-msg', 'This email is already registered.', 'error');
+            } else {
+                showMsg('signup-msg', result.body?.message || 'Signup failed.', 'error');
+            }
         });
     }
 
     // FORGOT PASSWORD FORM (In login.html)
     const forgotForm = $('forgotForm');
     if (forgotForm) {
-        forgotForm.addEventListener('submit', (e) => {
+        forgotForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = $('forgot-email').value;
-            const users = getLocalUsers();
-            if (users.some(u => u.email === email)) {
-                $('reset-email-display').textContent = email;
-                $('resetForm').dataset.email = email;
-                switchView('view-reset');
-            } else {
-                showMsg('forgot-msg', 'No account found with that email.', 'error');
+            const email = ($('forgot-email').value || '').toString().trim().toLowerCase();
+
+            // Try server request-reset
+            const result = await apiPost('/request-reset', { email });
+            if (result === null) {
+                // Network error -> fallback to localStorage behavior
+                const users = getLocalUsers();
+                if (users.some(u => u.email === email)) {
+                    $('reset-email-display').textContent = email;
+                    $('resetForm').dataset.email = email;
+                    switchView('view-reset');
+                } else {
+                    showMsg('forgot-msg', 'No account found with that email.', 'error');
+                }
+                return;
             }
+
+            // Server returns generic success even if email not found
+            showMsg('forgot-msg', result.body?.message || 'If that email exists, a reset link was sent.', 'success');
         });
     }
 
     // RESET PASSWORD FORM (In login.html)
     const resetForm = $('resetForm');
     if (resetForm) {
-        resetForm.addEventListener('submit', (e) => {
+        resetForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = e.target.dataset.email;
-            const newPass = $('reset-password').value;
-            let users = getLocalUsers();
-            const idx = users.findIndex(u => u.email === email);
-            
-            if (idx !== -1) {
-                users[idx].password = newPass;
-                setLocalUsers(users);
-                showMsg('reset-msg', 'Password updated!', 'success');
-                setTimeout(() => {
-                    $('forgotForm').reset();
-                    $('resetForm').reset();
-                    switchView('view-login');
-                }, 1500);
+            const email = (e.target.dataset.email || '').toString().trim().toLowerCase();
+            const newPass = ($('reset-password').value || '').toString();
+
+            // Try server reset endpoint: This flow assumes user received a token via email and is on a dedicated reset page.
+            // For the inline reset view (local flow), we still support updating localStorage when server isn't reachable.
+            const result = await apiPost('/reset-password', { email, token: e.target.dataset.token || '', newPassword: newPass });
+            if (result === null) {
+                // Network -> fallback local
+                let users = getLocalUsers();
+                const idx = users.findIndex(u => u.email === email);
+                if (idx !== -1) {
+                    users[idx].password = newPass;
+                    setLocalUsers(users);
+                    showMsg('reset-msg', 'Password updated!', 'success');
+                    setTimeout(() => {
+                        $('forgotForm').reset();
+                        $('resetForm').reset();
+                        switchView('view-login');
+                    }, 1500);
+                } else {
+                    showMsg('reset-msg', 'No local account found to update.', 'error');
+                }
+                return;
+            }
+
+            if (result.ok) {
+                showMsg('reset-msg', result.body?.message || 'Password updated', 'success');
+                setTimeout(() => { $('forgotForm').reset(); $('resetForm').reset(); switchView('view-login'); }, 1500);
+            } else {
+                showMsg('reset-msg', result.body?.message || 'Reset failed', 'error');
             }
         });
     }
@@ -215,8 +302,8 @@ function checkRedirects() {
 
     // Redirect Logged In Users away from Auth Pages
     if ((path.includes('login.html') || path.includes('sign-up.html')) && isLoggedIn) {
-        // Optional: redirect to home if they are already logged in
-        // window.location.href = 'home.html'; 
+        // Redirect logged-in users to the app home (encode spaces)
+        window.location.href = encodeURI('Home page/home.html');
     }
     
     // Update Greeting on Home Page
