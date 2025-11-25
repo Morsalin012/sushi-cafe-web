@@ -1,8 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Reserve — Haru Sora Café</title>
-  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    :root{
+      --bright-blue:#51e2f5;
+      --blue-green:#9df9ef;
+      --dusty-white:#edf756;
+      --pink-sand:#ffa8B6;
+      --bg:#fff;
+      --muted:#6b7280;
+      --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
+      --glass: rgba(255,255,255,0.6);
+      --radius:14px;
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#0f172a;
+      background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      line-height:1.45;
+    }
+    .container{max-width:var(--max-width);margin:0 auto;padding:24px}
+    
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;background:transparent;position:sticky;top:12px;z-index:40}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo-wrap{width:56px;height:56px;background:linear-gradient(135deg,var(--bright-blue),var(--blue-green));border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(81,226,245,0.18)}
+    .brand h1{font-size:18px;color:#071029;letter-spacing:0.2px}
+    .brand p{font-size:12px;color:var(--muted);margin-top:2px}
+    
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:#071029;text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600}
+    nav a.btn{background:linear-gradient(90deg,var(--pink-sand),var(--bright-blue));color:#061124}
+    nav a.ghost{background:transparent;color:var(--muted);font-weight:600}
+
+    /* Reserve Section Styles */
+    .hero{
+      margin-top:8px;border-radius:16px;overflow:hidden;position:relative;background:#f8fbff;
+      padding:40px; text-align:center;
+      box-shadow: var(--card-shadow);
+    }
+    .btn-primary{background:linear-gradient(90deg,var(--bright-blue),var(--blue-green));color:#04111a; padding:12px 24px; border-radius:12px; text-decoration:none; font-weight:700; display:inline-block; margin-top:20px;}
+    
+    @media(max-width:640px){ nav{display:none} }
+  </style>
 
   <script>
     if(localStorage.getItem('isLoggedIn') !== 'true'){
@@ -12,29 +59,56 @@
 </head>
 
 <body>
+  <div class="container">
 
-<header>
-  <h2>Haru Sora Café</h2>
-  <nav>
-    <a href="home.html">Home</a>
-    <a href="menu.html">Menu</a>
-    <a href="about.html">About</a>
-    <a href="reserve.html" class="active">Reserve</a>
-    <a href="#" onclick="logout()">Logout</a>
-  </nav>
-</header>
+    <header>
+      <div class="brand">
+        <div class="logo-wrap">
+           <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#51e2f5"/><stop offset="1" stop-color="#9df9ef"/></linearGradient></defs>
+            <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.95"/>
+            <path d="M17 45c6-7 19-9 27-4" stroke="#041124" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Haru Sora Café</h1>
+          <p>Handcrafted Sushi · Artisan Coffee</p>
+        </div>
+      </div>
+      <nav>
+        <a href="home.html" class="ghost">Home</a>
+        <a href="menu.html" class="ghost">Menu</a>
+        <a href="home.html#about" class="ghost">About</a>
+        <a href="reserve.html" class="btn">Reserve</a>
+        <a href="#" id="logoutBtn" class="btn">Logout</a>
+      </nav>
+    </header>
 
-<div class="page">
-  <h1>Reserve a Table</h1>
-  <p>📞 Call us at <strong>+880 123 456 789</strong></p>
+    <section class="hero">
+      <h2 style="font-size:32px; margin-bottom:16px;">Reserve a Table</h2>
+      <p style="color:var(--muted); font-size:18px;">Would you like to join us? Give us a call.</p>
+      
+      <div style="margin-top:24px; font-size:20px; font-weight:bold;">
+        📞 +880 123 456 789
+      </div>
 
-  <a href="tel:+880123456789"
-     style="padding:10px 18px;background:var(--bright-blue);border-radius:12px;display:inline-block;color:#04111a;font-weight:700;">
-     Call to Reserve
-  </a>
-</div>
+      <a href="tel:+880123456789" class="btn-primary">Call to Reserve</a>
 
-<script src="logout.js"></script>
+      <div style="margin-top:40px; border-radius:12px; overflow:hidden;">
+         <iframe title="Haru Sora map" width="100%" height="300" style="border:0;" src="https://www.google.com/maps?q=Dhaka&output=embed"></iframe>
+      </div>
+    </section>
 
+  </div>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', function(e){
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userName');
+      window.location.href = '../Login-SignUp page/login.html';
+    });
+  </script>
 </body>
 </html>
