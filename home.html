@@ -1,35 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haru Sora Café — Home</title>
-  <link rel="stylesheet" href="styles.css">
-
+  <link rel="stylesheet" href="home.css">
   <script>
     if(localStorage.getItem('isLoggedIn') !== 'true'){
       window.location.href = '../Login-SignUp page/login.html';
     }
+    function logout(){
+      localStorage.setItem('isLoggedIn', 'false');
+      window.location.href = '../Login-SignUp page/login.html';
+    }
   </script>
 </head>
-
 <body>
 
 <header>
-  <h2>Haru Sora Café</h2>
+  <div class="logo">
+    <img src="https://i.ibb.co/FW3Xq5M/cafe-logo.png" alt="Logo" class="logo-img">
+    <span>Haru Sora Café</span>
+  </div>
   <nav>
     <a href="home.html" class="active">Home</a>
     <a href="menu.html">Menu</a>
     <a href="about.html">About</a>
-    <a href="reserve.html">Reserve</a>
-    <a href="#" onclick="logout()">Logout</a>
+    <a href="reserve.html" class="btn-reserve">Reserve</a>
+    <a href="#" class="btn-logout" onclick="logout()">Logout</a>
   </nav>
 </header>
 
-<div class="page">
-  <h1>Welcome to Haru Sora Café</h1>
-  <p>Your modern Japanese sushi & artisan café experience.</p>
-</div>
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-text">
+    <h1>Welcome to Haru Sora Café</h1>
+    <p>Where Fresh Sushi Meets Artisan Coffee</p>
+    <p class="wish-note">“Sip. Savor. Smile. Every bite is a memory.”</p>
+    <a href="menu.html" class="btn-cta">Explore Menu</a>
+  </div>
+</section>
 
-<script src="logout.js"></script>
+<section class="menu">
+  <div class="menu-header">
+    <h2>Our Specials</h2>
+    <p>Handpicked delights for every taste.</p>
+  </div>
+  <div class="menu-items">
+    <div class="menu-item">
+      <img src="https://images.unsplash.com/photo-1562967916-eb82221dfb44?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sushi Roll">
+      <div class="menu-content">
+        <div class="item-head">
+          <h3>Salmon Sushi</h3>
+          <span class="price">$8</span>
+        </div>
+        <p>Fresh salmon with perfectly seasoned rice.</p>
+        <span class="badge">Popular</span>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Coffee Cup">
+      <div class="menu-content">
+        <div class="item-head">
+          <h3>Latte Art</h3>
+          <span class="price">$5</span>
+        </div>
+        <p>Creamy artisan coffee to start your day bright.</p>
+        <span class="badge">Signature</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <h2>About Us</h2>
+  <p>At Haru Sora Café, we blend Japanese culinary art with modern café culture. Enjoy our handpicked sushi and aromatic coffee while soaking in cozy vibes.</p>
+</section>
+
+<footer>
+  &copy; 2025 Haru Sora Café | Designed with love & coffee ☕🍣
+</footer>
 
 </body>
 </html>
