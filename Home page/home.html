@@ -3,103 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sakura Mocha Rolls — Premium Sushi & Coffee Experience</title>
+  <title>Nami & Bean — Coastal Sushi & Artisan Brews</title>
   <link rel="stylesheet" href="home.css">
+  <script>
+    // Check if user is logged in
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+       window.location.href = '../Login-SignUp page/login.html';
+    }
+  </script>
 </head>
-<script>
-  // Check if user is logged in
-  if (localStorage.getItem('isLoggedIn') !== 'true') {
-     window.location.href = '../Login-SignUp page/login.html';
-  }
-</script>
 <body>
-  <!-- Header -->
+
   <header>
-    <div class="logo">🍣Sakura Mocha Rolls- Premium Sushi & Coffee Experience☕</div>
+    <div class="logo">
+      <span class="logo-icon">🌊☕</span> 
+      <span class="logo-text">Nami & Bean</span>
+    </div>
     <nav>
       <a href="#home">Home</a>
       <a href="#menu">Menu</a>
       <a href="#about">About</a>
-      <a href="#contact" class="btn">Reserve</a>
-      <a href="#" id="logoutBtn" class="btn">Logout</a>
+      <a href="#contact" class="btn-reserve">Reserve</a>
+      <a href="#" id="logoutBtn" class="btn-logout">Logout</a>
     </nav>
   </header>
 
-  <!-- Hero Section -->
   <section id="home" class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-text">
-      <h1>Premium Sushi & Coffee Experience</h1>
-      <p>Authentic Japanese sushi meets artisan coffee — only at Sakura Mocha Rolls.</p>
-      <a href="#menu" class="btn">Explore Menu</a>
+      <h1>The Tide Meets the Grind</h1>
+      <p>Experience the vibrant fusion of fresh ocean sushi and pink-sand roasted coffee.</p>
+      <a href="#menu" class="btn-cta">Explore 50+ Items</a>
     </div>
   </section>
 
-  <!-- Menu Section -->
   <section id="menu" class="menu">
-    <h2>Our Menu</h2>
-    <div class="menu-items">
-      <!-- Sushi -->
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc" alt="Dragon Roll">
-        <h3>Dragon Roll</h3>
-        <p>Eel, avocado, cucumber, and a touch of sweet sauce.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Sushi Platter">
-        <h3>Sushi Platter</h3>
-        <p>Assorted nigiri, sashimi, and rolls — ideal for sharing.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c" alt="Tuna Nigiri">
-        <h3>Tuna Nigiri</h3>
-        <p>Premium tuna slices on seasoned rice.</p>
-      </div>
-
-      <!-- Coffee -->
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93" alt="Cappuccino">
-        <h3>Cappuccino</h3>
-        <p>Rich espresso topped with silky milk foam.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348" alt="Mocha Latte">
-        <h3>Mocha Latte</h3>
-        <p>A chocolatey delight with espresso and steamed milk.</p>
-      </div>
-      <div class="menu-item">
-        <img src="https://images.unsplash.com/photo-1523942839745-7848c839b661" alt="Matcha Latte">
-        <h3>Matcha Latte</h3>
-        <p>Earthy Japanese green tea blended with milk.</p>
-      </div>
+    <div class="menu-header">
+        <h2>Our Collection</h2>
+        <p>Filter by Category</p>
+        <div class="category-tabs">
+            <button onclick="filterMenu('all')" class="active-tab">All</button>
+            <button onclick="filterMenu('sushi')">Sushi & Sashimi</button>
+            <button onclick="filterMenu('coffee')">Coffee & Brews</button>
+        </div>
     </div>
+    
+    <div id="menu-container" class="menu-items">
+        </div>
   </section>
 
-  <!-- About -->
   <section id="about" class="about">
-    <h2>About Us</h2>
-    <p>Sakura Mocha Rolls combines two passions — handcrafted sushi and specialty coffee. From traditional rolls to artisan brews, we bring harmony to every plate and cup.</p>
+    <h2>About Nami & Bean</h2>
+    <p>Inspired by the colors of the coast. We bring together the cool precision of Japanese sushi and the warm comfort of artisan coffee. Our aesthetic reflects the bright blue skies, pink sands, and yellow sun of a perfect beach day.</p>
   </section>
 
-  <!-- Contact -->
   <section id="contact" class="contact">
-    <h2>Contact & Reservations</h2>
-    <p>📍 123 Sushi & Coffee Street, Dhaka<br>📞 +880 123 456 789</p>
-    <a href="tel:+880123456789" class="btn">Call Now</a>
+    <h2>Visit Us</h2>
+    <p>📍 88 Coastal Highway, Dhaka (Gulshan Ave)<br>📞 +880 123 456 789</p>
+    <a href="tel:+880123456789" class="btn-cta">Call to Book</a>
   </section>
 
-  <!-- Footer -->
   <footer>
-    <p>© 2025 Sakura Mocha Rolls — Premium Sushi & Coffee Experience</p>
+    <p>© 2025 Nami & Bean — Coastal Sushi & Brews</p>
   </footer>
+
   <script>
-    // Logout functionality
+    // --- 1. Logout Functionality ---
     document.getElementById('logoutBtn').addEventListener('click', function() {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userName');
-    window.location.href = '../Login-SignUp page/login.html';
+      window.location.href = '../Login-SignUp page/login.html';
     });
+
+    // --- 2. Dynamic Menu Data (50+ Items with Prices) ---
+    // Prices are in BDT (৳) based on your location context
+    const menuData = [
+        // --- SUSHI SECTION ---
+        // Nigiri (2 pcs)
+        { name: "Salmon Nigiri", cat: "sushi", price: "450৳", desc: "Fresh Atlantic salmon on vinegared rice.", img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=300&q=80" },
+        { name: "Tuna (Maguro) Nigiri", cat: "sushi", price: "500৳", desc: "Lean red tuna slice.", img: "https://images.unsplash.com/photo-1579584425555-c3ce17fd43da?auto=format&fit=crop&w=300&q=80" },
+        { name: "Yellowtail Nigiri", cat: "sushi", price: "550৳", desc: "Buttery Hamachi slice.", img: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=300&q=80" },
+        { name: "Eel (Unagi) Nigiri", cat: "sushi", price: "600৳", desc: "BBQ eel with sweet sauce.", img: "https://images.unsplash.com/photo-1534256958597-7fe685cbd745?auto=format&fit=crop&w=300&q=80" },
+        { name: "Shrimp (Ebi) Nigiri", cat: "sushi", price: "400৳", desc: "Cooked shrimp butterfly.", img: "https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&w=300&q=80" },
+        { name: "Scallop Nigiri", cat: "sushi", price: "650৳", desc: "Sweet raw scallop from Hokkaido.", img: "https://images.unsplash.com/photo-1626202158953-6f87144552e6?auto=format&fit=crop&w=300&q=80" },
+        { name: "Octopus Nigiri", cat: "sushi", price: "450৳", desc: "Tender steamed octopus.", img: "https://images.unsplash.com/photo-1534482421-64566f9d5549?auto=format&fit=crop&w=300&q=80" },
+        { name: "Squid (Ika) Nigiri", cat: "sushi", price: "420৳", desc: "Silky raw squid with shiso leaf.", img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=300&q=80" },
+        { name: "Salmon Belly Nigiri", cat: "sushi", price: "550৳", desc: "Fatty salmon belly melt-in-mouth.", img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=300&q=80" },
+        { name: "Tobiko (Roe) Gunkan", cat: "sushi", price: "480৳", desc: "Flying fish roe boat.", img: "https://images.unsplash.com/photo-1558985250-27a406d64cb3?auto=format&fit=crop&w=300&q=80" },
+
+        // Sashimi (5 pcs)
+        { name: "Salmon Sashimi", cat: "sushi", price: "850৳", desc: "5 slices of thick cut salmon.", img: "https://images.unsplash.com/photo-1534256958597-7fe685cbd745?auto=format&fit=crop&w=300&q=80" },
+        { name: "Tuna Sashimi", cat: "sushi", price: "950৳", desc: "5 slices of premium tuna.", img: "https://images.unsplash.com/photo-1579584425555-c3ce17fd43da?auto=format&fit=crop&w=300&q=80" },
+        { name: "White Fish Sashimi", cat: "sushi", price: "800৳", desc: "Seasonal white fish selection.", img: "https://images.unsplash.com/photo-1534482421-64566f9d5549?auto=format&fit=crop&w=300&q=80" },
+        { name: "Sashimi Deluxe", cat: "sushi", price: "1800৳", desc: "12 pc chef's mixed selection.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80" },
+        
+        // Classic Rolls (6-8 pcs)
+        { name: "California Roll", cat: "sushi", price: "550৳", desc: "Crab, avocado, cucumber.", img: "https://images.unsplash.com/photo-1558985250-27a406d64cb3?auto=format&fit=crop&w=300&q=80" },
+        { name: "Spicy Tuna Roll", cat: "sushi", price: "600৳", desc: "Minced tuna, spicy mayo, cucumber.", img: "https://images.unsplash.com/photo-1579584425555-c3ce17fd43da?auto=format&fit=crop&w=300&q=80" },
+        { name: "Philadelphia Roll", cat: "sushi", price: "650৳", desc: "Smoked salmon, cream cheese, avocado.", img: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=300&q=80" },
+        { name: "Avocado Roll (V)", cat: "sushi", price: "350৳", desc: "Fresh avocado maki.", img: "https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&w=300&q=80" },
+        { name: "Cucumber Roll (V)", cat: "sushi", price: "300৳", desc: "Crisp cucumber kappa maki.", img: "https://images.unsplash.com/photo-1626202158953-6f87144552e6?auto=format&fit=crop&w=300&q=80" },
+        { name: "Tempura Roll", cat: "sushi", price: "600৳", desc: "Fried shrimp inside.", img: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=300&q=80" },
+
+        // Special Rolls
+        { name: "Dragon Roll", cat: "sushi", price: "1100৳", desc: "Eel, cucumber topped with avocado.", img: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=300&q=80" },
+        { name: "Rainbow Roll", cat: "sushi", price: "1200৳", desc: "California roll topped with assorted fish.", img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=300&q=80" },
+        { name: "Volcano Roll", cat: "sushi", price: "1250৳", desc: "Baked scallop and spicy mayo on top.", img: "https://images.unsplash.com/photo-1558985250-27a406d64cb3?auto=format&fit=crop&w=300&q=80" },
+        { name: "Spider Roll", cat: "sushi", price: "1300৳", desc: "Soft shell crab, cucumber, masago.", img: "https://images.unsplash.com/photo-1534256958597-7fe685cbd745?auto=format&fit=crop&w=300&q=80" },
+        { name: "Pink Sand Roll", cat: "sushi", price: "1400৳", desc: "Shrimp tempura wrapped in pink soy paper.", img: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=300&q=80" },
+        { name: "Nami Surf Roll", cat: "sushi", price: "1350৳", desc: "Seared salmon, lemon, spicy crab.", img: "https://images.unsplash.com/photo-1579584425555-c3ce17fd43da?auto=format&fit=crop&w=300&q=80" },
+        
+        // Platters
+        { name: "Love Boat", cat: "sushi", price: "3500৳", desc: "Chef's selection for two.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80" },
+        { name: "Party Platter", cat: "sushi", price: "5000৳", desc: "30 pieces of mixed rolls.", img: "https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&w=300&q=80" },
+
+        // --- COFFEE SECTION ---
+        // Classics
+        { name: "Espresso", cat: "coffee", price: "200৳", desc: "Double shot of rich arabica.", img: "https://images.unsplash.com/photo-1510707577719-ae7b14805e3a?auto=format&fit=crop&w=300&q=80" },
+        { name: "Americano", cat: "coffee", price: "250৳", desc: "Espresso with hot water.", img: "https://images.unsplash.com/photo-1551030173-122aabc4489c?auto=format&fit=crop&w=300&q=80" },
+        { name: "Cappuccino", cat: "coffee", price: "320৳", desc: "Equal parts espresso, milk, foam.", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=300&q=80" },
+        { name: "Latte", cat: "coffee", price: "320৳", desc: "Espresso with steamed milk.", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=300&q=80" },
+        { name: "Flat White", cat: "coffee", price: "340৳", desc: "Silky microfoam over ristretto.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=300&q=80" },
+        { name: "Mocha", cat: "coffee", price: "380৳", desc: "Chocolate, espresso, milk.", img: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=300&q=80" },
+        { name: "Macchiato", cat: "coffee", price: "250৳", desc: "Espresso 'stained' with milk.", img: "https://images.unsplash.com/photo-1485808191679-5f86510da987?auto=format&fit=crop&w=300&q=80" },
+        { name: "Cortado", cat: "coffee", price: "280৳", desc: "Equal espresso and warm milk.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=300&q=80" },
+        
+        // Specialty
+        { name: "Pink Salt Caramel Latte", cat: "coffee", price: "450৳", desc: "House special pink syrup.", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=300&q=80" },
+        { name: "Blue Ocean Latte", cat: "coffee", price: "480৳", desc: "Butterfly pea flower milk.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=300&q=80" },
+        { name: "Dirty Chai", cat: "coffee", price: "420৳", desc: "Spiced tea with espresso shot.", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=300&q=80" },
+        { name: "Matcha Latte", cat: "coffee", price: "400৳", desc: "Premium ceremonial green tea.", img: "https://images.unsplash.com/photo-1523942839745-7848c839b661?auto=format&fit=crop&w=300&q=80" },
+        { name: "Golden Turmeric Latte", cat: "coffee", price: "380৳", desc: "Anti-inflammatory blend.", img: "https://images.unsplash.com/photo-1556484687-3063616e9719?auto=format&fit=crop&w=300&q=80" },
+        { name: "Rose Latte", cat: "coffee", price: "420৳", desc: "Floral infused sweet latte.", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=300&q=80" },
+        { name: "Taro Latte", cat: "coffee", price: "450৳", desc: "Purple sweet potato blend.", img: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=300&q=80" },
+        
+        // Cold
+        { name: "Cold Brew", cat: "coffee", price: "300৳", desc: "Steeped for 24 hours.", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=300&q=80" },
+        { name: "Iced Americano", cat: "coffee", price: "280৳", desc: "Chilled and refreshing.", img: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=300&q=80" },
+        { name: "Iced Vanilla Latte", cat: "coffee", price: "350৳", desc: "Sweet vanilla bean syrup.", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=300&q=80" },
+        { name: "Coffee Frappe", cat: "coffee", price: "450৳", desc: "Blended ice coffee slush.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=300&q=80" },
+        { name: "Mocha Frappe", cat: "coffee", price: "480৳", desc: "Blended chocolate coffee.", img: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=300&q=80" },
+        { name: "Affogato", cat: "coffee", price: "350৳", desc: "Espresso over vanilla ice cream.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=300&q=80" },
+        
+        // Non-Coffee
+        { name: "Hot Chocolate", cat: "coffee", price: "350৳", desc: "Rich Belgian chocolate.", img: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=300&q=80" },
+        { name: "Mango Smoothie", cat: "coffee", price: "400৳", desc: "Fresh tropical mango.", img: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=300&q=80" },
+        { name: "Berry Blast", cat: "coffee", price: "420৳", desc: "Mixed berries smoothie.", img: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=300&q=80" }
+    ];
+
+    const menuContainer = document.getElementById('menu-container');
+
+    function renderMenu(filter) {
+        menuContainer.innerHTML = '';
+        menuData.forEach(item => {
+            if (filter === 'all' || item.cat === filter) {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'menu-item';
+                itemDiv.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="menu-content">
+                        <div class="item-head">
+                            <h3>${item.name}</h3>
+                            <span class="price">${item.price}</span>
+                        </div>
+                        <p>${item.desc}</p>
+                        <span class="badge">${item.cat === 'sushi' ? '🍣 Sushi' : '☕ Brew'}</span>
+                    </div>
+                `;
+                menuContainer.appendChild(itemDiv);
+            }
+        });
+    }
+
+    function filterMenu(category) {
+        renderMenu(category);
+        // Update buttons styles
+        const buttons = document.querySelectorAll('.category-tabs button');
+        buttons.forEach(btn => {
+            // Simple logic to toggle active class visually
+            if(btn.textContent.toLowerCase().includes(category) || (category==='all' && btn.textContent==='All')){
+                btn.classList.add('active-tab');
+            } else {
+                btn.classList.remove('active-tab');
+            }
+        });
+    }
+
+    // Initial Render
+    renderMenu('all');
   </script>
 </body>
 </html>
