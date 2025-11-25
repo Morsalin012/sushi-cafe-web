@@ -1,0 +1,130 @@
+h1{
+    color:rgb(232, 25, 25);
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+    body{
+        
+      background-color:white;
+      text-align:center;
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 50px;
+      color: rgb(100,0,0);
+
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        flex-wrap:wrap;
+        gap: 20px;
+    }
+
+    .card{
+        text-align: center;
+        background-color:#f8f5f5;
+        box-shadow: 100px;
+        border-radius: 16px;
+        width:300px;
+        padding:20px;
+
+    }
+
+    .card img{
+        height: 200px;
+        width: 100%;
+        border-radius:12px;
+        margin-bottom:10px;
+        object-fit: cover;
+    }
+
+    .card h2{
+        color:black;
+    }
+
+    .card p{
+        font-size: 15px;
+        color:#101010;
+
+    }
+
+    .card h3{
+        color:#0d0d0d;
+    }
+
+    form{
+      text-align: left;
+      background-color:#f8f5f5;
+      box-shadow: 12px;
+      border-radius: 16px;
+      width:300px;
+      padding:30px;
+      margin: auto;
+
+    }
+
+    form label{
+      display: block;
+      font-weight: bold;
+      color: rgb(10, 9, 9);
+      margin-bottom: 10px;
+    }
+
+    form input,form button,form select{
+      width:100%;
+      height: 40px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      box-sizing: border-box;
+      border: #080808;
+      margin-bottom: 15px;
+      color: #000;
+      background-color: #fff;
+
+    }
+
+    form button{
+      background: orangered;
+      color:white;
+      font-weight: bold;
+      font-size: 20px;
+      cursor:pointer;
+      margin: 20px auto 0 auto;
+      border-radius: 12px;
+      height:50px;
+      display:block;
+      align-self: center;
+
+      
+      
+
+    }
+
+    form button:hover{
+      background: darkorange;
+    }
+
+   
+   #Orchid {
+    display: none; 
+    padding: 15px;
+    border: 2px solid chocolate;
+    border-radius: 16px;
+    background-color: #f8f5f5;
+    margin-top: 15px;
+}
+
+#celebration {
+    width: 100%;
+    height: 40px;
+    padding: 5px;
+    font-size: 16px;
+    border: 2px solid chocolate;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #000;
+}
+

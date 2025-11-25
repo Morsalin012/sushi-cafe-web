@@ -1,12 +1,11 @@
-<!---Signup page !-->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
-  <title>Sushi & Mocha — Sign up</title>
-  <link rel="stylesheet" href="main.css">
+  <title>Sushi & Mocha — Sign Up</title>
+  <link rel="stylesheet" href="CSS files/main.css">
 </head>
 <body>
   <main class="auth-bg">
@@ -36,7 +35,9 @@
           <label for="signup-password">Password</label>
           <div class="password">
             <input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="8" required>
-            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">👁</button>
+            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">
+              <svg class="eye-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5"/><circle cx="12" cy="12" r="2.5"/></svg>
+            </button>
           </div>
           <p class="hint" hidden>Use at least 8 characters.</p>
         </div>
@@ -44,7 +45,9 @@
           <label for="signup-confirm-password">Confirm Password</label>
           <div class="password">
             <input id="signup-confirm-password" name="confirm-password" type="password" autocomplete="new-password" minlength="8" required>
-            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">👁</button>
+            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">
+              <svg class="eye-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5"/><circle cx="12" cy="12" r="2.5"/></svg>
+            </button>
           </div>
           <p class="hint" id="password-mismatch-hint" style="color:#e05d5d;display:none;">Please correct your password.</p>
         </div>

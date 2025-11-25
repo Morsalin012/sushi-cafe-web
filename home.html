@@ -1,17 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nami & Bean — Coastal Sushi & Artisan Brews</title>
-  <link rel="stylesheet" href="home.css">
-  <script>
-    // Check if user is logged in
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
-       window.location.href = '../Login-SignUp page/login.html';
-    }
-  </script>
+  <title>Sakura Mocha Rolls — Premium Sushi & Coffee Experience</title>
+  <link rel="stylesheet" href="CSS files/home.css">
 </head>
+<script>
+  // Check if user is logged in
+  if (localStorage.getItem('isLoggedIn') !== 'true') {
+     window.location.href = 'login.html';
+  }
+</script>
 <body>
 
   <header>
@@ -38,18 +39,42 @@
   </section>
 
   <section id="menu" class="menu">
-    <div class="menu-header">
-        <h2>Our Collection</h2>
-        <p>Filter by Category</p>
-        <div class="category-tabs">
-            <button onclick="filterMenu('all')" class="active-tab">All</button>
-            <button onclick="filterMenu('sushi')">Sushi & Sashimi</button>
-            <button onclick="filterMenu('coffee')">Coffee & Brews</button>
-        </div>
+    <h2>Our Menu</h2>
+    <div class="menu-items">
+      <!-- Sushi -->
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc" alt="Dragon Roll">
+        <h3>Dragon Roll</h3>
+        <p>Eel, avocado, cucumber, and a touch of sweet sauce.</p>
+      </div>
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Sushi Platter">
+        <h3>Sushi Platter</h3>
+        <p>Assorted nigiri, sashimi, and rolls — ideal for sharing.</p>
+      </div>
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c" alt="Tuna Nigiri">
+        <h3>Tuna Nigiri</h3>
+        <p>Premium tuna slices on seasoned rice.</p>
+      </div>
+
+      <!-- Coffee -->
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93" alt="Cappuccino">
+        <h3>Cappuccino</h3>
+        <p>Rich espresso topped with silky milk foam.</p>
+      </div>
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348" alt="Mocha Latte">
+        <h3>Mocha Latte</h3>
+        <p>A chocolatey delight with espresso and steamed milk.</p>
+      </div>
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1523942839745-7848c839b661" alt="Matcha Latte">
+        <h3>Matcha Latte</h3>
+        <p>Earthy Japanese green tea blended with milk.</p>
+      </div>
     </div>
-    
-    <div id="menu-container" class="menu-items">
-        </div>
   </section>
 
   <section id="about" class="about">
@@ -73,7 +98,7 @@
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userName');
-      window.location.href = '../Login-SignUp page/login.html';
+    window.location.href = '../Login-SignUp page/login.html';
     });
 
     // --- 2. Dynamic Menu Data (50+ Items with Prices) ---

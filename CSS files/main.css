@@ -254,3 +254,63 @@ input:focus {
     scroll-behavior: auto !important; 
   }
 }
+
+@media (max-width: 768px) {
+  .container, .card, form {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px !important;
+  }
+  body {
+    padding: 10px !important;
+  }
+}
+@media (max-width: 480px) {
+  h1, h2 {
+    font-size: 1.4rem !important;
+  }
+  .card img {
+    height: 120px !important;
+  }
+}
+
+/* Enable user-select and pointer events on inputs and interactive elements */
+input, textarea, button, a {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+/* Ensure overlays and animated background elements do not block touch */
+.auth-bg, .auth-bg::before, .auth-bg::after {
+  pointer-events: none;
+}
+
+/* Disable heavy backgrounds/animations on small screens to improve performance and touch */
+@media (max-width: 768px) {
+  .auth-bg, .auth-bg::before, .auth-bg::after {
+    display: none;
+  }
+}
+
+/* Enable text selection and pointer events on inputs and interactive elements */
+input, textarea, button, a {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+/* Prevent blocking of touch events by background overlays */
+.auth-bg, .auth-bg::before, .auth-bg::after {
+  pointer-events: none;
+}
+
+/* Disable heavy background and animation overlays on mobile */
+@media (max-width: 768px) {
+  .auth-bg, .auth-bg::before, .auth-bg::after {
+    display: none;
+  }
+}
+

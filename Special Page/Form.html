@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sushi Booking From</title>
+
+    <link rel="stylesheet" href="Friday.css">
+
+    <script defer src="Friday.js"></script>
+
+</head>
+<body>
+    <h1>Sushi Booking Form</h1>
+
+    <p><a href="Friday.html" class="btn">Back to Menu</a></p>
+
+    <form id="SushiForm">
+
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" required>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" required>
+            <option value="">--Select Gender--</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label for="sushi">Choose Sushi:</label>
+        
+        <select id="sushi" required>
+            <option value="">--Select--</option>
+
+            <option value="Rainbow Dragon Roll Sushi">Rainbow Dragon Roll Sushi(Anyone)</option>
+            <option value="Kaiseki Sushi">Kaiseki Sushi(Only 20 customer can order)</option>
+            <option value="Orchid Princess Roll Sushi">Orchid Princess Roll sushi( Only Girls)</option>
+            <option value="Omakase">Omakase(Only first 3 customers)</option>
+
+        </select>
+
+
+        <div id="Orchid"style="display:none;margin-top: 15px;">
+    
+        <label for="celebration">Reason for Celebration:</label>
+        
+        <select id="celebration">
+            <option value="">--Select--</option>
+
+            <option value="birthday">Birthday</option>
+            <option value="education">Education Success</option>
+            <option value="career">career Achievement</option>
+            <option value="mothersday">Mother's Day</option>
+            <option value="breakup">Breakup</option>
+            <option value="other">Other</option>
+        </select>
+
+        <label for="note">Write a Note</label>
+        <textarea id="note" rows="5"placeholder="Tell us abot your celebration.............."></textarea>
+
+        
+        </div>
+
+
+        <button type="Submit">Submit Order</button>
+
+
+
+        
+
+
+    </form>
+
+    <div id="OrderSummary"></div>
+    
+</body>
+</html>
+

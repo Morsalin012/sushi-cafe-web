@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <title>Sushi & Mocha — Login</title>
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="CSS files/main.css">
 </head>
 <body>
   <main class="auth-bg">
@@ -30,7 +30,9 @@
           <label for="login-password">Password</label>
           <div class="password">
             <input id="login-password" name="password" type="password" autocomplete="current-password" minlength="6" required>
-            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">👁</button>
+            <button type="button" class="icon-btn" aria-label="Show password" data-toggle="visibility">
+              <svg class="eye-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5"/><circle cx="12" cy="12" r="2.5"/></svg>
+            </button>
           </div>
           <p class="hint" hidden>Enter your password here.</p>
         </div>

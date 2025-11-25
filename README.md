@@ -22,20 +22,15 @@ A **frontend web project** built with **HTML, CSS, and JavaScript**, showcasing 
 ---
  
 
----
-
-## 📂 Project Structure  
-
-
-
----
-
 ## 🎯 Future Improvements  
 - 🛒 Add online ordering system (cart + checkout)  
 - 🌐 Add localization (multi-language support)  
 - 🎶 Add background music toggle option  
 
 ---
+
+## 🌐 Live Demo
+[View Live Website](https://morsalin012.github.io/sushi-cafe-web/)
 
 
 💌 Feel free to connect and share feedback!  
