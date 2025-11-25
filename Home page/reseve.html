@@ -2,7 +2,43 @@
 <html>
 <head>
   <title>Reserve — Haru Sora Café</title>
-  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    :root{
+      --bright-blue:#51e2f5;
+      --blue-green:#9df9ef;
+      --dusty-white:#edf756;
+      --pink-sand:#ffa8B6;
+      --bg:#fff;
+      --muted:#6b7280;
+    }
+    body{
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #0f172a;
+    }
+    header{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    nav a{
+      text-decoration: none;
+      color: #0f172a;
+      margin-left: 15px;
+      font-weight: 600;
+    }
+    nav a.active{
+      color: var(--muted);
+    }
+    .page{
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+  </style>
 
   <script>
     if(localStorage.getItem('isLoggedIn') !== 'true'){
@@ -29,12 +65,19 @@
   <p>📞 Call us at <strong>+880 123 456 789</strong></p>
 
   <a href="tel:+880123456789"
-     style="padding:10px 18px;background:var(--bright-blue);border-radius:12px;display:inline-block;color:#04111a;font-weight:700;">
+     style="padding:10px 18px;background:var(--bright-blue);border-radius:12px;display:inline-block;color:#04111a;font-weight:700;text-decoration:none;">
      Call to Reserve
   </a>
 </div>
 
-<script src="logout.js"></script>
+<script>
+  function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+    window.location.href = '../Login-SignUp page/login.html';
+  }
+</script>
 
 </body>
 </html>
