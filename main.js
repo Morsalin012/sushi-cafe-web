@@ -220,6 +220,18 @@ function setupAuthLogic() {
         });
     }
 
+    // RESET DATA LINK (on signup page)
+    const resetDataLink = $('reset-data-link');
+    if (resetDataLink) {
+        resetDataLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('This will clear all saved accounts and data. Continue?')) {
+                localStorage.clear();
+                showMsg('signup-msg', 'All data cleared! You can now create a new account.', 'success');
+            }
+        });
+    }
+
     // FORGOT PASSWORD FORM (In login.html)
     const forgotForm = $('forgotForm');
     if (forgotForm) {
