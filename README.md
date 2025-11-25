@@ -20,18 +20,53 @@ A **frontend web project** built with **HTML, CSS, and JavaScript**, showcasing 
 - **JavaScript (ES6+)** – interactivity & DOM manipulation  
 
 ---
- 
 
-## 🎯 Future Improvements  
-- 🛒 Add online ordering system (cart + checkout)  
-- 🌐 Add localization (multi-language support)  
-- 🎶 Add background music toggle option  
-
----
 
 ## 🌐 Live Demo
 [View Live Website](https://morsalin012.github.io/sushi-cafe-web/)
+  
 
+---
 
-💌 Feel free to connect and share feedback!  
+## Backend
+
+This repository includes a minimal Node + MongoDB backend used by the Sushi Cafe project. It provides endpoints to:
+
+- create users (`/api/signup`)
+- login (`/api/login`)
+- request a password reset (`/api/request-reset`) — creates a token and emails/logs a reset link
+- reset password (`/api/reset-password`)
+
+Quick start (backend)
+
+1. Open a terminal in `backend`:
+
+```pwsh
+cd backend
+npm install
+```
+
+2. Copy `.env.example` to `.env` and edit values (optional SMTP credentials):
+
+```pwsh
+copy .env.example .env
+# edit .env with your editor
+```
+
+3. Start the server:
+
+```pwsh
+npm start
+# or for development with auto-reload (nodemon):
+npx nodemon server.js
+```
+
+Default server: `http://localhost:4000`
+
+Notes
+
+- If you don't configure SMTP, password reset links are printed to the server console.
+- The `/api/users` endpoint lists users (no auth) — remove or protect in production.
+
+```
 
