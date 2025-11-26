@@ -1,3 +1,4 @@
+/*heading*/
 h1{
     color:rgb(248, 244, 244);
     margin-bottom: 30px;
@@ -5,8 +6,9 @@ h1{
     font-weight: bold;
 }
 
-    body{
-    background: url("https://static.vecteezy.com/system/resources/previews/008/920/047/large_2x/dark-blue-grungy-abstract-cement-concrete-wall-texture-background-photo.jpg");
+/*page background*/
+body{
+  background: url("https://static.vecteezy.com/system/resources/previews/008/920/047/large_2x/dark-blue-grungy-abstract-cement-concrete-wall-texture-background-photo.jpg");
     
     background-size: cover;
     background-position: center;
@@ -15,40 +17,49 @@ h1{
     margin: 0;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
-    /*background: linear-gradient(to bottom, #ffffff, #ffe6e6); 
-    text-align:center;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 50px;
-    color: rgb(100,0,0);*/
-
 
     }
 
-    .container {
-        display: flex;
-        justify-content: center;
-        flex-wrap:wrap;
-        gap: 20px;
-    }
+/*back to menu*/
+.btn {
+    color: white;
+    font-size: 20px;
+    text-decoration: underline;
+    font-weight: bold;
+}
 
-    .card{
-        text-align: center;
-        background: linear-gradient(to bottom right, #ffffff, #f3d6d6);
-        box-shadow: 0px 0px 12px rgba(0,0,0,0.15);
-        border-radius: 16px;
-        width:300px;
-        padding:20px;
+.btn:hover {
+    color: rgb(255, 200, 200); /* soft hover effect */
+    text-decoration: underline;
+}
 
-    }
 
-    .card img{
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-wrap:wrap;
+  gap: 20px;
+}
+
+.card{
+  text-align: center;
+  background: linear-gradient(to bottom right, #ffffff, #f3d6d6);
+  box-shadow: 0px 0px 12px rgba(0,0,0,0.15);
+  border-radius: 16px;
+  width:300px;
+  padding:20px;
+
+}
+
+.card img{
         height: 200px;
         width: 100%;
         border-radius:12px;
         margin-bottom:10px;
         object-fit: cover;
     }
-
+    
     .card h2{
         color:black;
     }
@@ -62,6 +73,7 @@ h1{
     .card h3{
         color:#0d0d0d;
     }
+
 
     form{
       text-align: left;
@@ -106,6 +118,7 @@ h1{
       height:50px;
       display:block;
       align-self: center;
+      transition: 0.3s ease;
 
       
       
@@ -114,6 +127,7 @@ h1{
 
     form button:hover{
       background: linear-gradient(to right, #ff8c42, darkorange);
+      transform: scale(1.05);
     }
 
    
@@ -136,4 +150,25 @@ h1{
     background: linear-gradient(to right, #ffffff, #ffe8d7);
     color: #000;
 }
+
+/*oder button*/
+.order-btn {
+    color: rgb(68, 5, 170);
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    background: none;
+    padding: 0;
+    display: inline-block;
+    margin-top: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.order-btn:hover {
+    color: rgb(222, 39, 39);
+    text-decoration: underline;
+}
+
 

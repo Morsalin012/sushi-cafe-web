@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Menu — Haru Sora Café</title>
+
+  <link rel="stylesheet" href="../CSS files/home.css">
+  <style>
+    /* Premium Sushi Logo Styles */
+    .brand-logo-container {
+      width: 52px;
+      height: 52px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #f5e6d3 0%, #e8d4bc 50%, #d4c4a8 100%);
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 2px 6px rgba(255,255,255,0.4), 0 0 15px rgba(212,163,115,0.2);
+      border: 1.5px solid rgba(180,140,95,0.4);
+    }
+    .brand-ring {
+      position: absolute;
+      inset: -2px;
+      border: 1px solid transparent;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(180,140,95,0.5), rgba(160,120,80,0.2), rgba(180,140,95,0.5)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: spin-glow 12s linear infinite;
+      filter: drop-shadow(0 0 4px rgba(180,140,95,0.3));
+    }
+    .brand-logo-container::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(180,140,95,0.1) 0%, transparent 70%);
+      animation: pulse-glow 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .brand-logo-container::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 15%;
+      width: 70%;
+      height: 35%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%);
+      border-radius: 50% 50% 40% 40%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .brand-ring-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sushi-logo-svg {
+      width: 38px;
+      height: 38px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+    }
+    @keyframes spin-glow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes pulse-glow { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.04); opacity: 0.7; } }
+
+    /* Menu page specific styles */
+    .menu h2 { color: var(--text-main); }
+    
+    /* Icon Navigation Styles */
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .nav-icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: rgba(212, 163, 115, 0.1);
+      border: 1px solid rgba(212, 163, 115, 0.2);
+      border-radius: 12px;
+      color: #ffe6dc;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .nav-icon:hover {
+      background: rgba(212, 163, 115, 0.25);
+      border-color: rgba(212, 163, 115, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(212, 163, 115, 0.2);
+    }
+    
+    .nav-icon.active {
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      border-color: #d4a373;
+      color: #1a120e;
+    }
+    
+    .nav-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 1.8;
+    }
+    
+    /* Tooltip */
+    .nav-icon::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(5px);
+      padding: 6px 12px;
+      background: rgba(26, 18, 14, 0.95);
+      color: #d4a373;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      border: 1px solid rgba(212, 163, 115, 0.2);
+      z-index: 100;
+    }
+    
+    .nav-icon:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    /* Cart badge */
+    .nav-icon .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+      height: 18px;
+      background: #e76f51;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+    
+    /* Account Dropdown Styles */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .nav-dropdown .nav-icon {
+      background: rgba(212, 163, 115, 0.1);
+      border-color: rgba(212, 163, 115, 0.2);
+      color: #ffe6dc;
+    }
+    
+    .nav-dropdown .nav-icon:hover {
+      background: rgba(212, 163, 115, 0.25);
+      border-color: rgba(212, 163, 115, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(212, 163, 115, 0.2);
+    }
+    
+    .nav-dropdown.active .nav-icon {
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      border-color: #d4a373;
+      color: #1a120e;
+    }
+    
+    .nav-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      min-width: 220px;
+      background: rgba(26, 18, 14, 0.98);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(212, 163, 115, 0.2);
+      border-radius: 16px;
+      padding: 12px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+    
+    .nav-dropdown.active .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .nav-dropdown-menu a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      color: #ffe6dc;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .nav-dropdown-menu a:hover {
+      background: rgba(212, 163, 115, 0.15);
+      color: #d4a373;
+      transform: translateX(4px);
+    }
+    
+    .nav-dropdown-menu a svg {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+    
+    .nav-dropdown-divider {
+      height: 1px;
+      background: rgba(212, 163, 115, 0.15);
+      margin: 8px 0;
+    }
+    
+    .nav-dropdown-menu .logout-link {
+      color: #e76f51;
+    }
+    
+    .nav-dropdown-menu .logout-link:hover {
+      background: rgba(231, 111, 81, 0.15);
+      color: #e76f51;
+    }
+    
+    .dropdown-arrow {
+      position: absolute;
+      bottom: -6px;
+      right: 18px;
+      width: 12px;
+      height: 12px;
+      background: rgba(26, 18, 14, 0.98);
+      border-left: 1px solid rgba(212, 163, 115, 0.2);
+      border-top: 1px solid rgba(212, 163, 115, 0.2);
+      transform: rotate(45deg);
+      z-index: -1;
+    }
+    
+    /* Add to cart button */
+    .card .add-to-cart {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .card .add-to-cart:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212, 163, 115, 0.4);
+    }
+    .card .add-to-cart:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Wishlist button */
+    .card .wishlist-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      background: rgba(26, 18, 14, 0.7);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .card .wishlist-btn:hover {
+      background: rgba(212, 163, 115, 0.9);
+      transform: scale(1.1);
+    }
+    .card .wishlist-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #d4a373;
+      fill: none;
+    }
+    .card .wishlist-btn.active svg {
+      fill: #e76f51;
+      stroke: #e76f51;
+    }
+    
+    /* Card positioning for wishlist button */
+    .card {
+      position: relative;
+    }
+    
+    /* Category filter active state */
+    .cat.active {
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+    }
+    
+    /* Loading state */
+    .menu-grid.loading {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    /* Stock info */
+    .stock-info {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .stock-info.low {
+      color: #e76f51;
+    }
+    
+    /* Tags */
+    .product-tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .product-tags span {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(212, 163, 115, 0.2);
+      color: #d4a373;
+    }
+    .product-tags .vegetarian {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+    }
+    .product-tags .spicy {
+      background: rgba(231, 111, 81, 0.2);
+      color: #e76f51;
+    }
+    
+    /* Rating stars */
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #d4a373;
+    }
+    .rating svg {
+      width: 14px;
+      height: 14px;
+      fill: #d4a373;
+    }
+  </style>
+
+  <script>
+    if(localStorage.getItem('isLoggedIn') !== 'true'){
+      window.location.href="../login.html";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+  
+    <header>
+      <div class="brand">
+        <div class="brand-logo-container">
+          <div class="brand-ring"></div>
+          <div class="brand-ring-inner">
+            <svg class="sushi-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 25 L85 55" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+              <path d="M10 35 L80 65" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="50" cy="50" r="22" fill="none" stroke="#1a1a1a" stroke-width="4"/>
+              <ellipse cx="50" cy="50" rx="16" ry="14" fill="#e8a87c"/>
+              <ellipse cx="50" cy="50" rx="11" ry="9" fill="#c85a5a"/>
+              <ellipse cx="50" cy="50" rx="6" ry="5" fill="#e8a87c"/>
+              <ellipse cx="50" cy="50" rx="3" ry="2.5" fill="#c85a5a"/>
+              <path d="M35 75 Q50 70 65 75 L62 85 Q50 82 38 85 Z" fill="#1a1a1a"/>
+              <rect x="45" y="68" width="10" height="8" fill="#1a1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <h1>Haru Sora Café</h1>
+          <p>Handcrafted Sushi · Artisan Coffee</p>
+        </div>
+      </div>
+
+      <nav>
+        <!-- Home -->
+        <a href="home.html" class="nav-icon" data-tooltip="Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </a>
+        
+        <!-- Menu -->
+        <a href="menu.html" class="nav-icon active" data-tooltip="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+        </a>
+        
+        <!-- Cart -->
+        <a href="cart.html" class="nav-icon" data-tooltip="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+        </a>
+        
+        <!-- Account Dropdown -->
+        <div class="nav-dropdown" id="accountDropdown">
+          <div class="nav-icon" data-tooltip="Account" onclick="toggleDropdown(event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="nav-dropdown-menu">
+            <div class="dropdown-arrow"></div>
+            <a href="profile.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              My Profile
+            </a>
+            <a href="orders.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              My Orders
+            </a>
+            <a href="reserve.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              Reservations
+            </a>
+            <a href="help.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              Help Center
+            </a>
+            <div class="nav-dropdown-divider"></div>
+            <a href="#" class="logout-link" id="logoutBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section id="menu" class="menu">
+      <div class="menu-head">
+        <div>
+          <h2 style="font-size:22px;margin-bottom:6px">Our Menu</h2>
+          <p style="color:var(--muted)">Sushi, Rolls, Coffee, and Sweet Treats — thoughtfully sourced and crafted daily.</p>
+        </div>
+        <div class="cats" id="categoryFilters">
+          <span class="cat active" data-category="All">All</span>
+        </div>
+      </div>
+
+      <div class="menu-grid" id="menuGrid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">
+          Loading menu...
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="../cafe-ecommerce.js"></script>
+  
+  <script>
+    let allProducts = [];
+    let currentCategory = 'All';
+    
+    async function loadProducts(category = 'All') {
+      const grid = document.getElementById('menuGrid');
+      grid.classList.add('loading');
+      
+      try {
+        const filters = category !== 'All' ? { category } : {};
+        const data = await window.HaruSora.Products.getAll(filters);
+        allProducts = data.products || [];
+        renderProducts(allProducts);
+      } catch (error) {
+        console.error('Error loading products:', error);
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">Failed to load menu. Please try again.</div>';
+      }
+      
+      grid.classList.remove('loading');
+    }
+    
+    async function loadCategories() {
+      try {
+        const categories = await window.HaruSora.Products.getCategories();
+        const container = document.getElementById('categoryFilters');
+        container.innerHTML = '<span class="cat active" data-category="All">All</span>';
+        
+        categories.forEach(cat => {
+          const btn = document.createElement('span');
+          btn.className = 'cat';
+          btn.dataset.category = cat.name;
+          btn.textContent = `${cat.name} (${cat.count})`;
+          container.appendChild(btn);
+        });
+        
+        container.querySelectorAll('.cat').forEach(btn => {
+          btn.addEventListener('click', () => {
+            container.querySelectorAll('.cat').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.dataset.category;
+            loadProducts(currentCategory);
+          });
+        });
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    }
+    
+    function renderProducts(products) {
+      const grid = document.getElementById('menuGrid');
+      
+      if (!products.length) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No items found.</div>';
+        return;
+      }
+      
+      grid.innerHTML = products.map(product => `
+        <article class="card" data-product-id="${product._id}">
+          <button class="wishlist-btn" data-wishlist="${product._id}" title="Add to wishlist">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+          <img src="${product.image}" alt="${product.name}" loading="lazy">
+          <h3>${product.name} ${product.isFeatured ? '<span class="tag">Chef\'s Pick</span>' : ''}</h3>
+          <p>${product.description}</p>
+          <div class="product-tags">
+            ${product.isVegetarian ? '<span class="vegetarian">🌱 Vegetarian</span>' : ''}
+            ${product.isSpicy ? '<span class="spicy">🌶️ Spicy</span>' : ''}
+          </div>
+          ${product.rating && product.rating.count > 0 ? `
+            <div class="rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              ${product.rating.average.toFixed(1)} (${product.rating.count})
+            </div>
+          ` : ''}
+          <div class="price">৳ ${product.price}</div>
+          ${product.stock < 10 && product.stock > 0 ? `<div class="stock-info low">Only ${product.stock} left!</div>` : ''}
+          ${product.isAvailable && product.stock > 0 ? `
+            <button class="add-to-cart" data-product="${product._id}">🛒 Add to Cart</button>
+          ` : `
+            <button class="add-to-cart" disabled>Out of Stock</button>
+          `}
+        </article>
+      `).join('');
+      
+      grid.querySelectorAll('.add-to-cart:not([disabled])').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          btn.disabled = true;
+          btn.textContent = 'Adding...';
+          await window.HaruSora.Cart.add(btn.dataset.product);
+          btn.disabled = false;
+          btn.textContent = '🛒 Add to Cart';
+        });
+      });
+      
+      grid.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const productId = btn.dataset.wishlist;
+          if (btn.classList.contains('active')) {
+            await window.HaruSora.Wishlist.remove(productId);
+            btn.classList.remove('active');
+          } else {
+            await window.HaruSora.Wishlist.add(productId);
+            btn.classList.add('active');
+          }
+        });
+      });
+      
+      checkWishlistStatus();
+    }
+    
+    async function checkWishlistStatus() {
+      const wishlist = await window.HaruSora.Wishlist.get();
+      const wishlistIds = wishlist.map(item => item._id || item);
+      document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        if (wishlistIds.includes(btn.dataset.wishlist)) {
+          btn.classList.add('active');
+        }
+      });
+    }
+    
+    async function refreshCartBadge() {
+      try {
+        const cart = await window.HaruSora.Cart.get();
+        const totalItems = cart?.totals?.itemCount ?? (cart.items ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0);
+        window.HaruSora.Cart.updateCartBadge(totalItems);
+      } catch (error) {
+        console.log('Cart badge update skipped', error);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategories();
+      loadProducts();
+      refreshCartBadge();
+    });
+
+    window.addEventListener('cartUpdated', () => {
+      refreshCartBadge();
+    });
+    
+    // Toggle Account Dropdown
+    function toggleDropdown(event) {
+      event.stopPropagation();
+      document.getElementById('accountDropdown').classList.toggle('active');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('accountDropdown');
+      if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+    
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      window.location.href = '../login.html';
+    });
+  </script>
+</body>
+</html>

@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", function ()
   const orchidSection = document.getElementById("Orchid");
   const summaryDiv = document.getElementById("OrderSummary");
 
+
+// Omakase (max 3) kaiseki (max 20)
+  let omakaseCount = 0;
+  let kaisekiCount = 0;  
+
+
+
   // Save the Orchid 
   let orchidOption = null;
   for (let option of sushiSelect.options)
@@ -82,10 +89,54 @@ document.addEventListener("DOMContentLoaded", function ()
       return;
     }
 
+
+
+// LIMIT OMAKASE ORDERS TO FIRST 3
+  if (sushi === "Omakase") 
+  {
+    omakaseCount++;
+
+    if (omakaseCount >= 3) 
+    {
+      for (let option of sushiSelect.options) 
+      {
+        if (option.value === "Omakase") 
+        {
+            option.remove();
+            break;
+        }
+      }
+
+        alert("❗ Omakase limit reached! Only first 3 customers can order it.");
+    }
+  }
+// Kaiseiki 20
+if (sushi === "Kaiseki Sushi") 
+{
+  kaisekiCount++;
+
+  if (kaisekiCount >= 20) 
+  {
+    for (let option of sushiSelect.options) 
+    {
+      if (option.value === "Kaiseki Sushi") 
+      {
+       option.remove();
+        break;
+      }
+    }
+    alert("❗ Kaiseki Sushi limit reached! Only 20 customers can order it.");
+  }
+}
+
+
+//display order summery
     let summary = `🍣 Sushi Booking Summary\n\n`;
     summary += `👤 Name: ${name}\n`;
     summary += `🚻 Gender: ${gender}\n`;
     summary += `🍱 Sushi: ${sushi}\n`;
+
+    //orchid 
 
     if (sushi === "Orchid Princess Roll Sushi" && gender === "Female") 
     {
