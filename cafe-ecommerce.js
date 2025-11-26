@@ -7,7 +7,11 @@
 // Configuration
 // ============================================
 
-const API_BASE = 'http://localhost:4000/api';
+// Auto-detect environment: use deployed backend on GitHub Pages, localhost otherwise
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocalhost 
+  ? 'http://localhost:4000/api'
+  : 'https://sushi-cafe-api.onrender.com/api';  // Update this after deploying to Render
 
 // Get current user from localStorage
 function getCurrentUser() {
