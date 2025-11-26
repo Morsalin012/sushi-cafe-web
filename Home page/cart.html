@@ -847,6 +847,16 @@
       }
     });
     
+    // Nav Icon Flip Animation
+    document.querySelectorAll('.nav-icon').forEach(function(icon) {
+      icon.addEventListener('click', function(e) {
+        this.classList.add('flipping');
+        setTimeout(function() {
+          icon.classList.remove('flipping');
+        }, 600);
+      });
+    });
+    
     document.getElementById('logoutBtn').addEventListener('click', function(e) {
       e.preventDefault();
       localStorage.removeItem('isLoggedIn');
