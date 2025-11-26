@@ -504,6 +504,16 @@
       dropdown.classList.remove('active');
     }
   });
+  
+  // Nav Icon Flip Animation
+  document.querySelectorAll('.nav-icon').forEach(function(icon) {
+    icon.addEventListener('click', function(e) {
+      this.classList.add('flipping');
+      setTimeout(function() {
+        icon.classList.remove('flipping');
+      }, 600);
+    });
+  });
 </script>
   <div class="container">
   

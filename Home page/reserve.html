@@ -67,6 +67,23 @@
     @keyframes spin-glow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes pulse-glow { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.04); opacity: 0.7; } }
 
+    /* Nav Icon Flip Animation */
+    .nav-icon {
+      perspective: 1000px;
+    }
+    .nav-icon svg {
+      transition: transform 0.6s ease;
+      transform-style: preserve-3d;
+    }
+    .nav-icon.flipping svg {
+      animation: iconFlip 0.6s ease;
+    }
+    @keyframes iconFlip {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(180deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
     /* Reserve page specific styles */
     .reserve-container {
       max-width: 800px;
@@ -116,6 +133,116 @@
       color: var(--text-main);
       margin-bottom: 8px;
       font-weight: 500;
+    }
+    /* Styled select for guest count to keep dropdown readable */
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+      color: var(--text-main);
+      border: 1px solid rgba(212,163,115,0.12);
+      border-radius: 10px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      font-size: 15px;
+      outline: none;
+    }
+    /* Attempt to style native option dropdown (works on many Chromium-based browsers) */
+    .form-group select option {
+      background: linear-gradient(180deg, #2d1f1a 0%, #26160f 100%);
+      color: var(--text-main);
+    }
+    /* For good measure, target the select dropdown arrow on IE/Edge */
+    .form-group select::-ms-expand { display: none; }
+
+    /* Custom dropdown styles */
+    .custom-dropdown {
+      position: relative;
+      width: 100%;
+      z-index: 100;
+    }
+    .custom-dropdown-trigger {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(145deg, rgba(212, 163, 115, 0.15), rgba(188, 140, 95, 0.1));
+      border: 1px solid rgba(212, 163, 115, 0.4);
+      border-radius: 10px;
+      color: #e6cba8;
+      font-size: 16px;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+      padding-right: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .custom-dropdown-trigger:hover {
+      border-color: #d4a373;
+      background: linear-gradient(145deg, rgba(212, 163, 115, 0.2), rgba(188, 140, 95, 0.15));
+    }
+    .custom-dropdown-trigger::after {
+      content: '▼';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      color: #d4a373;
+      opacity: 0.8;
+      transition: transform 0.2s;
+      pointer-events: none;
+    }
+    .custom-dropdown.open .custom-dropdown-trigger {
+      border-color: #d4a373;
+      box-shadow: 0 2px 12px rgba(212, 163, 115, 0.2);
+    }
+    .custom-dropdown.open .custom-dropdown-trigger::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .custom-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, #2d1f1a 0%, #1a120e 100%);
+      border: 1px solid rgba(212, 163, 115, 0.5);
+      border-radius: 10px;
+      padding: 8px;
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 9999;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(212, 163, 115, 0.1);
+    }
+    .custom-dropdown.open .custom-dropdown-menu {
+      display: block;
+    }
+    .custom-dropdown-item {
+      padding: 12px 14px;
+      color: #e6cba8;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .custom-dropdown-item:hover {
+      background: linear-gradient(135deg, rgba(212, 163, 115, 0.25), rgba(188, 140, 95, 0.15));
+      color: #d4a373;
+    }
+    .custom-dropdown-item.selected {
+      background: linear-gradient(135deg, rgba(212, 163, 115, 0.3), rgba(188, 140, 95, 0.2));
+      color: #d4a373;
+      font-weight: 500;
+    }
+    .custom-dropdown-menu::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-dropdown-menu::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
+    .custom-dropdown-menu::-webkit-scrollbar-thumb {
+      background: rgba(212,163,115,0.3);
+      border-radius: 4px;
     }
     
     .form-group input,
@@ -664,16 +791,19 @@
           
           <div class="form-group">
             <label>Number of Guests</label>
-            <select id="partySize" required>
-              <option value="">Select guests</option>
-              <option value="1">1 Guest</option>
-              <option value="2">2 Guests</option>
-              <option value="3">3 Guests</option>
-              <option value="4">4 Guests</option>
-              <option value="5">5 Guests</option>
-              <option value="6">6 Guests</option>
-              <option value="7">7+ Guests (Please call)</option>
-            </select>
+            <input type="hidden" id="partySize" required>
+            <div class="custom-dropdown" id="guestDropdown">
+              <div class="custom-dropdown-trigger" id="guestTrigger">Select guests</div>
+              <div class="custom-dropdown-menu" id="guestMenu">
+                <div class="custom-dropdown-item" data-value="1">1 Guest</div>
+                <div class="custom-dropdown-item" data-value="2">2 Guests</div>
+                <div class="custom-dropdown-item" data-value="3">3 Guests</div>
+                <div class="custom-dropdown-item" data-value="4">4 Guests</div>
+                <div class="custom-dropdown-item" data-value="5">5 Guests</div>
+                <div class="custom-dropdown-item" data-value="6">6 Guests</div>
+                <div class="custom-dropdown-item" data-value="7">7+ Guests (Please call)</div>
+              </div>
+            </div>
           </div>
           
           <div class="form-group">
@@ -725,167 +855,215 @@
 <script src="../cafe-ecommerce.js"></script>
 
 <script>
-  const API_BASE = 'http://localhost:4000/api';
-  let selectedTimeSlot = null;
-  
-  // Set minimum date to today
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('reserveDate').min = today;
-  
-  // Pre-fill user info
-  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-  if (currentUser.name) document.getElementById('customerName').value = currentUser.name;
-  if (currentUser.email) document.getElementById('email').value = currentUser.email;
-  if (currentUser.phone) document.getElementById('phone').value = currentUser.phone;
-  
-  // Time slot selection
-  document.querySelectorAll('.time-slot').forEach(slot => {
-    slot.addEventListener('click', function() {
-      if (this.classList.contains('unavailable')) return;
-      
-      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-      this.classList.add('selected');
-      selectedTimeSlot = this.dataset.time;
-      document.getElementById('selectedTime').value = selectedTimeSlot;
+  // Using API_BASE from cafe-ecommerce.js
+  var selectedTimeSlot = null;
+  var selectedPartySize = null;
+
+  // ========== NAV ICON FLIP ANIMATION ==========
+  document.querySelectorAll('.nav-icon').forEach(function(icon) {
+    icon.addEventListener('click', function(e) {
+      this.classList.add('flipping');
+      setTimeout(function() {
+        icon.classList.remove('flipping');
+      }, 600);
     });
   });
-  
-  // Form submission
-  document.getElementById('reservationForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+
+  // Wait for DOM to be ready
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Reserve page loaded - initializing...');
     
-    const messageDiv = document.getElementById('formMessage');
+    // ========== GUEST DROPDOWN ==========
+    var guestDropdown = document.getElementById('guestDropdown');
+    var guestTrigger = document.getElementById('guestTrigger');
+    var guestMenu = document.getElementById('guestMenu');
+    var partySizeInput = document.getElementById('partySize');
     
-    if (!selectedTimeSlot) {
-      messageDiv.textContent = 'Please select a time slot';
-      messageDiv.className = 'message error';
-      return;
-    }
+    console.log('Dropdown elements:', guestDropdown, guestTrigger, guestMenu);
     
-    const reservationData = {
-      customerName: document.getElementById('customerName').value,
-      phone: document.getElementById('phone').value,
-      email: document.getElementById('email').value,
-      partySize: parseInt(document.getElementById('partySize').value),
-      date: document.getElementById('reserveDate').value,
-      timeSlot: selectedTimeSlot,
-      specialRequests: document.getElementById('specialRequests').value
-    };
+    // Toggle dropdown on trigger click
+    guestTrigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      guestDropdown.classList.toggle('open');
+    });
     
-    try {
-      const response = await fetch(`${API_BASE}/reservations`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reservationData)
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        messageDiv.textContent = '✅ Reservation confirmed! We look forward to seeing you.';
-        messageDiv.className = 'message success';
-        document.getElementById('reservationForm').reset();
-        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-        selectedTimeSlot = null;
-        loadMyReservations();
-      } else {
-        messageDiv.textContent = data.error || 'Failed to make reservation. Please try again.';
-        messageDiv.className = 'message error';
+    // Handle guest selection
+    guestMenu.addEventListener('click', function(e) {
+      var item = e.target.closest('.custom-dropdown-item');
+      if (item) {
+        e.stopPropagation();
+        var value = item.getAttribute('data-value');
+        var text = item.textContent;
+        
+        // Update hidden input and trigger text
+        partySizeInput.value = value;
+        selectedPartySize = value;
+        guestTrigger.textContent = text;
+        
+        // Update selected state
+        guestMenu.querySelectorAll('.custom-dropdown-item').forEach(function(i) {
+          i.classList.remove('selected');
+        });
+        item.classList.add('selected');
+        
+        // Close dropdown
+        guestDropdown.classList.remove('open');
       }
-    } catch (error) {
-      console.error('Reservation error:', error);
-      messageDiv.textContent = 'Connection error. Please try again later.';
-      messageDiv.className = 'message error';
-    }
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!guestDropdown.contains(e.target)) {
+        guestDropdown.classList.remove('open');
+      }
+    });
+    
+    // ========== TIME SLOTS ==========
+    var timeSlots = document.querySelectorAll('.time-slot');
+    timeSlots.forEach(function(slot) {
+      slot.addEventListener('click', function(e) {
+        if (this.classList.contains('unavailable')) return;
+        
+        // Remove selected from all
+        timeSlots.forEach(function(s) {
+          s.classList.remove('selected');
+        });
+        
+        // Add selected to clicked
+        this.classList.add('selected');
+        selectedTimeSlot = this.getAttribute('data-time');
+        document.getElementById('selectedTime').value = selectedTimeSlot;
+        console.log('Time selected:', selectedTimeSlot);
+      });
+    });
+    
+    // ========== DATE SETUP ==========
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('reserveDate').min = today;
+    
+    // ========== PRE-FILL USER INFO ==========
+    var currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    if (currentUser.name) document.getElementById('customerName').value = currentUser.name;
+    if (currentUser.email) document.getElementById('email').value = currentUser.email;
+    if (currentUser.phone) document.getElementById('phone').value = currentUser.phone;
+    
+    // ========== FORM SUBMISSION ==========
+    document.getElementById('reservationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      var messageDiv = document.getElementById('formMessage');
+      
+      if (!selectedTimeSlot) {
+        messageDiv.textContent = 'Please select a time slot';
+        messageDiv.className = 'message error';
+        return;
+      }
+      
+      if (!selectedPartySize) {
+        messageDiv.textContent = 'Please select number of guests';
+        messageDiv.className = 'message error';
+        return;
+      }
+      
+      var reservationData = {
+        id: Date.now().toString(),
+        customerName: document.getElementById('customerName').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        partySize: parseInt(selectedPartySize),
+        date: document.getElementById('reserveDate').value,
+        timeSlot: selectedTimeSlot,
+        specialRequests: document.getElementById('specialRequests').value,
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      };
+      
+      // Save to localStorage directly (works offline)
+      saveToLocalStorage(reservationData);
+      messageDiv.textContent = '✅ Reservation confirmed! We look forward to seeing you.';
+      messageDiv.className = 'message success';
+      resetForm();
+      loadMyReservations();
+    });
+    
+    // ========== LOGOUT ==========
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      window.location.href = '../login.html';
+    });
+    
+    // Load reservations on page load
+    loadMyReservations();
   });
   
-  // Load user's reservations
-  async function loadMyReservations() {
-    const container = document.getElementById('reservationsList');
+  // ========== HELPER FUNCTIONS ==========
+  function resetForm() {
+    document.getElementById('reservationForm').reset();
+    document.querySelectorAll('.time-slot').forEach(function(s) {
+      s.classList.remove('selected');
+    });
+    selectedTimeSlot = null;
+    selectedPartySize = null;
+    document.getElementById('guestTrigger').textContent = 'Select guests';
+    document.querySelectorAll('.custom-dropdown-item').forEach(function(i) {
+      i.classList.remove('selected');
+    });
+  }
+  
+  function saveToLocalStorage(reservation) {
+    var reservations = JSON.parse(localStorage.getItem('myReservations') || '[]');
+    reservations.unshift(reservation);
+    localStorage.setItem('myReservations', JSON.stringify(reservations));
+    console.log('Saved reservation:', reservation);
+  }
+  
+  function loadMyReservations() {
+    var container = document.getElementById('reservationsList');
+    var localReservations = JSON.parse(localStorage.getItem('myReservations') || '[]');
     
-    try {
-      const response = await fetch(`${API_BASE}/reservations/my`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
-        }
-      });
-      
-      if (!response.ok) {
-        container.innerHTML = '<div class="empty-reservations">No reservations found</div>';
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (!data.reservations || data.reservations.length === 0) {
-        container.innerHTML = '<div class="empty-reservations">No reservations yet. Book your first table above!</div>';
-        return;
-      }
-      
-      container.innerHTML = data.reservations.map(res => `
-        <div class="reservation-item">
-          <div class="reservation-details">
-            <h4>📅 ${formatDate(res.date)} at ${formatTime(res.timeSlot)}</h4>
-            <p>👥 ${res.partySize} Guest${res.partySize > 1 ? 's' : ''}</p>
-            ${res.specialRequests ? `<p>📝 ${res.specialRequests}</p>` : ''}
-          </div>
-          <div>
-            <span class="reservation-status ${res.status}">${res.status}</span>
-            ${res.status === 'pending' || res.status === 'confirmed' ? 
-              `<button class="cancel-btn" onclick="cancelReservation('${res._id}')">Cancel</button>` : ''}
-          </div>
-        </div>
-      `).join('');
-    } catch (error) {
-      console.error('Error loading reservations:', error);
-      container.innerHTML = '<div class="empty-reservations">Unable to load reservations</div>';
+    if (localReservations.length > 0) {
+      container.innerHTML = localReservations.map(function(res) {
+        return '<div class="reservation-item">' +
+          '<div class="reservation-details">' +
+            '<h4>📅 ' + formatDate(res.date) + ' at ' + formatTime(res.timeSlot) + '</h4>' +
+            '<p>👥 ' + res.partySize + ' Guest' + (res.partySize > 1 ? 's' : '') + '</p>' +
+            (res.specialRequests ? '<p>📝 ' + res.specialRequests + '</p>' : '') +
+          '</div>' +
+          '<div>' +
+            '<span class="reservation-status ' + res.status + '">' + res.status + '</span>' +
+            '<button class="cancel-btn" onclick="cancelReservation(\'' + res.id + '\')">Cancel</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } else {
+      container.innerHTML = '<div class="empty-reservations">No reservations yet. Book your first table above!</div>';
     }
   }
   
-  // Cancel reservation
-  async function cancelReservation(id) {
+  function cancelReservation(id) {
     if (!confirm('Are you sure you want to cancel this reservation?')) return;
     
-    try {
-      const response = await fetch(`${API_BASE}/reservations/${id}/cancel`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
-        }
-      });
-      
-      if (response.ok) {
-        loadMyReservations();
-      } else {
-        alert('Failed to cancel reservation');
-      }
-    } catch (error) {
-      console.error('Cancel error:', error);
-      alert('Connection error');
-    }
+    var reservations = JSON.parse(localStorage.getItem('myReservations') || '[]');
+    reservations = reservations.filter(function(r) { return r.id !== id; });
+    localStorage.setItem('myReservations', JSON.stringify(reservations));
+    loadMyReservations();
   }
   
   function formatDate(dateStr) {
-    const date = new Date(dateStr);
+    var date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   }
   
   function formatTime(time) {
-    const [hours] = time.split(':');
-    const h = parseInt(hours);
-    return h > 12 ? `${h - 12}:00 PM` : `${h}:00 ${h === 12 ? 'PM' : 'AM'}`;
+    if (!time) return '';
+    var parts = time.split(':');
+    var h = parseInt(parts[0]);
+    if (h > 12) return (h - 12) + ':00 PM';
+    if (h === 12) return '12:00 PM';
+    return h + ':00 AM';
   }
-  
-  // Logout
-  document.getElementById('logoutBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('currentUser');
-    window.location.href = '../login.html';
-  });
-  
-  // Initialize
-  loadMyReservations();
 </script>
 
 </body>
