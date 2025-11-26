@@ -318,6 +318,7 @@ textarea:-webkit-autofill:active {
   box-shadow: inset 0 0 0 1px var(--glass-border);
   -webkit-box-shadow: inset 0 0 0 1px var(--glass-border);
   transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: var(--text-main) !important;
 }
 
 .toggle-password {
