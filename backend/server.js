@@ -225,6 +225,10 @@ app.post('/api/reset-password', async (req, res) => {
 // API Routes
 // ============================================
 
+// Auth routes (Google OAuth)
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);

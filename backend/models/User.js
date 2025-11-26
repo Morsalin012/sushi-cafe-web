@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: { type: String },
   avatar: { type: String },
+  // Google OAuth fields
+  googleId: { type: String, sparse: true },
+  isGoogleUser: { type: Boolean, default: false },
   role: {
     type: String,
     enum: ['customer', 'staff', 'admin'],
