@@ -79,7 +79,7 @@ To make the live GitHub Pages site work with real data:
 
 1. **Create a MongoDB Atlas account** (free): https://www.mongodb.com/cloud/atlas
    - Create a free cluster
-   - Get your connection string: `mongodb+srv://user:pass@cluster.xxxxx.mongodb.net/sushi-cafe`
+   - Get your connection string (format: `mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<dbname>`)
 
 2. **Deploy to Render**:
    - Go to https://render.com and sign up (free)
