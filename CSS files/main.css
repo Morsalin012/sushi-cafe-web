@@ -287,6 +287,7 @@ input, textarea {
   font-size: 0.95rem;
   font-family: inherit;
   transition: all 0.3s ease;
+  caret-color: var(--text-main);
 }
 
 textarea {
@@ -300,6 +301,7 @@ input:focus, textarea:focus {
   border-color: var(--accent-gold);
   background: rgba(40, 30, 25, 0.8);
   box-shadow: 0 0 0 1px var(--accent-gold);
+  caret-color: var(--text-main);
 }
 
 input:focus + .input-icon { color: var(--accent-gold); }
