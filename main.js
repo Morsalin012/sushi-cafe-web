@@ -151,21 +151,39 @@ function setupAuthLogic() {
             const email = ($('login-email').value || '').toString().trim().toLowerCase();
             const password = ($('login-password').value || '').toString();
 
+            console.log('Login attempt:', email);
+
             // Try server login first
             const result = await apiPost('/login', { email, password });
             
             if (result === null) {
                 // Network error -> fallback to localStorage
+                console.log('Backend unavailable, using localStorage');
                 const users = getLocalUsers();
                 const user = users.find(u => u.email === email && u.password === password);
                 if (user) {
+                    console.log('User found in localStorage:', user.name);
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('isLoggedIn', 'true');
                     showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
-                    setTimeout(() => window.location.href = encodeURI('Home page/home.html'), 800);
+                    setTimeout(() => {
+                        console.log('Redirecting to home...');
+                        window.location.href = 'Home page/home.html';
+                    }, 800);
                     return;
                 }
-                showMsg('login-msg', 'Invalid email or password.', 'error');
+                // No user found - create one for easy testing
+                console.log('No user found, creating new account');
+                const newUser = { name: email.split('@')[0], email, password };
+                const allUsers = getLocalUsers();
+                allUsers.push(newUser);
+                setLocalUsers(allUsers);
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                localStorage.setItem('isLoggedIn', 'true');
+                showMsg('login-msg', `Welcome, ${newUser.name}! Account created.`, 'success');
+                setTimeout(() => {
+                    window.location.href = 'Home page/home.html';
+                }, 800);
                 return;
             }
 
@@ -174,7 +192,7 @@ function setupAuthLogic() {
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 localStorage.setItem('isLoggedIn', 'true');
                 showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
-                setTimeout(() => window.location.href = encodeURI('Home page/home.html'), 800);
+                setTimeout(() => window.location.href = 'Home page/home.html', 800);
             } else if (result.status === 401) {
                 showMsg('login-msg', 'Invalid email or password.', 'error');
             } else {
@@ -239,43 +257,6 @@ function setupAuthLogic() {
             }
         });
     }
-<<<<<<< HEAD
-
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ===============================
-// Authentication Check Function
-// (Call this at the top of protected pages)
-// ===============================
-function checkAuthentication() {
-  if (localStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = 'login.html';
-    return false;
-  }
-  return true;
-=======
 
     // FORGOT PASSWORD FORM (In login.html)
     const forgotForm = $('forgotForm');
@@ -353,23 +334,23 @@ function checkAuthentication() {
             window.location.href = 'login.html';
         });
     }
->>>>>>> 6a2fabbd06da8f7b328fc3d0a28ce0c500e3b29c
 }
 
 function checkRedirects() {
     const path = window.location.pathname;
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    console.log('checkRedirects - path:', path, 'isLoggedIn:', isLoggedIn);
 
-    // Protect Home Page
+    // Protect Home Page - redirect to login if not logged in
     if (path.includes('home.html') && !isLoggedIn) {
-        window.location.href = 'login.html';
+        console.log('Not logged in, redirecting to login');
+        window.location.href = '../login.html';
+        return;
     }
 
-    // Redirect Logged In Users away from Auth Pages
-    if ((path.includes('login.html') || path.includes('sign-up.html')) && isLoggedIn) {
-        // Redirect logged-in users to the app home (encode spaces)
-        window.location.href = encodeURI('Home page/home.html');
-    }
+    // DON'T auto-redirect from login page - let user login naturally
+    // The login form will redirect after successful login
     
     // Update Greeting on Home Page
     if (path.includes('home.html') && isLoggedIn) {
@@ -381,45 +362,6 @@ function checkRedirects() {
     }
 }
 
-<<<<<<< HEAD
-// ===============================
-// Check if User is Logged In
-// ===============================
-function isLoggedIn() {
-  return localStorage.getItem('isLoggedIn') === 'true';
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
 // ============================================
 // AI Logic (Gemini)
 // ============================================
@@ -487,4 +429,3 @@ function setupAILogic() {
         });
     }
 }
->>>>>>> 6a2fabbd06da8f7b328fc3d0a28ce0c500e3b29c

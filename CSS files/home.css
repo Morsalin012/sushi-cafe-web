@@ -130,21 +130,12 @@ nav a.ghost:hover{
 /* Footer */
 footer{margin-top:28px;text-align:center;padding:22px;border-radius:12px;color:var(--text-muted);font-size:14px}
 
-/* Nav Icon Flip Animation */
-.nav-icon {
-  perspective: 1000px;
-}
+/* Nav Icon Flip Animation - Flips upside down and stays */
 .nav-icon svg {
-  transition: transform 0.6s ease;
-  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
 }
-.nav-icon.flipping svg {
-  animation: iconFlip 0.6s ease;
-}
-@keyframes iconFlip {
-  0% { transform: rotateY(0deg); }
-  50% { transform: rotateY(180deg); }
-  100% { transform: rotateY(360deg); }
+.nav-icon.flipped svg {
+  transform: rotate(180deg);
 }
 
 /* Responsive */

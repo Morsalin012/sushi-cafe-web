@@ -106,10 +106,30 @@
       color: #1a120e;
     }
     
+    /* When another icon is clicked, remove glow from page icon */
+    .nav-icon.active.dimmed {
+      background: rgba(212, 163, 115, 0.1);
+      border-color: rgba(212, 163, 115, 0.2);
+      color: #ffe6dc;
+    }
+    
+    /* Clicked state - the icon you just clicked */
+    .nav-icon.clicked {
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      border-color: #d4a373;
+      color: #1a120e;
+    }
+    
     .nav-icon svg {
       width: 22px;
       height: 22px;
       stroke-width: 1.8;
+      transition: transform 0.4s ease;
+    }
+    
+    /* Flip upside down when clicked */
+    .nav-icon.flipped svg {
+      transform: rotate(180deg);
     }
     
     /* Tooltip */
@@ -686,13 +706,29 @@
       }
     });
     
-    // Nav Icon Flip Animation
-    document.querySelectorAll('.nav-icon').forEach(function(icon) {
-      icon.addEventListener('click', function(e) {
-        this.classList.add('flipping');
-        setTimeout(function() {
-          icon.classList.remove('flipping');
-        }, 600);
+    // Nav Icon Flip Animation - only for link icons (not dropdown)
+    document.addEventListener('DOMContentLoaded', function() {
+      // Handle all nav icon clicks (including dropdown trigger)
+      document.querySelectorAll('.nav-icon').forEach(function(icon) {
+        icon.addEventListener('click', function(e) {
+          // Remove clicked class from all icons
+          document.querySelectorAll('.nav-icon').forEach(function(i) {
+            i.classList.remove('clicked');
+          });
+          // Dim the active (current page) icon
+          document.querySelectorAll('.nav-icon.active').forEach(function(i) {
+            i.classList.add('dimmed');
+          });
+          // Add clicked class to this icon
+          this.classList.add('clicked');
+          
+          // For link icons - flip and stay flipped until page navigates
+          if (this.tagName === 'A') {
+            this.classList.add('flipped');
+            // Don't prevent default - let the link navigate naturally
+            // The flip stays visible until browser loads the new page
+          }
+        });
       });
     });
     
