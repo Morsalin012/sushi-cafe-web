@@ -352,12 +352,17 @@
     
     .order-type select {
       width: 100%;
-      padding: 12px;
-      background: rgba(212, 163, 115, 0.1);
-      border: 1px solid rgba(212, 163, 115, 0.3);
-      border-radius: 8px;
-      color: var(--text-main);
+      padding: 12px 16px;
+      background: rgba(26, 18, 14, 0.7);
+      border: 1px solid rgba(212, 163, 115, 0.35);
+      border-radius: 12px;
+      color: #ffe6dc;
       font-size: 16px;
+      appearance: none;
+    }
+    .order-type select option {
+      background: #1a120e;
+      color: #ffe6dc;
     }
     
     .checkout-btn {
@@ -558,17 +563,74 @@
   <script src="../cafe-ecommerce.js"></script>
   
   <script>
+    const CART_PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80';
     let cartData = null;
-    
+    const cartContainer = document.getElementById('cartContent');
+
+    const calculateTotals = (items) => {
+      const subtotal = items.reduce((sum, item) => {
+        const price = (item.product?.price ?? item.price ?? 0);
+        return sum + (price * (item.quantity || 0));
+      }, 0);
+      const tax = Math.round(subtotal * 0.05);
+      const deliveryFee = subtotal > 1000 ? 0 : 50;
+      const total = subtotal + tax + deliveryFee;
+      const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      return { subtotal, tax, deliveryFee, total, itemCount };
+    };
+
+    async function hydrateCartItems(items = []) {
+      const cache = {};
+      const hydrated = [];
+
+      for (const item of items) {
+        let product = item.product;
+        if (!product || typeof product !== 'object' || !product.name) {
+          const productId = item.product?._id || item.productId || item.product;
+          if (productId) {
+            if (!cache[productId]) {
+              try {
+                cache[productId] = await window.HaruSora.Products.getById(productId);
+              } catch (err) {
+                cache[productId] = null;
+              }
+            }
+            product = cache[productId];
+          }
+        }
+
+        if (!product) {
+          product = {
+            _id: item.productId || 'unknown',
+            name: item.name || 'Menu Item',
+            price: item.price || 0,
+            image: CART_PLACEHOLDER_IMAGE,
+            isAvailable: true
+          };
+        }
+
+        hydrated.push({ ...item, product });
+      }
+
+      return hydrated;
+    }
+
     async function loadCart() {
       cartData = await window.HaruSora.Cart.get();
-      renderCart();
+      await renderCart();
     }
-    
-    function renderCart() {
+
+    async function renderCart() {
       const container = document.getElementById('cartContent');
-      
-      if (!cartData.items || cartData.items.length === 0) {
+      const items = await hydrateCartItems(cartData?.items || []);
+      const recalculatedTotals = calculateTotals(items);
+      cartData = {
+        ...cartData,
+        items,
+        totals: recalculatedTotals
+      };
+
+      if (!items.length) {
         container.innerHTML = `
           <div class="empty-cart">
             <h3>Your cart is empty</h3>
@@ -576,31 +638,35 @@
             <a href="menu.html">Browse Menu</a>
           </div>
         `;
+        window.HaruSora.Cart.updateCartBadge(0);
         return;
       }
-      
-      const itemsHtml = cartData.items.map(item => {
+
+      const itemsHtml = items.map(item => {
         const product = item.product;
         return `
           <div class="cart-item" data-product="${product._id}">
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${product.image || CART_PLACEHOLDER_IMAGE}" alt="${product.name}">
             <div class="cart-item-details">
               <h4>${product.name}</h4>
               <p class="cart-item-price">৳ ${product.price} each</p>
             </div>
             <div class="cart-item-actions">
-              <div class="quantity-control">
-                <button onclick="updateQuantity('${product._id}', ${item.quantity - 1})">−</button>
-                <span>${item.quantity}</span>
-                <button onclick="updateQuantity('${product._id}', ${item.quantity + 1})">+</button>
-              </div>
+                    <div class="quantity-control">
+                      <button type="button" data-action="decrease" data-product="${product._id}">−</button>
+                      <span>${item.quantity}</span>
+                      <button type="button" data-action="increase" data-product="${product._id}">+</button>
+                    </div>
               <span class="cart-item-price">৳ ${product.price * item.quantity}</span>
-              <button class="remove-btn" onclick="removeItem('${product._id}')">Remove</button>
+                    <button type="button" class="remove-btn" data-action="remove" data-product="${product._id}">Remove</button>
             </div>
           </div>
         `;
       }).join('');
-      
+
+      const totals = cartData.totals;
+      window.HaruSora.Cart.updateCartBadge(totals.itemCount);
+
       container.innerHTML = `
         <div class="cart-items">
           ${itemsHtml}
@@ -609,19 +675,19 @@
         <div class="cart-summary">
           <div class="summary-row">
             <span>Subtotal</span>
-            <span>৳ ${cartData.totals.subtotal}</span>
+            <span>৳ ${totals.subtotal}</span>
           </div>
           <div class="summary-row">
             <span>VAT (5%)</span>
-            <span>৳ ${cartData.totals.tax}</span>
+            <span>৳ ${totals.tax}</span>
           </div>
           <div class="summary-row">
             <span>Delivery Fee</span>
-            <span>${cartData.totals.deliveryFee > 0 ? '৳ ' + cartData.totals.deliveryFee : 'Free'}</span>
+            <span>${totals.deliveryFee > 0 ? '৳ ' + totals.deliveryFee : 'Free'}</span>
           </div>
           <div class="summary-row total">
             <span>Total</span>
-            <span class="amount">৳ ${cartData.totals.total}</span>
+            <span class="amount">৳ ${totals.total}</span>
           </div>
           
           <div class="order-type">
@@ -634,7 +700,7 @@
           </div>
           
           <button class="checkout-btn" onclick="placeOrder()">
-            Place Order — ৳ ${cartData.totals.total}
+            Place Order — ৳ ${totals.total}
           </button>
         </div>
       `;
@@ -679,6 +745,26 @@
       if (confirm('Are you sure you want to clear your cart?')) {
         await window.HaruSora.Cart.clear();
         await loadCart();
+      }
+    });
+
+    cartContainer?.addEventListener('click', async (event) => {
+      const actionBtn = event.target.closest('button[data-action]');
+      if (!actionBtn) return;
+      const productId = actionBtn.dataset.product;
+      if (!productId) return;
+
+      const currentItem = cartData?.items?.find(item => (item.product?._id === productId));
+      if (actionBtn.dataset.action === 'decrease') {
+        const newQuantity = (currentItem?.quantity || 0) - 1;
+        await updateQuantity(productId, newQuantity);
+      }
+      if (actionBtn.dataset.action === 'increase') {
+        const newQuantity = (currentItem?.quantity || 0) + 1;
+        await updateQuantity(productId, newQuantity);
+      }
+      if (actionBtn.dataset.action === 'remove') {
+        await removeItem(productId);
       }
     });
     

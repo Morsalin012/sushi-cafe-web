@@ -64,7 +64,10 @@ const Cart = {
       }
     }
     // Fallback to localStorage
-    return JSON.parse(localStorage.getItem('cart') || '{"items":[],"totals":{"subtotal":0,"tax":0,"total":0,"itemCount":0}}');
+    const cart = JSON.parse(localStorage.getItem('cart') || '{"items":[],"totals":{"subtotal":0,"tax":0,"deliveryFee":0,"total":0,"itemCount":0}}');
+    cart.items = cart.items || [];
+    cart.totals = cart.totals || this._calculateTotals(cart.items);
+    return cart;
   },
 
   // Add item to cart
@@ -89,17 +92,44 @@ const Cart = {
 
   // Local cart fallback
   addLocal(productId, quantity) {
-    const cart = JSON.parse(localStorage.getItem('cart') || '{"items":[]}');
+    const cart = this._getLocalCart();
     const existingIndex = cart.items.findIndex(i => i.productId === productId);
     if (existingIndex > -1) {
       cart.items[existingIndex].quantity += quantity;
     } else {
       cart.items.push({ productId, quantity });
     }
-    localStorage.setItem('cart', JSON.stringify(cart));
-    this.updateCartBadge(cart.items.reduce((sum, i) => sum + i.quantity, 0));
+    cart.totals = this._calculateTotals(cart.items);
+    this._saveLocalCart(cart);
+    this.updateCartUI(cart);
     this.showNotification('Added to cart!');
     return cart;
+  },
+
+  _getLocalCart() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '{"items":[],"totals":{"subtotal":0,"tax":0,"deliveryFee":0,"total":0,"itemCount":0}}');
+    cart.items = cart.items || [];
+    cart.totals = cart.totals || this._calculateTotals(cart.items);
+    return cart;
+  },
+
+  _saveLocalCart(cart) {
+    localStorage.setItem('cart', JSON.stringify({
+      items: cart.items,
+      totals: cart.totals
+    }));
+  },
+
+  _calculateTotals(items) {
+    const subtotal = items.reduce((sum, item) => {
+      const price = item?.product?.price ?? item.price ?? 0;
+      return sum + (price * (item.quantity || 0));
+    }, 0);
+    const tax = Math.round(subtotal * 0.05);
+    const deliveryFee = subtotal > 1000 ? 0 : 50;
+    const total = subtotal + tax + deliveryFee;
+    const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    return { subtotal, tax, deliveryFee, total, itemCount };
   },
 
   // Update item quantity
@@ -116,7 +146,22 @@ const Cart = {
         return result.data;
       }
     }
-    return null;
+    return this.updateLocal(productId, quantity);
+  },
+
+  updateLocal(productId, quantity) {
+    const cart = this._getLocalCart();
+    const existingIndex = cart.items.findIndex(i => i.productId === productId || i.product === productId);
+    if (existingIndex === -1) return null;
+    if (quantity <= 0) {
+      cart.items.splice(existingIndex, 1);
+    } else {
+      cart.items[existingIndex].quantity = quantity;
+    }
+    cart.totals = this._calculateTotals(cart.items);
+    this._saveLocalCart(cart);
+    this.updateCartUI(cart);
+    return cart;
   },
 
   // Remove item from cart
@@ -133,7 +178,19 @@ const Cart = {
         return result.data;
       }
     }
-    return null;
+    return this.removeLocal(productId);
+  },
+
+  removeLocal(productId) {
+    const cart = this._getLocalCart();
+    cart.items = cart.items.filter(
+      item => item.productId !== productId && item.product !== productId
+    );
+    cart.totals = this._calculateTotals(cart.items);
+    this._saveLocalCart(cart);
+    this.updateCartUI(cart);
+    this.showNotification('Removed from cart');
+    return cart;
   },
 
   // Clear cart
@@ -146,14 +203,16 @@ const Cart = {
         return result.data;
       }
     }
-    localStorage.removeItem('cart');
+    const emptyCart = { items: [], totals: this._calculateTotals([]) };
+    this._saveLocalCart(emptyCart);
+    this.updateCartUI(emptyCart);
     this.updateCartBadge(0);
-    return { items: [], totals: { subtotal: 0, tax: 0, total: 0, itemCount: 0 } };
+    return emptyCart;
   },
 
   // Update cart badge in header
   updateCartBadge(count) {
-    const badge = document.getElementById('cart-badge');
+    const badge = document.getElementById('cart-badge') || document.getElementById('cartBadge');
     if (badge) {
       badge.textContent = count;
       badge.style.display = count > 0 ? 'flex' : 'none';

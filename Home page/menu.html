@@ -593,31 +593,25 @@
       });
     }
     
+    async function refreshCartBadge() {
+      try {
+        const cart = await window.HaruSora.Cart.get();
+        const totalItems = cart?.totals?.itemCount ?? (cart.items ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0);
+        window.HaruSora.Cart.updateCartBadge(totalItems);
+      } catch (error) {
+        console.log('Cart badge update skipped', error);
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       loadCategories();
       loadProducts();
-      updateCartBadge();
+      refreshCartBadge();
     });
-    
-    // Update cart badge
-    async function updateCartBadge() {
-      try {
-        const res = await fetch('/api/cart');
-        if (res.ok) {
-          const cart = await res.json();
-          const totalItems = cart.items ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
-          const badge = document.getElementById('cartBadge');
-          if (totalItems > 0) {
-            badge.textContent = totalItems > 99 ? '99+' : totalItems;
-            badge.style.display = 'flex';
-          } else {
-            badge.style.display = 'none';
-          }
-        }
-      } catch (e) {
-        console.log('Cart badge update skipped');
-      }
-    }
+
+    window.addEventListener('cartUpdated', () => {
+      refreshCartBadge();
+    });
     
     // Toggle Account Dropdown
     function toggleDropdown(event) {
