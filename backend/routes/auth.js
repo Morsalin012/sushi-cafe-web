@@ -11,7 +11,7 @@ const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'haru-sora-secret-key-2024';
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '92817315946-uhm3r52gmlmf629439d9do6kqc2601cc.apps.googleusercontent.com';
 
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
@@ -141,6 +141,63 @@ router.get('/me', async (req, res) => {
 
   } catch (error) {
     res.status(401).json({ message: 'Invalid token' });
+  }
+});
+
+// POST /api/auth/google-userinfo - Alternative Google login using userinfo
+router.post('/google-userinfo', async (req, res) => {
+  try {
+    const { email, name, picture, googleId } = req.body;
+
+    if (!email || !googleId) {
+      return res.status(400).json({ message: 'Email and Google ID are required' });
+    }
+
+    // Find or create user
+    let user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+      // Create new user with Google account
+      user = await User.create({
+        name: name || email.split('@')[0],
+        email: email.toLowerCase(),
+        password: await bcrypt.hash(googleId + JWT_SECRET, 12),
+        avatar: picture,
+        googleId,
+        isGoogleUser: true
+      });
+      console.log(`✅ New Google user created: ${email}`);
+    } else if (!user.googleId) {
+      // Link existing account to Google
+      user.googleId = googleId;
+      user.avatar = user.avatar || picture;
+      await user.save();
+      console.log(`✅ Linked Google to existing account: ${email}`);
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      message: 'Google login successful',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        role: user.role,
+        loyaltyPoints: user.loyaltyPoints
+      }
+    });
+
+  } catch (error) {
+    console.error('Google userinfo auth error:', error);
+    res.status(500).json({ message: 'Server error during Google login' });
   }
 });
 

@@ -30,10 +30,22 @@
         <div class="brand-logo-container">
           <div class="brand-ring"></div>
           <div class="brand-ring-inner">
-            <div class="logo-composition">
-              <i data-lucide="coffee" class="logo-icon-1" size="20"></i>
-              <i data-lucide="fish" class="logo-icon-2" size="20"></i>
-            </div>
+            <svg class="sushi-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Chopsticks -->
+              <path d="M15 25 L85 55" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+              <path d="M10 35 L80 65" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+              <!-- Plate/Circle -->
+              <circle cx="50" cy="50" r="22" fill="none" stroke="#1a1a1a" stroke-width="4"/>
+              <!-- Sushi roll outer -->
+              <ellipse cx="50" cy="50" rx="16" ry="14" fill="#e8a87c"/>
+              <!-- Sushi roll inner spiral -->
+              <ellipse cx="50" cy="50" rx="11" ry="9" fill="#c85a5a"/>
+              <ellipse cx="50" cy="50" rx="6" ry="5" fill="#e8a87c"/>
+              <ellipse cx="50" cy="50" rx="3" ry="2.5" fill="#c85a5a"/>
+              <!-- Stand base -->
+              <path d="M35 75 Q50 70 65 75 L62 85 Q50 82 38 85 Z" fill="#1a1a1a"/>
+              <rect x="45" y="68" width="10" height="8" fill="#1a1a1a"/>
+            </svg>
           </div>
         </div>
         <div>
@@ -51,6 +63,39 @@
         
         <h2>Create Account</h2>
         <p class="subtitle">Reserve your digital table today.</p>
+
+        <!-- Google Sign Up Button -->
+        <button type="button" id="googleSignUpBtn" style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          width: 100%;
+          padding: 14px 20px;
+          background: #fff;
+          border: 1px solid #dadce0;
+          border-radius: 30px;
+          font-size: 15px;
+          font-weight: 500;
+          color: #3c4043;
+          cursor: pointer;
+          transition: all 0.2s;
+          margin-bottom: 20px;
+        " onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Sign up with Google
+        </button>
+
+        <div class="divider" style="display: flex; align-items: center; margin: 20px 0; color: rgba(255,230,220,0.5);">
+          <span style="flex: 1; height: 1px; background: rgba(255,230,220,0.2);"></span>
+          <span style="padding: 0 16px; font-size: 13px;">or sign up with email</span>
+          <span style="flex: 1; height: 1px; background: rgba(255,230,220,0.2);"></span>
+        </div>
         
         <form id="signupForm">
           <div class="form-group">
@@ -92,6 +137,115 @@
     </section>
   </div>
 
-  <script src="main.js" defer></script>
+  <script src="main.js"></script>
+  
+  <!-- Google Sign-In Library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
+  <!-- Google Sign Up Handler -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Re-init Lucide icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+
+    // Configuration
+    const GOOGLE_CLIENT_ID = '92817315946-uhm3r52gmlmf629439d9do6kqc2601cc.apps.googleusercontent.com';
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:4000/api'
+      : 'https://sushi-cafe-api.onrender.com/api';
+
+    // Google Sign Up button click
+    const googleBtn = document.getElementById('googleSignUpBtn');
+    if (googleBtn) {
+      googleBtn.addEventListener('click', async function() {
+        if (typeof google === 'undefined') {
+          showMessage('signup-msg', 'Google Sign-In is loading. Please wait...', 'error');
+          return;
+        }
+
+        try {
+          const tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: GOOGLE_CLIENT_ID,
+            scope: 'email profile',
+            callback: async (tokenResponse) => {
+              if (tokenResponse.access_token) {
+                const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                });
+                const userInfo = await userInfoRes.json();
+                handleGoogleUser(userInfo);
+              }
+            },
+            error_callback: (error) => {
+              console.error('OAuth error:', error);
+              showMessage('signup-msg', 'Google sign-up error. Please try again.', 'error');
+            }
+          });
+          tokenClient.requestAccessToken();
+        } catch (e) {
+          console.error('Google OAuth error:', e);
+          showMessage('signup-msg', 'Failed to start Google sign-up.', 'error');
+        }
+      });
+    }
+
+    async function handleGoogleUser(userInfo) {
+      try {
+        const result = await fetch(`${API_BASE}/auth/google-userinfo`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: userInfo.email,
+            name: userInfo.name,
+            picture: userInfo.picture,
+            googleId: userInfo.sub
+          })
+        });
+
+        const data = await result.json();
+
+        if (result.ok) {
+          localStorage.setItem('currentUser', JSON.stringify(data.user));
+          if (data.token) localStorage.setItem('authToken', data.token);
+          localStorage.setItem('isLoggedIn', 'true');
+          
+          showMessage('signup-msg', `Welcome, ${data.user.name}!`, 'success');
+          setTimeout(() => {
+            window.location.href = 'Home%20page/home.html';
+          }, 500);
+        } else {
+          showMessage('signup-msg', data.message || 'Google sign-up failed', 'error');
+        }
+      } catch (error) {
+        console.error('Google signup error:', error);
+        // Fallback: create user locally
+        const user = {
+          id: userInfo.sub,
+          name: userInfo.name,
+          email: userInfo.email,
+          avatar: userInfo.picture
+        };
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        showMessage('signup-msg', `Welcome, ${user.name}!`, 'success');
+        setTimeout(() => {
+          window.location.href = 'Home%20page/home.html';
+        }, 500);
+      }
+    }
+
+    function showMessage(id, text, type) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = text;
+        el.className = 'message ' + type;
+        el.style.display = 'block';
+      }
+    }
+  });
+  </script>
 </body>
 </html>

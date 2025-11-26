@@ -30,10 +30,22 @@
         <div class="brand-logo-container">
           <div class="brand-ring"></div>
           <div class="brand-ring-inner">
-            <div class="logo-composition">
-              <i data-lucide="coffee" class="logo-icon-1" size="20"></i>
-              <i data-lucide="fish" class="logo-icon-2" size="20"></i>
-            </div>
+            <svg class="sushi-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Chopsticks -->
+              <path d="M15 25 L85 55" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+              <path d="M10 35 L80 65" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+              <!-- Plate/Circle -->
+              <circle cx="50" cy="50" r="22" fill="none" stroke="#1a1a1a" stroke-width="4"/>
+              <!-- Sushi roll outer -->
+              <ellipse cx="50" cy="50" rx="16" ry="14" fill="#e8a87c"/>
+              <!-- Sushi roll inner spiral -->
+              <ellipse cx="50" cy="50" rx="11" ry="9" fill="#c85a5a"/>
+              <ellipse cx="50" cy="50" rx="6" ry="5" fill="#e8a87c"/>
+              <ellipse cx="50" cy="50" rx="3" ry="2.5" fill="#c85a5a"/>
+              <!-- Stand base -->
+              <path d="M35 75 Q50 70 65 75 L62 85 Q50 82 38 85 Z" fill="#1a1a1a"/>
+              <rect x="45" y="68" width="10" height="8" fill="#1a1a1a"/>
+            </svg>
           </div>
         </div>
         <div>
@@ -157,15 +169,188 @@
     </section>
   </div>
 
-  <script src="main.js" defer></script>
+  <script src="main.js"></script>
   
-  <!-- Google Sign In Handler -->
+  <!-- Google Sign-In Library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
+  <!-- Google Sign In Handler - runs after DOM is ready -->
   <script>
-    document.getElementById('googleSignInBtn').addEventListener('click', function() {
-      // Show info modal about Google OAuth setup
-      const msg = `🔐 Google Sign-In Setup Required\n\nTo enable Google login, you need to:\n\n1. Go to Google Cloud Console\n2. Create a project\n3. Enable Google+ API\n4. Create OAuth 2.0 credentials\n5. Add your Client ID to this app\n\nFor now, please use email login.`;
-      alert(msg);
+  document.addEventListener('DOMContentLoaded', function() {
+    // Re-init Lucide icons (in case main.js already ran)
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+
+    // Configuration - Google Client ID
+    const GOOGLE_CLIENT_ID = '92817315946-uhm3r52gmlmf629439d9do6kqc2601cc.apps.googleusercontent.com';
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:4000/api'
+      : 'https://sushi-cafe-api.onrender.com/api';
+
+    let googleInitialized = false;
+
+    // Initialize Google Sign-In when library loads
+    function initGoogleSignIn() {
+      if (typeof google === 'undefined' || googleInitialized) return;
+      try {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleCallback
+        });
+        googleInitialized = true;
+        console.log('✅ Google Sign-In initialized');
+      } catch (e) {
+        console.error('Google init error:', e);
+      }
+    }
+
+    // Try to init immediately or on load
+    if (typeof google !== 'undefined') {
+      initGoogleSignIn();
+    }
+    window.addEventListener('load', () => {
+      setTimeout(initGoogleSignIn, 500); // Give GSI time to load
     });
+
+    // Handle Google Sign-In button click
+    document.getElementById('googleSignInBtn').addEventListener('click', async function() {
+      console.log('Google button clicked');
+      
+      // Make sure google is loaded
+      if (typeof google === 'undefined') {
+        showMessage('login-msg', 'Google Sign-In is still loading. Please wait and try again.', 'error');
+        return;
+      }
+
+      initGoogleSignIn(); // Ensure initialized
+
+      // Use the token client for OAuth popup (more reliable)
+      try {
+        const tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'email profile',
+          callback: async (tokenResponse) => {
+            console.log('Token response:', tokenResponse);
+            if (tokenResponse.access_token) {
+              // Get user info from Google
+              const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+              });
+              const userInfo = await userInfoRes.json();
+              console.log('User info:', userInfo);
+              handleGoogleUser(userInfo);
+            } else if (tokenResponse.error) {
+              console.error('Token error:', tokenResponse.error);
+              showMessage('login-msg', 'Google sign-in was cancelled or failed.', 'error');
+            }
+          },
+          error_callback: (error) => {
+            console.error('OAuth error:', error);
+            showMessage('login-msg', 'Google sign-in error. Please try again.', 'error');
+          }
+        });
+        tokenClient.requestAccessToken();
+      } catch (e) {
+        console.error('Google OAuth error:', e);
+        showMessage('login-msg', 'Failed to start Google sign-in.', 'error');
+      }
+    });
+
+    // Handle Google credential callback (One Tap flow)
+    async function handleGoogleCallback(response) {
+      console.log('Google callback received');
+      try {
+        const result = await fetch(`${API_BASE}/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ credential: response.credential })
+        });
+
+        const data = await result.json();
+
+        if (result.ok) {
+          loginSuccess(data.user, data.token);
+        } else {
+          showMessage('login-msg', data.message || 'Google login failed', 'error');
+        }
+      } catch (error) {
+        console.error('Google login error:', error);
+        // Fallback: decode JWT locally and login without backend
+        try {
+          const payload = JSON.parse(atob(response.credential.split('.')[1]));
+          const user = {
+            id: payload.sub,
+            name: payload.name,
+            email: payload.email,
+            avatar: payload.picture
+          };
+          loginSuccess(user, null);
+        } catch (e) {
+          showMessage('login-msg', 'Connection error. Please try again.', 'error');
+        }
+      }
+    }
+
+    // Handle user info from Google (OAuth token flow)
+    async function handleGoogleUser(userInfo) {
+      console.log('Handling Google user:', userInfo.email);
+      try {
+        const result = await fetch(`${API_BASE}/auth/google-userinfo`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: userInfo.email,
+            name: userInfo.name,
+            picture: userInfo.picture,
+            googleId: userInfo.sub
+          })
+        });
+
+        const data = await result.json();
+
+        if (result.ok) {
+          loginSuccess(data.user, data.token);
+        } else {
+          showMessage('login-msg', data.message || 'Google login failed', 'error');
+        }
+      } catch (error) {
+        console.error('Google login error (no backend):', error);
+        // Fallback: login without backend
+        const user = {
+          id: userInfo.sub,
+          name: userInfo.name,
+          email: userInfo.email,
+          avatar: userInfo.picture
+        };
+        loginSuccess(user, null);
+      }
+    }
+
+    // Centralized login success handler
+    function loginSuccess(user, token) {
+      console.log('Login success:', user.email);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      if (token) localStorage.setItem('authToken', token);
+      localStorage.setItem('isLoggedIn', 'true');
+      
+      showMessage('login-msg', `Welcome, ${user.name}!`, 'success');
+      
+      // Redirect after brief delay to show success message
+      setTimeout(() => {
+        window.location.href = 'Home%20page/home.html';
+      }, 500);
+    }
+
+    function showMessage(id, text, type) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = text;
+        el.className = 'message ' + type;
+        el.style.display = 'block';
+      }
+    }
+  }); // End DOMContentLoaded
   </script>
 </body>
 </html>

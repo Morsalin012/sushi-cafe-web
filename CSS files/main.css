@@ -169,33 +169,81 @@ body {
 }
 
 .brand-logo-container {
-  width: 72px; height: 72px;
+  width: 80px; height: 80px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(145deg, #f5e6d3 0%, #e8d4bc 50%, #d4c4a8 100%);
+  border-radius: 50%;
+  box-shadow: 
+    0 8px 32px rgba(0,0,0,0.4),
+    inset 0 2px 8px rgba(255,255,255,0.4),
+    inset 0 -2px 6px rgba(0,0,0,0.1),
+    0 0 25px rgba(212,163,115,0.25);
+  border: 2px solid rgba(212,163,115,0.5);
 }
 
+/* Outer glow ring - smaller and subtler */
 .brand-ring {
   position: absolute;
-  inset: 0;
-  border: 2px solid var(--accent-gold);
+  inset: -3px;
+  border: 1.5px solid transparent;
   border-radius: 50%;
-  opacity: 0.3;
-  animation: pulse-ring 3s infinite;
+  background: linear-gradient(135deg, rgba(212,163,115,0.6), rgba(180,140,95,0.3), rgba(212,163,115,0.6)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-glow 12s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(212,163,115,0.3));
+}
+
+/* Pulsing glow aura - smaller */
+.brand-logo-container::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,163,115,0.15) 0%, transparent 70%);
+  animation: pulse-glow 3s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .brand-ring-inner {
-  position: absolute;
-  inset: 6px;
-  border: 1px solid var(--accent-gold);
-  border-radius: 50%;
-  background: linear-gradient(135deg, #3e2723, #1a120e);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-gold);
+}
+
+/* Inner shine effect */
+.brand-logo-container::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 15%;
+  width: 70%;
+  height: 35%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%);
+  border-radius: 50% 50% 40% 40%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes spin-glow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.5; 
+  }
+  50% { 
+    transform: scale(1.05); 
+    opacity: 0.7; 
+  }
 }
 
 @keyframes pulse-ring {
@@ -204,12 +252,40 @@ body {
   100% { transform: scale(1); opacity: 0.3; }
 }
 
+.sushi-logo-svg {
+  width: 58px;
+  height: 58px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+
 .logo-composition {
   position: relative;
-  width: 32px; height: 32px;
+  width: 36px; height: 36px;
+  z-index: 1;
 }
-.logo-icon-1 { position: absolute; top: -4px; right: -4px; color: var(--accent-gold-light); }
-.logo-icon-2 { position: absolute; bottom: -2px; left: -4px; color: var(--accent-gold); }
+
+.logo-icon-1 { 
+  position: absolute; 
+  top: -4px; 
+  right: -4px; 
+  color: #e6cba8;
+  filter: drop-shadow(0 0 4px rgba(230,203,168,0.5));
+  animation: icon-float 4s ease-in-out infinite;
+}
+
+.logo-icon-2 { 
+  position: absolute; 
+  bottom: -2px; 
+  left: -4px; 
+  color: #d4a373;
+  filter: drop-shadow(0 0 4px rgba(212,163,115,0.5));
+  animation: icon-float 4s ease-in-out infinite 2s;
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
 
 .brand h1 {
   font-family: 'Playfair Display', serif;
