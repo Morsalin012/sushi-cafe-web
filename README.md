@@ -24,7 +24,17 @@ A **frontend web project** built with **HTML, CSS, and JavaScript**, showcasing 
 
 ## 🌐 Live Demo
 [View Live Website](https://morsalin012.github.io/sushi-cafe-web/)
-  
+
+### 📄 Page Links
+| Page | URL |
+|------|-----|
+| Home | [https://morsalin012.github.io/sushi-cafe-web/Home%20page/home.html](https://morsalin012.github.io/sushi-cafe-web/Home%20page/home.html) |
+| Menu | [https://morsalin012.github.io/sushi-cafe-web/Home%20page/menu.html](https://morsalin012.github.io/sushi-cafe-web/Home%20page/menu.html) |
+| Cart | [https://morsalin012.github.io/sushi-cafe-web/Home%20page/cart.html](https://morsalin012.github.io/sushi-cafe-web/Home%20page/cart.html) |
+| Orders | [https://morsalin012.github.io/sushi-cafe-web/Home%20page/orders.html](https://morsalin012.github.io/sushi-cafe-web/Home%20page/orders.html) |
+| Profile | [https://morsalin012.github.io/sushi-cafe-web/Home%20page/profile.html](https://morsalin012.github.io/sushi-cafe-web/Home%20page/profile.html) |
+| Reservations | [https://morsalin012.github.io/sushi-cafe-web/Home%20page/reserve.html](https://morsalin012.github.io/sushi-cafe-web/Home%20page/reserve.html) |
+| Help Center | [https://morsalin012.github.io/sushi-cafe-web/Home%20page/help.html](https://morsalin012.github.io/sushi-cafe-web/Home%20page/help.html) |
 
 ---
 
