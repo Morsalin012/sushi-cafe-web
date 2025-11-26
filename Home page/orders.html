@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Orders — Haru Sora Café</title>
+
+  <link rel="stylesheet" href="../CSS files/home.css">
+  <style>
+    .orders-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .orders-header h2 {
+      color: var(--text-main);
+      margin-bottom: 24px;
+    }
+    
+    .order-card {
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(212, 163, 115, 0.2);
+    }
+    
+    .order-number {
+      font-size: 18px;
+      font-weight: 700;
+      color: #d4a373;
+    }
+    
+    .order-date {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .order-status {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+    
+    .order-status.pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+    .order-status.confirmed { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+    .order-status.preparing { background: rgba(156, 39, 176, 0.2); color: #9c27b0; }
+    .order-status.ready { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .order-status.delivered { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .order-status.cancelled { background: rgba(244, 67, 54, 0.2); color: #f44336; }
+    
+    .order-items {
+      margin-bottom: 16px;
+    }
+    
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      color: var(--muted);
+    }
+    
+    .order-item-name {
+      color: var(--text-main);
+    }
+    
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(212, 163, 115, 0.2);
+    }
+    
+    .order-total {
+      font-size: 20px;
+      font-weight: 700;
+      color: #d4a373;
+    }
+    
+    .order-type-badge {
+      background: rgba(212, 163, 115, 0.2);
+      color: #d4a373;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      text-transform: capitalize;
+    }
+    
+    .empty-orders {
+      text-align: center;
+      padding: 60px;
+      color: var(--muted);
+    }
+    
+    .empty-orders h3 {
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+    
+    .empty-orders a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    /* Order tracking */
+    .tracking-section {
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 30px;
+    }
+    
+    .tracking-section h3 {
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+    
+    .tracking-form {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .tracking-form input {
+      flex: 1;
+      padding: 12px;
+      background: rgba(212, 163, 115, 0.1);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 16px;
+    }
+    
+    .tracking-form button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .tracking-result {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(212, 163, 115, 0.1);
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .tracking-result.show {
+      display: block;
+    }
+    
+    /* Status timeline */
+    .status-timeline {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      position: relative;
+    }
+    
+    .status-timeline::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(212, 163, 115, 0.2);
+    }
+    
+    .timeline-step {
+      text-align: center;
+      z-index: 1;
+    }
+    
+    .timeline-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(212, 163, 115, 0.2);
+      margin: 0 auto 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    .timeline-step.completed .timeline-dot {
+      background: #4caf50;
+    }
+    
+    .timeline-step.current .timeline-dot {
+      background: #d4a373;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .timeline-label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    
+    .timeline-step.completed .timeline-label,
+    .timeline-step.current .timeline-label {
+      color: var(--text-main);
+    }
+  </style>
+
+  <script>
+    if(localStorage.getItem('isLoggedIn') !== 'true'){
+      window.location.href="../login.html";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+  
+    <header>
+      <div class="brand">
+        <div class="logo-wrap" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#51e2f5"/>
+                <stop offset="1" stop-color="#9df9ef"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.95"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Haru Sora Café</h1>
+          <p>Handcrafted Sushi · Artisan Coffee</p>
+        </div>
+      </div>
+
+      <nav>
+        <a href="home.html" class="ghost">Home</a>
+        <a href="menu.html" class="ghost">Menu</a>
+        <a href="cart.html" class="ghost">Cart</a>
+        <a href="profile.html" class="ghost">Profile</a>
+        <a href="#" id="logoutBtn" class="ghost">Logout</a>
+      </nav>
+    </header>
+
+    <div class="orders-container">
+      <div class="tracking-section">
+        <h3>🔍 Track Order</h3>
+        <div class="tracking-form">
+          <input type="text" id="trackingInput" placeholder="Enter order number (e.g., HSC-20251126-0001)">
+          <button onclick="trackOrder()">Track</button>
+        </div>
+        <div class="tracking-result" id="trackingResult"></div>
+      </div>
+
+      <div class="orders-header">
+        <h2>📋 My Orders</h2>
+      </div>
+
+      <div id="ordersList">
+        <div class="empty-orders">
+          <h3>Loading orders...</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../cafe-ecommerce.js"></script>
+  
+  <script>
+    const statusOrder = ['pending', 'confirmed', 'preparing', 'ready', 'delivered'];
+    
+    async function loadOrders() {
+      const data = await window.HaruSora.Orders.getHistory();
+      const container = document.getElementById('ordersList');
+      
+      if (!data.orders || data.orders.length === 0) {
+        container.innerHTML = `
+          <div class="empty-orders">
+            <h3>No orders yet</h3>
+            <p>Your order history will appear here.</p>
+            <a href="menu.html">Browse Menu</a>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = data.orders.map(order => `
+        <div class="order-card">
+          <div class="order-card-header">
+            <div>
+              <div class="order-number">#${order.orderNumber}</div>
+              <div class="order-date">${formatDate(order.createdAt)}</div>
+            </div>
+            <span class="order-status ${order.status}">${order.status}</span>
+          </div>
+          
+          ${order.status !== 'delivered' && order.status !== 'cancelled' ? renderTimeline(order.status) : ''}
+          
+          <div class="order-items">
+            ${order.items.map(item => `
+              <div class="order-item">
+                <span class="order-item-name">${item.quantity}x ${item.name}</span>
+                <span>৳ ${item.price * item.quantity}</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="order-footer">
+            <span class="order-type-badge">${order.orderType}</span>
+            <span class="order-total">Total: ৳ ${order.total}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderTimeline(currentStatus) {
+      const steps = [
+        { key: 'pending', label: 'Placed', icon: '📝' },
+        { key: 'confirmed', label: 'Confirmed', icon: '✓' },
+        { key: 'preparing', label: 'Preparing', icon: '👨‍🍳' },
+        { key: 'ready', label: 'Ready', icon: '🍱' },
+        { key: 'delivered', label: 'Done', icon: '✨' }
+      ];
+      
+      const currentIndex = statusOrder.indexOf(currentStatus);
+      
+      return `
+        <div class="status-timeline">
+          ${steps.map((step, i) => `
+            <div class="timeline-step ${i < currentIndex ? 'completed' : ''} ${i === currentIndex ? 'current' : ''}">
+              <div class="timeline-dot">${step.icon}</div>
+              <div class="timeline-label">${step.label}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    async function trackOrder() {
+      const orderNumber = document.getElementById('trackingInput').value.trim();
+      const resultDiv = document.getElementById('trackingResult');
+      
+      if (!orderNumber) {
+        resultDiv.innerHTML = '<p style="color: #e76f51;">Please enter an order number.</p>';
+        resultDiv.classList.add('show');
+        return;
+      }
+      
+      resultDiv.innerHTML = '<p>Searching...</p>';
+      resultDiv.classList.add('show');
+      
+      const order = await window.HaruSora.Orders.track(orderNumber);
+      
+      if (order) {
+        resultDiv.innerHTML = `
+          <h4 style="color: var(--text-main); margin-bottom: 12px;">Order #${order.orderNumber}</h4>
+          <p><strong>Status:</strong> <span class="order-status ${order.status}" style="display: inline-block;">${order.status}</span></p>
+          <p><strong>Order Type:</strong> ${order.orderType}</p>
+          <p><strong>Total:</strong> ৳ ${order.total}</p>
+          ${order.estimatedReadyTime ? `<p><strong>Estimated Ready:</strong> ${formatDate(order.estimatedReadyTime)}</p>` : ''}
+          ${renderTimeline(order.status)}
+        `;
+      } else {
+        resultDiv.innerHTML = '<p style="color: #e76f51;">Order not found. Please check the order number.</p>';
+      }
+    }
+    
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      window.location.href = '../login.html';
+    });
+    
+    // Allow Enter key to track order
+    document.getElementById('trackingInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') trackOrder();
+    });
+    
+    // Initialize
+    loadOrders();
+  </script>
+</body>
+</html>

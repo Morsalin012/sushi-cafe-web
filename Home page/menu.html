@@ -7,13 +7,170 @@
 
   <link rel="stylesheet" href="../CSS files/home.css">
   <style>
-    /* Menu page specific overrides */
-    .menu h2{color:var(--text-main)}
+    /* Menu page specific styles */
+    .menu h2 { color: var(--text-main); }
+    
+    /* Cart button in header */
+    .cart-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .cart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212, 163, 115, 0.4);
+    }
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #e76f51;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Add to cart button */
+    .card .add-to-cart {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .card .add-to-cart:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212, 163, 115, 0.4);
+    }
+    .card .add-to-cart:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Wishlist button */
+    .card .wishlist-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      background: rgba(26, 18, 14, 0.7);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .card .wishlist-btn:hover {
+      background: rgba(212, 163, 115, 0.9);
+      transform: scale(1.1);
+    }
+    .card .wishlist-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #d4a373;
+      fill: none;
+    }
+    .card .wishlist-btn.active svg {
+      fill: #e76f51;
+      stroke: #e76f51;
+    }
+    
+    /* Card positioning for wishlist button */
+    .card {
+      position: relative;
+    }
+    
+    /* Category filter active state */
+    .cat.active {
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+    }
+    
+    /* Loading state */
+    .menu-grid.loading {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    /* Stock info */
+    .stock-info {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .stock-info.low {
+      color: #e76f51;
+    }
+    
+    /* Tags */
+    .product-tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .product-tags span {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(212, 163, 115, 0.2);
+      color: #d4a373;
+    }
+    .product-tags .vegetarian {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+    }
+    .product-tags .spicy {
+      background: rgba(231, 111, 81, 0.2);
+      color: #e76f51;
+    }
+    
+    /* Rating stars */
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #d4a373;
+    }
+    .rating svg {
+      width: 14px;
+      height: 14px;
+      fill: #d4a373;
+    }
   </style>
 
   <script>
     if(localStorage.getItem('isLoggedIn') !== 'true'){
-      window.location.href="../Login-SignUp page/login.html";
+      window.location.href="../login.html";
     }
   </script>
 </head>
@@ -50,8 +207,12 @@
         <a href="home.html" class="ghost">Home</a>
         <a href="menu.html" class="ghost">Menu</a>
         <a href="home.html#about" class="ghost">About</a>
+        <a href="cart.html" class="cart-btn">
+          🛒 Cart
+          <span id="cart-badge" class="cart-badge">0</span>
+        </a>
         <a href="reserve.html" class="btn">Reserve</a>
-        <a href="#" id="logoutBtn" class="btn">Logout</a>
+        <a href="#" id="logoutBtn" class="ghost">Logout</a>
       </nav>
     </header>
 
@@ -61,111 +222,153 @@
           <h2 style="font-size:22px;margin-bottom:6px">Our Menu</h2>
           <p style="color:var(--muted)">Sushi, Rolls, Coffee, and Sweet Treats — thoughtfully sourced and crafted daily.</p>
         </div>
-        <div class="cats">
-          <span class="cat">All</span>
-          <span class="cat">Sushi</span>
-          <span class="cat">Rolls</span>
-          <span class="cat">Coffee</span>
-          <span class="cat">Desserts</span>
+        <div class="cats" id="categoryFilters">
+          <span class="cat active" data-category="All">All</span>
         </div>
       </div>
 
-      <div class="menu-grid">
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1200&q=80" alt="Tuna Nigiri">
-          <h3>Tuna Nigiri <span class="tag">Chef's Pick</span></h3>
-          <p>Premium A-grade tuna slices on seasoned sushi rice. Simple, pristine, perfect.</p>
-          <div class="price">৳ 420</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=1200&q=80" alt="Dragon Roll">
-          <h3>Dragon Roll</h3>
-          <p>Eel, avocado, cucumber, topped with sweet glaze and sesame.</p>
-          <div class="price">৳ 520</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=80" alt="Sashimi Platter">
-          <h3>Sashimi Platter</h3>
-          <p>Assortment of sashimi selected by our chef — ideal for sharing.</p>
-          <div class="price">৳ 1150</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80" alt="Spicy Tuna Roll">
-          <h3>Spicy Tuna Roll</h3>
-          <p>Hand-rolled with chili mayo and scallions — a fan favourite.</p>
-          <div class="price">৳ 380</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80" alt="Vegetarian Roll">
-          <h3>Yasai Roll (Vegetarian)</h3>
-          <p>Seasonal vegetables, avocado, and sesame — bright and fresh.</p>
-          <div class="price">৳ 320</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80" alt="Crunch Roll">
-          <h3>Crunch Roll</h3>
-          <p>Tempura crunch, cucumber, and house special sauce.</p>
-          <div class="price">৳ 390</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" alt="Cappuccino">
-          <h3>Cappuccino</h3>
-          <p>Rich espresso balanced with silky steamed milk and microfoam.</p>
-          <div class="price">৳ 220</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80" alt="Mocha Latte">
-          <h3>Mocha Latte</h3>
-          <p>Chocolatey, bittersweet, and smooth — a café classic.</p>
-          <div class="price">৳ 260</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1523942839745-7848c839b661?auto=format&fit=crop&w=1200&q=80" alt="Matcha Latte">
-          <h3>Matcha Latte</h3>
-          <p>Stone-ground matcha whisked to order with steamed milk.</p>
-          <div class="price">৳ 240</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1200&q=80" alt="Mochi">
-          <h3>Sakura Mochi</h3>
-          <p>Sweet rice cake wrapped in salted cherry leaf — seasonal favorite.</p>
-          <div class="price">৳ 150</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1542827630-5b9b7b8b6b46?auto=format&fit=crop&w=1200&q=80" alt="Green Tea Cake">
-          <h3>Matcha Cheesecake</h3>
-          <p>Creamy, slightly tangy cheesecake with matcha infusion.</p>
-          <div class="price">৳ 280</div>
-        </article>
-
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1509223197845-458d87318791?auto=format&fit=crop&w=1200&q=80" alt="Iced Coffee">
-          <h3>Iced Cold Brew</h3>
-          <p>Slow-steeped cold brew — bright, smooth, and refreshing.</p>
-          <div class="price">৳ 210</div>
-        </article>
+      <div class="menu-grid" id="menuGrid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">
+          Loading menu...
+        </div>
       </div>
     </section>
   </div>
 
+  <script src="../cafe-ecommerce.js"></script>
+  
   <script>
-    // Added Logout Logic for Menu Page
-    document.getElementById('logoutBtn').addEventListener('click', function(e){
+    let allProducts = [];
+    let currentCategory = 'All';
+    
+    async function loadProducts(category = 'All') {
+      const grid = document.getElementById('menuGrid');
+      grid.classList.add('loading');
+      
+      try {
+        const filters = category !== 'All' ? { category } : {};
+        const data = await window.HaruSora.Products.getAll(filters);
+        allProducts = data.products || [];
+        renderProducts(allProducts);
+      } catch (error) {
+        console.error('Error loading products:', error);
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">Failed to load menu. Please try again.</div>';
+      }
+      
+      grid.classList.remove('loading');
+    }
+    
+    async function loadCategories() {
+      try {
+        const categories = await window.HaruSora.Products.getCategories();
+        const container = document.getElementById('categoryFilters');
+        container.innerHTML = '<span class="cat active" data-category="All">All</span>';
+        
+        categories.forEach(cat => {
+          const btn = document.createElement('span');
+          btn.className = 'cat';
+          btn.dataset.category = cat.name;
+          btn.textContent = `${cat.name} (${cat.count})`;
+          container.appendChild(btn);
+        });
+        
+        container.querySelectorAll('.cat').forEach(btn => {
+          btn.addEventListener('click', () => {
+            container.querySelectorAll('.cat').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.dataset.category;
+            loadProducts(currentCategory);
+          });
+        });
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    }
+    
+    function renderProducts(products) {
+      const grid = document.getElementById('menuGrid');
+      
+      if (!products.length) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No items found.</div>';
+        return;
+      }
+      
+      grid.innerHTML = products.map(product => `
+        <article class="card" data-product-id="${product._id}">
+          <button class="wishlist-btn" data-wishlist="${product._id}" title="Add to wishlist">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+          <img src="${product.image}" alt="${product.name}" loading="lazy">
+          <h3>${product.name} ${product.isFeatured ? '<span class="tag">Chef\'s Pick</span>' : ''}</h3>
+          <p>${product.description}</p>
+          <div class="product-tags">
+            ${product.isVegetarian ? '<span class="vegetarian">🌱 Vegetarian</span>' : ''}
+            ${product.isSpicy ? '<span class="spicy">🌶️ Spicy</span>' : ''}
+          </div>
+          ${product.rating && product.rating.count > 0 ? `
+            <div class="rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              ${product.rating.average.toFixed(1)} (${product.rating.count})
+            </div>
+          ` : ''}
+          <div class="price">৳ ${product.price}</div>
+          ${product.stock < 10 && product.stock > 0 ? `<div class="stock-info low">Only ${product.stock} left!</div>` : ''}
+          ${product.isAvailable && product.stock > 0 ? `
+            <button class="add-to-cart" data-product="${product._id}">🛒 Add to Cart</button>
+          ` : `
+            <button class="add-to-cart" disabled>Out of Stock</button>
+          `}
+        </article>
+      `).join('');
+      
+      grid.querySelectorAll('.add-to-cart:not([disabled])').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          btn.disabled = true;
+          btn.textContent = 'Adding...';
+          await window.HaruSora.Cart.add(btn.dataset.product);
+          btn.disabled = false;
+          btn.textContent = '🛒 Add to Cart';
+        });
+      });
+      
+      grid.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const productId = btn.dataset.wishlist;
+          if (btn.classList.contains('active')) {
+            await window.HaruSora.Wishlist.remove(productId);
+            btn.classList.remove('active');
+          } else {
+            await window.HaruSora.Wishlist.add(productId);
+            btn.classList.add('active');
+          }
+        });
+      });
+      
+      checkWishlistStatus();
+    }
+    
+    async function checkWishlistStatus() {
+      const wishlist = await window.HaruSora.Wishlist.get();
+      const wishlistIds = wishlist.map(item => item._id || item);
+      document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        if (wishlistIds.includes(btn.dataset.wishlist)) {
+          btn.classList.add('active');
+        }
+      });
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategories();
+      loadProducts();
+    });
+    
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
       e.preventDefault();
       localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userName');
-      window.location.href = '../Login-SignUp page/login.html';
+      localStorage.removeItem('currentUser');
+      window.location.href = '../login.html';
     });
   </script>
 </body>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cart — Haru Sora Café</title>
+
+  <link rel="stylesheet" href="../CSS files/home.css">
+  <style>
+    .cart-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .cart-header h2 {
+      color: var(--text-main);
+      font-size: 28px;
+    }
+    
+    .cart-items {
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .cart-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(212, 163, 115, 0.2);
+    }
+    
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    
+    .cart-item-details {
+      flex: 1;
+    }
+    
+    .cart-item-details h4 {
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    
+    .cart-item-details p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .cart-item-price {
+      color: #d4a373;
+      font-weight: 600;
+    }
+    
+    .cart-item-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 163, 115, 0.1);
+      border-radius: 8px;
+      padding: 4px;
+    }
+    
+    .quantity-control button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: rgba(212, 163, 115, 0.3);
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+    
+    .quantity-control button:hover {
+      background: #d4a373;
+      color: #1a120e;
+    }
+    
+    .quantity-control span {
+      min-width: 32px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #e76f51;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 8px;
+      transition: all 0.2s;
+    }
+    
+    .remove-btn:hover {
+      text-decoration: underline;
+    }
+    
+    .cart-summary {
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      color: var(--muted);
+    }
+    
+    .summary-row.total {
+      border-top: 2px solid rgba(212, 163, 115, 0.3);
+      margin-top: 12px;
+      padding-top: 16px;
+      color: var(--text-main);
+      font-size: 20px;
+      font-weight: 700;
+    }
+    
+    .summary-row.total .amount {
+      color: #d4a373;
+    }
+    
+    .order-type {
+      margin: 20px 0;
+    }
+    
+    .order-type label {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    
+    .order-type select {
+      width: 100%;
+      padding: 12px;
+      background: rgba(212, 163, 115, 0.1);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 16px;
+    }
+    
+    .checkout-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 20px;
+    }
+    
+    .checkout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 163, 115, 0.4);
+    }
+    
+    .checkout-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    
+    .empty-cart h3 {
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+    
+    .empty-cart a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .clear-cart-btn {
+      background: none;
+      border: 1px solid rgba(231, 111, 81, 0.5);
+      color: #e76f51;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .clear-cart-btn:hover {
+      background: rgba(231, 111, 81, 0.1);
+    }
+  </style>
+
+  <script>
+    if(localStorage.getItem('isLoggedIn') !== 'true'){
+      window.location.href="../login.html";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+  
+    <header>
+      <div class="brand">
+        <div class="logo-wrap" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#51e2f5"/>
+                <stop offset="1" stop-color="#9df9ef"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.95"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Haru Sora Café</h1>
+          <p>Handcrafted Sushi · Artisan Coffee</p>
+        </div>
+      </div>
+
+      <nav>
+        <a href="home.html" class="ghost">Home</a>
+        <a href="menu.html" class="ghost">Menu</a>
+        <a href="cart.html" class="ghost" style="color: #d4a373;">Cart</a>
+        <a href="profile.html" class="ghost">Profile</a>
+        <a href="#" id="logoutBtn" class="ghost">Logout</a>
+      </nav>
+    </header>
+
+    <div class="cart-container">
+      <div class="cart-header">
+        <h2>🛒 Your Cart</h2>
+        <button class="clear-cart-btn" id="clearCartBtn">Clear Cart</button>
+      </div>
+
+      <div id="cartContent">
+        <div class="empty-cart">
+          <h3>Your cart is empty</h3>
+          <p>Looks like you haven't added anything yet.</p>
+          <a href="menu.html">Browse Menu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../cafe-ecommerce.js"></script>
+  
+  <script>
+    let cartData = null;
+    
+    async function loadCart() {
+      cartData = await window.HaruSora.Cart.get();
+      renderCart();
+    }
+    
+    function renderCart() {
+      const container = document.getElementById('cartContent');
+      
+      if (!cartData.items || cartData.items.length === 0) {
+        container.innerHTML = `
+          <div class="empty-cart">
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added anything yet.</p>
+            <a href="menu.html">Browse Menu</a>
+          </div>
+        `;
+        return;
+      }
+      
+      const itemsHtml = cartData.items.map(item => {
+        const product = item.product;
+        return `
+          <div class="cart-item" data-product="${product._id}">
+            <img src="${product.image}" alt="${product.name}">
+            <div class="cart-item-details">
+              <h4>${product.name}</h4>
+              <p class="cart-item-price">৳ ${product.price} each</p>
+            </div>
+            <div class="cart-item-actions">
+              <div class="quantity-control">
+                <button onclick="updateQuantity('${product._id}', ${item.quantity - 1})">−</button>
+                <span>${item.quantity}</span>
+                <button onclick="updateQuantity('${product._id}', ${item.quantity + 1})">+</button>
+              </div>
+              <span class="cart-item-price">৳ ${product.price * item.quantity}</span>
+              <button class="remove-btn" onclick="removeItem('${product._id}')">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      container.innerHTML = `
+        <div class="cart-items">
+          ${itemsHtml}
+        </div>
+        
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>৳ ${cartData.totals.subtotal}</span>
+          </div>
+          <div class="summary-row">
+            <span>VAT (5%)</span>
+            <span>৳ ${cartData.totals.tax}</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery Fee</span>
+            <span>${cartData.totals.deliveryFee > 0 ? '৳ ' + cartData.totals.deliveryFee : 'Free'}</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span class="amount">৳ ${cartData.totals.total}</span>
+          </div>
+          
+          <div class="order-type">
+            <label for="orderType">Order Type</label>
+            <select id="orderType">
+              <option value="dine-in">Dine In</option>
+              <option value="takeaway">Takeaway</option>
+              <option value="delivery">Delivery</option>
+            </select>
+          </div>
+          
+          <button class="checkout-btn" onclick="placeOrder()">
+            Place Order — ৳ ${cartData.totals.total}
+          </button>
+        </div>
+      `;
+    }
+    
+    async function updateQuantity(productId, newQuantity) {
+      if (newQuantity <= 0) {
+        await removeItem(productId);
+        return;
+      }
+      await window.HaruSora.Cart.update(productId, newQuantity);
+      await loadCart();
+    }
+    
+    async function removeItem(productId) {
+      await window.HaruSora.Cart.remove(productId);
+      await loadCart();
+    }
+    
+    async function placeOrder() {
+      const orderType = document.getElementById('orderType').value;
+      const btn = document.querySelector('.checkout-btn');
+      btn.disabled = true;
+      btn.textContent = 'Placing order...';
+      
+      const result = await window.HaruSora.Orders.create({
+        orderType,
+        paymentMethod: 'cash'
+      });
+      
+      if (result) {
+        // Redirect to order confirmation or orders page
+        alert(`Order placed successfully!\nOrder #: ${result.order.orderNumber}\nEstimated ready time: ~30 minutes`);
+        window.location.href = 'orders.html';
+      } else {
+        btn.disabled = false;
+        btn.textContent = `Place Order — ৳ ${cartData.totals.total}`;
+      }
+    }
+    
+    document.getElementById('clearCartBtn').addEventListener('click', async () => {
+      if (confirm('Are you sure you want to clear your cart?')) {
+        await window.HaruSora.Cart.clear();
+        await loadCart();
+      }
+    });
+    
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      window.location.href = '../login.html';
+    });
+    
+    // Listen for cart updates
+    window.addEventListener('cartUpdated', (e) => {
+      cartData = e.detail;
+      renderCart();
+    });
+    
+    // Initialize
+    loadCart();
+  </script>
+</body>
+</html>

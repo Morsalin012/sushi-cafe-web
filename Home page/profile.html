@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile — Haru Sora Café</title>
+
+  <link rel="stylesheet" href="../CSS files/home.css">
+  <style>
+    .profile-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 40px;
+      padding: 24px;
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 16px;
+    }
+    
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #1a120e;
+      font-weight: 700;
+    }
+    
+    .profile-info h2 {
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    
+    .profile-info p {
+      color: var(--muted);
+    }
+    
+    .profile-stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #d4a373;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    
+    .profile-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid rgba(212, 163, 115, 0.2);
+      padding-bottom: 12px;
+    }
+    
+    .profile-tabs button {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.2s;
+    }
+    
+    .profile-tabs button:hover {
+      background: rgba(212, 163, 115, 0.1);
+    }
+    
+    .profile-tabs button.active {
+      background: rgba(212, 163, 115, 0.2);
+      color: #d4a373;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .section-card {
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .section-card h3 {
+      color: var(--text-main);
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-group label {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      background: rgba(212, 163, 115, 0.1);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 16px;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #d4a373;
+    }
+    
+    .btn-primary {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212, 163, 115, 0.4);
+    }
+    
+    .btn-secondary {
+      padding: 12px 24px;
+      background: transparent;
+      border: 1px solid rgba(212, 163, 115, 0.5);
+      color: #d4a373;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(212, 163, 115, 0.1);
+    }
+    
+    .address-card {
+      background: rgba(212, 163, 115, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+    }
+    
+    .address-card h4 {
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    
+    .address-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .address-card .default-badge {
+      background: #d4a373;
+      color: #1a120e;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    .order-card {
+      background: rgba(212, 163, 115, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .order-number {
+      color: #d4a373;
+      font-weight: 600;
+    }
+    
+    .order-status {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .order-status.pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+    .order-status.confirmed { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+    .order-status.preparing { background: rgba(156, 39, 176, 0.2); color: #9c27b0; }
+    .order-status.ready { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .order-status.delivered { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .order-status.cancelled { background: rgba(244, 67, 54, 0.2); color: #f44336; }
+    
+    .order-items {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .order-total {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+    
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    
+    .wishlist-item {
+      background: rgba(212, 163, 115, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+    
+    .wishlist-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .wishlist-item h4 {
+      color: var(--text-main);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    .wishlist-item .price {
+      color: #d4a373;
+      font-weight: 600;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+    }
+  </style>
+
+  <script>
+    if(localStorage.getItem('isLoggedIn') !== 'true'){
+      window.location.href="../login.html";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+  
+    <header>
+      <div class="brand">
+        <div class="logo-wrap" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#51e2f5"/>
+                <stop offset="1" stop-color="#9df9ef"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.95"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Haru Sora Café</h1>
+          <p>Handcrafted Sushi · Artisan Coffee</p>
+        </div>
+      </div>
+
+      <nav>
+        <a href="home.html" class="ghost">Home</a>
+        <a href="menu.html" class="ghost">Menu</a>
+        <a href="cart.html" class="ghost">Cart</a>
+        <a href="profile.html" class="ghost" style="color: #d4a373;">Profile</a>
+        <a href="#" id="logoutBtn" class="ghost">Logout</a>
+      </nav>
+    </header>
+
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <div class="profile-info">
+          <h2 id="profileName">Loading...</h2>
+          <p id="profileEmail">...</p>
+          <div class="profile-stats">
+            <div class="stat">
+              <div class="stat-value" id="totalOrders">0</div>
+              <div class="stat-label">Orders</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="loyaltyPoints">0</div>
+              <div class="stat-label">Points</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-tabs">
+        <button class="active" data-tab="orders">Orders</button>
+        <button data-tab="wishlist">Wishlist</button>
+        <button data-tab="addresses">Addresses</button>
+        <button data-tab="settings">Settings</button>
+      </div>
+
+      <!-- Orders Tab -->
+      <div class="tab-content active" id="orders-tab">
+        <div class="section-card">
+          <h3>Order History</h3>
+          <div id="ordersList">
+            <div class="empty-state">Loading orders...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wishlist Tab -->
+      <div class="tab-content" id="wishlist-tab">
+        <div class="section-card">
+          <h3>My Wishlist</h3>
+          <div class="wishlist-grid" id="wishlistGrid">
+            <div class="empty-state">Loading wishlist...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Addresses Tab -->
+      <div class="tab-content" id="addresses-tab">
+        <div class="section-card">
+          <h3>Saved Addresses</h3>
+          <div id="addressesList"></div>
+          <button class="btn-secondary" onclick="showAddAddressForm()">+ Add New Address</button>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-content" id="settings-tab">
+        <div class="section-card">
+          <h3>Profile Settings</h3>
+          <form id="profileForm">
+            <div class="form-group">
+              <label for="settingsName">Name</label>
+              <input type="text" id="settingsName" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label for="settingsPhone">Phone</label>
+              <input type="tel" id="settingsPhone" placeholder="Your phone number">
+            </div>
+            <button type="submit" class="btn-primary">Save Changes</button>
+          </form>
+        </div>
+
+        <div class="section-card">
+          <h3>Change Password</h3>
+          <form id="passwordForm">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" placeholder="Enter current password">
+            </div>
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input type="password" id="newPassword" placeholder="Enter new password">
+            </div>
+            <button type="submit" class="btn-primary">Change Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../cafe-ecommerce.js"></script>
+  
+  <script>
+    // Tab switching
+    document.querySelectorAll('.profile-tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.profile-tabs button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab + '-tab').classList.add('active');
+      });
+    });
+    
+    // Load profile data
+    async function loadProfile() {
+      const user = window.HaruSora.getCurrentUser();
+      if (user) {
+        document.getElementById('profileName').textContent = user.name || 'User';
+        document.getElementById('profileEmail').textContent = user.email || '';
+        document.getElementById('profileAvatar').textContent = (user.name || 'U')[0].toUpperCase();
+        document.getElementById('settingsName').value = user.name || '';
+        document.getElementById('totalOrders').textContent = user.totalOrders || 0;
+        document.getElementById('loyaltyPoints').textContent = user.loyaltyPoints || 0;
+      }
+      
+      // Try to get full profile from server
+      const profile = await window.HaruSora.UserProfile.get();
+      if (profile) {
+        document.getElementById('profileName').textContent = profile.name;
+        document.getElementById('profileEmail').textContent = profile.email;
+        document.getElementById('settingsName').value = profile.name;
+        document.getElementById('settingsPhone').value = profile.phone || '';
+        document.getElementById('totalOrders').textContent = profile.totalOrders || 0;
+        document.getElementById('loyaltyPoints').textContent = profile.loyaltyPoints || 0;
+        
+        renderAddresses(profile.addresses || []);
+      }
+    }
+    
+    // Load orders
+    async function loadOrders() {
+      const data = await window.HaruSora.Orders.getHistory();
+      const container = document.getElementById('ordersList');
+      
+      if (!data.orders || data.orders.length === 0) {
+        container.innerHTML = '<div class="empty-state">No orders yet. <a href="menu.html">Browse our menu!</a></div>';
+        return;
+      }
+      
+      container.innerHTML = data.orders.map(order => `
+        <div class="order-card">
+          <div class="order-card-header">
+            <span class="order-number">#${order.orderNumber}</span>
+            <span class="order-status ${order.status}">${order.status}</span>
+          </div>
+          <div class="order-items">
+            ${order.items.map(i => `${i.quantity}x ${i.name}`).join(', ')}
+          </div>
+          <div class="order-total">Total: ৳ ${order.total}</div>
+          <div style="color: var(--muted); font-size: 12px; margin-top: 8px;">
+            ${new Date(order.createdAt).toLocaleDateString()} at ${new Date(order.createdAt).toLocaleTimeString()}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Load wishlist
+    async function loadWishlist() {
+      const wishlist = await window.HaruSora.Wishlist.get();
+      const container = document.getElementById('wishlistGrid');
+      
+      if (!wishlist || wishlist.length === 0) {
+        container.innerHTML = '<div class="empty-state">Your wishlist is empty.</div>';
+        return;
+      }
+      
+      container.innerHTML = wishlist.map(item => `
+        <div class="wishlist-item">
+          <img src="${item.image}" alt="${item.name}">
+          <h4>${item.name}</h4>
+          <div class="price">৳ ${item.price}</div>
+          <button class="btn-secondary" style="margin-top: 8px; width: 100%;" onclick="addToCartFromWishlist('${item._id}')">
+            Add to Cart
+          </button>
+        </div>
+      `).join('');
+    }
+    
+    function renderAddresses(addresses) {
+      const container = document.getElementById('addressesList');
+      
+      if (!addresses || addresses.length === 0) {
+        container.innerHTML = '<div class="empty-state">No saved addresses.</div>';
+        return;
+      }
+      
+      container.innerHTML = addresses.map(addr => `
+        <div class="address-card">
+          <div>
+            <h4>${addr.label} ${addr.isDefault ? '<span class="default-badge">Default</span>' : ''}</h4>
+            <p>${addr.street}, ${addr.city}</p>
+            <p>${addr.phone || ''}</p>
+          </div>
+          <button class="btn-secondary" onclick="deleteAddress('${addr._id}')">Remove</button>
+        </div>
+      `).join('');
+    }
+    
+    async function addToCartFromWishlist(productId) {
+      await window.HaruSora.Cart.add(productId);
+    }
+    
+    async function deleteAddress(addressId) {
+      if (confirm('Delete this address?')) {
+        await window.HaruSora.UserProfile.deleteAddress(addressId);
+        loadProfile();
+      }
+    }
+    
+    function showAddAddressForm() {
+      const label = prompt('Address Label (e.g., Home, Office):');
+      const street = prompt('Street Address:');
+      const city = prompt('City:');
+      const phone = prompt('Phone Number:');
+      
+      if (label && street && city) {
+        window.HaruSora.UserProfile.addAddress({ label, street, city, phone }).then(() => loadProfile());
+      }
+    }
+    
+    // Profile form
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await window.HaruSora.UserProfile.update({
+        name: document.getElementById('settingsName').value,
+        phone: document.getElementById('settingsPhone').value
+      });
+      loadProfile();
+    });
+    
+    // Password form
+    document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await window.HaruSora.UserProfile.changePassword(
+        document.getElementById('currentPassword').value,
+        document.getElementById('newPassword').value
+      );
+      document.getElementById('passwordForm').reset();
+    });
+    
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      window.location.href = '../login.html';
+    });
+    
+    // Initialize
+    loadProfile();
+    loadOrders();
+    loadWishlist();
+  </script>
+</body>
+</html>

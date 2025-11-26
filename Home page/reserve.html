@@ -8,48 +8,250 @@
   <link rel="stylesheet" href="../CSS files/home.css">
   <style>
     /* Reserve page specific styles */
-    .brand h2 { margin: 0; font-size: 24px; color: var(--text-main); }
-    
-    nav a.active {
-      background: rgba(255,230,220,0.1);
-      color: var(--text-muted);
-    }
-
-    /* Page Content */
-    .page{
-      max-width: 600px;
+    .reserve-container {
+      max-width: 800px;
       margin: 40px auto;
+      padding: 20px;
+    }
+    
+    .reserve-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .reserve-header h1 {
+      color: var(--text-main);
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+    
+    .reserve-header p {
+      color: var(--muted);
+      font-size: 18px;
+    }
+    
+    .reserve-card {
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 30px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      display: block;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px;
+      background: rgba(212, 163, 115, 0.1);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 16px;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #d4a373;
+    }
+    
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    
+    .time-slot {
+      padding: 12px;
+      background: rgba(212, 163, 115, 0.1);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: var(--text-main);
+    }
+    
+    .time-slot:hover {
+      background: rgba(212, 163, 115, 0.2);
+    }
+    
+    .time-slot.selected {
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border-color: #d4a373;
+    }
+    
+    .time-slot.unavailable {
+      opacity: 0.4;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    /* My Reservations */
+    .my-reservations {
+      background: rgba(26, 18, 14, 0.6);
+      border-radius: 20px;
+      padding: 32px;
+    }
+    
+    .my-reservations h2 {
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+    
+    .reservation-item {
+      background: rgba(212, 163, 115, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .reservation-details h4 {
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    
+    .reservation-details p {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 4px 0;
+    }
+    
+    .reservation-status {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    .reservation-status.pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+    .reservation-status.confirmed { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .reservation-status.cancelled { background: rgba(244, 67, 54, 0.2); color: #f44336; }
+    .reservation-status.completed { background: rgba(156, 39, 176, 0.2); color: #9c27b0; }
+    
+    .cancel-btn {
+      padding: 8px 16px;
+      background: rgba(244, 67, 54, 0.2);
+      color: #f44336;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-left: 12px;
+    }
+    
+    .empty-reservations {
       text-align: center;
       padding: 40px;
-      border-radius: 16px;
-      background: var(--glass);
-      box-shadow: var(--card-shadow);
-      border: 1px solid rgba(255,230,220,0.1);
+      color: var(--muted);
     }
     
-    h1 { margin-bottom: 20px; font-size: 32px; color: var(--text-main); }
-    p { color: var(--text-muted); margin-bottom: 30px; font-size: 18px; }
-    p strong { color: var(--accent-gold); }
+    /* Success/Error Messages */
+    .message {
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .message.success {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+      display: block;
+    }
+    
+    .message.error {
+      background: rgba(244, 67, 54, 0.2);
+      color: #f44336;
+      display: block;
+    }
+    
+    /* Phone option */
+    .phone-option {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(212, 163, 115, 0.1);
+      border-radius: 12px;
+    }
+    
+    .phone-option p {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
     
     .call-btn {
-      padding: 14px 24px;
-      background: linear-gradient(90deg,var(--accent-gold),var(--accent-salmon));
-      border-radius: 12px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
       color: #1a120e;
-      font-weight: 700;
       text-decoration: none;
-      font-size: 18px;
-      transition: transform 0.2s;
+      border-radius: 8px;
+      font-weight: 600;
     }
-    .call-btn:hover { transform: translateY(-2px); }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   </style>
 
   <script>
     if(localStorage.getItem('isLoggedIn') !== 'true'){
-      window.location.href="../Login-SignUp page/login.html";
+      window.location.href="../login.html";
     }
   </script>
 </head>
@@ -58,48 +260,284 @@
 <div class="container">
   <header>
     <div class="brand">
-      <h2>Haru Sora Café</h2>
-    </div>
-    <nav>
-      <a href="home.html">Home</a>
-      <a href="menu.html">Menu</a>
-      <a href="home.html#about">About</a>
-      
-      <a href="reserve.html" class="active">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-           <line x1="16" y1="2" x2="16" y2="6"></line>
-           <line x1="8" y1="2" x2="8" y2="6"></line>
-           <line x1="3" y1="10" x2="21" y2="10"></line>
+      <div class="logo-wrap" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1">
+              <stop offset="0" stop-color="#51e2f5"/>
+              <stop offset="1" stop-color="#9df9ef"/>
+            </linearGradient>
+          </defs>
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.95"/>
         </svg>
-        Reserve
-      </a>
-      
-      <a href="#" onclick="logout()">Logout</a>
+      </div>
+      <div>
+        <h1>Haru Sora Café</h1>
+        <p>Handcrafted Sushi · Artisan Coffee</p>
+      </div>
+    </div>
+
+    <nav>
+      <a href="home.html" class="ghost">Home</a>
+      <a href="menu.html" class="ghost">Menu</a>
+      <a href="cart.html" class="ghost">Cart</a>
+      <a href="orders.html" class="ghost">Orders</a>
+      <a href="reserve.html" class="btn">Reserve</a>
+      <a href="profile.html" class="ghost">Profile</a>
+      <a href="#" id="logoutBtn" class="btn">Logout</a>
     </nav>
   </header>
 
-  <div class="page">
-    <h1>Reserve a Table</h1>
-    <p>We'd love to host you! To ensure the best experience, we take reservations via phone.</p>
-    <p>📞 Call us at <strong>+880 123 456 789</strong></p>
+  <div class="reserve-container">
+    <div class="reserve-header">
+      <h1>🍽️ Reserve a Table</h1>
+      <p>Book your spot for an unforgettable dining experience</p>
+    </div>
+    
+    <div id="formMessage" class="message"></div>
 
-    <a href="tel:+880123456789" class="call-btn">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-      </svg>
-      Call to Reserve
-    </a>
+    <div class="reserve-card">
+      <form id="reservationForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="customerName" required placeholder="Enter your name">
+          </div>
+          
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" required placeholder="+880 1XX XXX XXXX">
+          </div>
+          
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" required placeholder="your@email.com">
+          </div>
+          
+          <div class="form-group">
+            <label>Number of Guests</label>
+            <select id="partySize" required>
+              <option value="">Select guests</option>
+              <option value="1">1 Guest</option>
+              <option value="2">2 Guests</option>
+              <option value="3">3 Guests</option>
+              <option value="4">4 Guests</option>
+              <option value="5">5 Guests</option>
+              <option value="6">6 Guests</option>
+              <option value="7">7+ Guests (Please call)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Reservation Date</label>
+            <input type="date" id="reserveDate" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Preferred Time</label>
+            <div class="time-slots" id="timeSlots">
+              <div class="time-slot" data-time="11:00">11:00 AM</div>
+              <div class="time-slot" data-time="12:00">12:00 PM</div>
+              <div class="time-slot" data-time="13:00">1:00 PM</div>
+              <div class="time-slot" data-time="14:00">2:00 PM</div>
+              <div class="time-slot" data-time="17:00">5:00 PM</div>
+              <div class="time-slot" data-time="18:00">6:00 PM</div>
+              <div class="time-slot" data-time="19:00">7:00 PM</div>
+              <div class="time-slot" data-time="20:00">8:00 PM</div>
+            </div>
+            <input type="hidden" id="selectedTime" required>
+          </div>
+          
+          <div class="form-group full-width">
+            <label>Special Requests (Optional)</label>
+            <textarea id="specialRequests" rows="3" placeholder="Birthday celebration, dietary requirements, seating preferences..."></textarea>
+          </div>
+        </div>
+        
+        <button type="submit" class="submit-btn">Book Table</button>
+      </form>
+      
+      <div class="phone-option">
+        <p>Prefer to book by phone?</p>
+        <a href="tel:+880123456789" class="call-btn">
+          📞 Call +880 123 456 789
+        </a>
+      </div>
+    </div>
+
+    <div class="my-reservations">
+      <h2>📋 My Reservations</h2>
+      <div id="reservationsList">
+        <div class="empty-reservations">Loading...</div>
+      </div>
+    </div>
   </div>
 </div>
 
+<script src="../cafe-ecommerce.js"></script>
+
 <script>
-  function logout() {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
-    window.location.href = '../Login-SignUp page/login.html';
+  const API_BASE = 'http://localhost:4000/api';
+  let selectedTimeSlot = null;
+  
+  // Set minimum date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('reserveDate').min = today;
+  
+  // Pre-fill user info
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  if (currentUser.name) document.getElementById('customerName').value = currentUser.name;
+  if (currentUser.email) document.getElementById('email').value = currentUser.email;
+  if (currentUser.phone) document.getElementById('phone').value = currentUser.phone;
+  
+  // Time slot selection
+  document.querySelectorAll('.time-slot').forEach(slot => {
+    slot.addEventListener('click', function() {
+      if (this.classList.contains('unavailable')) return;
+      
+      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedTimeSlot = this.dataset.time;
+      document.getElementById('selectedTime').value = selectedTimeSlot;
+    });
+  });
+  
+  // Form submission
+  document.getElementById('reservationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const messageDiv = document.getElementById('formMessage');
+    
+    if (!selectedTimeSlot) {
+      messageDiv.textContent = 'Please select a time slot';
+      messageDiv.className = 'message error';
+      return;
+    }
+    
+    const reservationData = {
+      customerName: document.getElementById('customerName').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      partySize: parseInt(document.getElementById('partySize').value),
+      date: document.getElementById('reserveDate').value,
+      timeSlot: selectedTimeSlot,
+      specialRequests: document.getElementById('specialRequests').value
+    };
+    
+    try {
+      const response = await fetch(`${API_BASE}/reservations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reservationData)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        messageDiv.textContent = '✅ Reservation confirmed! We look forward to seeing you.';
+        messageDiv.className = 'message success';
+        document.getElementById('reservationForm').reset();
+        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        selectedTimeSlot = null;
+        loadMyReservations();
+      } else {
+        messageDiv.textContent = data.error || 'Failed to make reservation. Please try again.';
+        messageDiv.className = 'message error';
+      }
+    } catch (error) {
+      console.error('Reservation error:', error);
+      messageDiv.textContent = 'Connection error. Please try again later.';
+      messageDiv.className = 'message error';
+    }
+  });
+  
+  // Load user's reservations
+  async function loadMyReservations() {
+    const container = document.getElementById('reservationsList');
+    
+    try {
+      const response = await fetch(`${API_BASE}/reservations/my`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+        }
+      });
+      
+      if (!response.ok) {
+        container.innerHTML = '<div class="empty-reservations">No reservations found</div>';
+        return;
+      }
+      
+      const data = await response.json();
+      
+      if (!data.reservations || data.reservations.length === 0) {
+        container.innerHTML = '<div class="empty-reservations">No reservations yet. Book your first table above!</div>';
+        return;
+      }
+      
+      container.innerHTML = data.reservations.map(res => `
+        <div class="reservation-item">
+          <div class="reservation-details">
+            <h4>📅 ${formatDate(res.date)} at ${formatTime(res.timeSlot)}</h4>
+            <p>👥 ${res.partySize} Guest${res.partySize > 1 ? 's' : ''}</p>
+            ${res.specialRequests ? `<p>📝 ${res.specialRequests}</p>` : ''}
+          </div>
+          <div>
+            <span class="reservation-status ${res.status}">${res.status}</span>
+            ${res.status === 'pending' || res.status === 'confirmed' ? 
+              `<button class="cancel-btn" onclick="cancelReservation('${res._id}')">Cancel</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    } catch (error) {
+      console.error('Error loading reservations:', error);
+      container.innerHTML = '<div class="empty-reservations">Unable to load reservations</div>';
+    }
   }
+  
+  // Cancel reservation
+  async function cancelReservation(id) {
+    if (!confirm('Are you sure you want to cancel this reservation?')) return;
+    
+    try {
+      const response = await fetch(`${API_BASE}/reservations/${id}/cancel`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+        }
+      });
+      
+      if (response.ok) {
+        loadMyReservations();
+      } else {
+        alert('Failed to cancel reservation');
+      }
+    } catch (error) {
+      console.error('Cancel error:', error);
+      alert('Connection error');
+    }
+  }
+  
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  
+  function formatTime(time) {
+    const [hours] = time.split(':');
+    const h = parseInt(hours);
+    return h > 12 ? `${h - 12}:00 PM` : `${h}:00 ${h === 12 ? 'PM' : 'AM'}`;
+  }
+  
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
+    window.location.href = '../login.html';
+  });
+  
+  // Initialize
+  loadMyReservations();
 </script>
 
 </body>
