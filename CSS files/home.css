@@ -217,29 +217,29 @@ footer{margin-top:28px;text-align:center;padding:22px;border-radius:12px;color:v
   header {
     padding: 12px;
     border-radius: 12px;
+    gap: 8px;
   }
   
   .brand {
     flex: 1;
     min-width: 0;
+    gap: 8px;
   }
   
   .brand h1 { 
-    font-size: 14px;
+    font-size: 13px;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
+    text-overflow: clip;
   }
   
   .brand p { 
-    font-size: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 9px;
+    display: none;
   }
   
-  .brand-logo-container, .logo-wrap { width: 40px; height: 40px; }
-  .sushi-logo-svg { width: 30px; height: 30px; }
+  .brand-logo-container, .logo-wrap { width: 36px; height: 36px; }
+  .sushi-logo-svg { width: 26px; height: 26px; }
   
   nav {
     gap: 4px;
@@ -346,20 +346,31 @@ footer{margin-top:28px;text-align:center;padding:22px;border-radius:12px;color:v
 @media(max-width:380px){
   .container { padding: 8px; }
   
-  header { padding: 10px; }
+  header { 
+    padding: 10px;
+    gap: 6px;
+  }
   
-  .brand h1 { font-size: 12px; }
+  .brand {
+    gap: 6px;
+  }
+  
+  .brand h1 { 
+    font-size: 11px;
+    overflow: visible;
+  }
   .brand p { display: none; }
-  .brand-logo-container, .logo-wrap { width: 36px; height: 36px; }
+  .brand-logo-container, .logo-wrap { width: 32px; height: 32px; }
+  .sushi-logo-svg { width: 24px; height: 24px; }
   
   .nav-icon {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
   }
   
   .nav-icon svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
   }
   
   .hero-title { font-size: 20px; }
