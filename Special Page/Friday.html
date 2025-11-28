@@ -1,58 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Special Sushi</title>
-    <link rel="stylesheet"href="Friday.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friday Special — Haru Sora Café</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #fdf8f3 0%, #f5ebe0 50%, #fae8d8 100%);
+      min-height: 100vh;
+      color: #2d2420;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 15% 85%, rgba(232, 168, 124, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 85% 15%, rgba(200, 90, 90, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(212, 163, 115, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
+    .page-header { text-align: center; margin-bottom: 50px; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px; color: #8b6914;
+      text-decoration: none; font-weight: 600; margin-bottom: 30px; padding: 12px 24px;
+      background: rgba(212, 163, 115, 0.15); border: 1px solid rgba(212, 163, 115, 0.4);
+      border-radius: 30px; transition: all 0.3s ease;
+    }
+    .back-btn:hover { background: rgba(212, 163, 115, 0.3); transform: translateX(-5px); }
+    .page-title {
+      font-family: 'Playfair Display', serif; font-size: 2.8rem;
+      color: #5c4033; margin-bottom: 15px;
+    }
+    .page-title-emoji { display: inline-block; animation: bounce 2s ease infinite; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .page-subtitle { color: #7a6a5a; font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
+    .special-badge {
+      display: inline-block; background: linear-gradient(135deg, #c85a5a, #e07a5f);
+      color: white; padding: 10px 24px; border-radius: 25px; font-weight: 700;
+      font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(200, 90, 90, 0.3);
+    }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+    .card {
+      background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 163, 115, 0.25); border-radius: 24px;
+      overflow: hidden; transition: all 0.4s ease; position: relative;
+      box-shadow: 0 8px 30px rgba(139, 90, 43, 0.08);
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(139, 90, 43, 0.15);
+      border-color: rgba(212, 163, 115, 0.5);
+    }
+    .card.special {
+      border: 2px solid #c85a5a;
+      background: linear-gradient(145deg, rgba(255, 245, 245, 0.9), rgba(255, 240, 235, 0.9));
+    }
+    .card.special::before {
+      content: '⭐ CHEF\'S PICK'; position: absolute; top: 15px; right: -35px;
+      background: linear-gradient(135deg, #c85a5a, #e07a5f); color: white;
+      padding: 6px 45px; font-size: 0.7rem; font-weight: 700; transform: rotate(45deg); z-index: 10;
+    }
+    .card-image-wrapper { overflow: hidden; }
+    .card-image { width: 100%; height: 200px; object-fit: cover; transition: transform 0.5s ease; }
+    .card:hover .card-image { transform: scale(1.08); }
+    .card-content { padding: 25px; }
+    .card-title {
+      font-family: 'Playfair Display', serif; font-size: 1.4rem;
+      color: #5c4033; margin-bottom: 10px;
+    }
+    .card-description { color: #7a6a5a; font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; }
+    .card-price {
+      font-size: 1.6rem; font-weight: 700;
+      color: #c85a5a; margin-bottom: 10px;
+    }
+    .card-condition {
+      font-size: 0.85rem; color: #5c4033; padding: 10px 14px;
+      background: rgba(212, 163, 115, 0.15); border-radius: 10px;
+      display: inline-block; margin-bottom: 20px; border: 1px solid rgba(212, 163, 115, 0.2);
+    }
+    .order-btn {
+      display: inline-flex; align-items: center; justify-content: center; width: 100%;
+      padding: 14px 28px; background: linear-gradient(135deg, #d4a373, #c08552);
+      color: white; font-weight: 700; font-size: 1rem; border: none; border-radius: 14px;
+      text-decoration: none; cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
+    }
+    .order-btn:hover {
+      background: linear-gradient(135deg, #c08552, #a67040);
+      transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 163, 115, 0.4);
+    }
+    .footer-note {
+      text-align: center; margin-top: 60px; padding: 30px;
+      background: rgba(255, 255, 255, 0.6); border-radius: 20px;
+      border: 1px solid rgba(212, 163, 115, 0.2);
+    }
+    .footer-note p { color: #7a6a5a; font-size: 0.95rem; }
+    .footer-note strong { color: #c85a5a; }
+    .sakura-float {
+      position: fixed; font-size: 1.5rem; opacity: 0.2; pointer-events: none;
+      animation: floatDown 15s linear infinite;
+    }
+    .sakura-1 { left: 10%; animation-delay: 0s; }
+    .sakura-2 { left: 30%; animation-delay: 3s; }
+    .sakura-3 { left: 50%; animation-delay: 6s; }
+    .sakura-4 { left: 70%; animation-delay: 9s; }
+    .sakura-5 { left: 90%; animation-delay: 12s; }
+    @keyframes floatDown {
+      0% { top: -5%; transform: rotate(0deg) translateX(0); }
+      100% { top: 105%; transform: rotate(360deg) translateX(50px); }
+    }
+    @media (max-width: 600px) { .page-title { font-size: 2rem; } .cards-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
+  <span class="sakura-float sakura-1">🌸</span>
+  <span class="sakura-float sakura-2">🌸</span>
+  <span class="sakura-float sakura-3">🌸</span>
+  <span class="sakura-float sakura-4">🌸</span>
+  <span class="sakura-float sakura-5">🌸</span>
 
-    <h1>🌸Friday Special Sushi Menu🍱🥢</h1>
+  <div class="container">
+    <header class="page-header">
+      <a href="../Home page/home.html" class="back-btn">← Back to Home</a>
+      <h1 class="page-title">
+        <span class="page-title-emoji">🌸</span>
+        Friday Special Menu
+        <span class="page-title-emoji">🍱</span>
+      </h1>
+      <p class="page-subtitle">Exclusive artisan dishes available only on Fridays — Limited quantities, crafted with love</p>
+      <span class="special-badge">🔥 Today Only</span>
+    </header>
 
-    <div class="container">
-
-        <div class="card">
-            <h2>Rainbow Dragon Roll</h2>
-            <img src="https://media-cdn.tripadvisor.com/media/photo-m/1280/13/82/a6/05/rainbow-dragon-roll-all.jpg"alt="Rainbow Dragon Roll">
-            <p>Colorful array of fish over a California roll base.</p>
-            <h3>2500 Tk.</h3>
-            <p><b>Condition:</b> Anyone can order.</p>
-            <a href="Form.html?Sushi=Rainbow Dargon Roll" class="order-btn">Order Now</a>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-image-wrapper">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-m/1280/13/82/a6/05/rainbow-dragon-roll-all.jpg" alt="Rainbow Dragon Roll" class="card-image">
         </div>
-
-        <div class="card">
-            <h2>Kaiseki Sushi</h2>
-            <img src="https://byfood.b-cdn.net/api/public/assets/9362/content"alt="Kaiseki Sushi">
-            <p>Multi-course traditional experience.</p>
-            <h3>4500 Tk.</h3>
-            <p><b>Condition:</b> Only 20 customer can order.</p>
-            <a href="Form.html?Sushi=Kaiseki Sushi" class="order-btn">Order Now</a>
+        <div class="card-content">
+          <h2 class="card-title">Rainbow Dragon Roll</h2>
+          <p class="card-description">Colorful array of premium fish artfully layered over a California roll base with creamy avocado.</p>
+          <div class="card-price">2,500 ৳</div>
+          <span class="card-condition">✓ Anyone can order</span>
+          <a href="Form.html?Sushi=Rainbow Dragon Roll" class="order-btn">Order Now →</a>
         </div>
+      </div>
 
-        
-        <div class="card">
-
-            <h2>Orchid Princess Roll Sushi</h2>
-            <img src="https://thumbs.dreamstime.com/b/gourmet-fruit-sushi-rolls-elegant-slate-plate-artisanal-chocolate-sauce-serving-platter-styled-orchid-flowers-320625846.jpg"alt="Orchid Princess Roll Sushi">
-            <p>Fresh fruit sushi with chocolate drizzle- a royal delight!".</p>
-            <h3>2500 Tk.</h3>
-            <p><b>Condition:</b> Only for Girls.</p>
-            <a href="Form.html?Sushi=Edomae" class="order-btn">Order Now</a>
+      <div class="card">
+        <div class="card-image-wrapper">
+          <img src="https://byfood.b-cdn.net/api/public/assets/9362/content" alt="Kaiseki Sushi" class="card-image">
         </div>
-
-        <div class="card special">
-            <h2>Omakase</h2>
-            <img src="https://static.wixstatic.com/media/b4d207_6a6bba619a604b4faf41cb1c79359f43~mv2.jpg/v1/fill/w_640,h_254,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/b4d207_6a6bba619a604b4faf41cb1c79359f43~mv2.jpg"alt="Omakase">
-            <p>Chef's choice" - Lets the sushi master create something extraordinary.</p>
-            <h3>5500 Tk.</h3>
-            <p><b>Condition:</b> Only first 3 customer can order.</p>
-            <a href="Form.html?Sushi=Omakase" class="order-btn">Order Now</a>
+        <div class="card-content">
+          <h2 class="card-title">Kaiseki Sushi</h2>
+          <p class="card-description">Multi-course traditional Japanese dining experience with seasonal ingredients.</p>
+          <div class="card-price">4,500 ৳</div>
+          <span class="card-condition">⚠️ Limited: 20 orders only</span>
+          <a href="Form.html?Sushi=Kaiseki Sushi" class="order-btn">Order Now →</a>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="card-image-wrapper">
+          <img src="https://thumbs.dreamstime.com/b/gourmet-fruit-sushi-rolls-elegant-slate-plate-artisanal-chocolate-sauce-serving-platter-styled-orchid-flowers-320625846.jpg" alt="Orchid Princess Roll" class="card-image">
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">Orchid Princess Roll</h2>
+          <p class="card-description">Fresh fruit sushi with artisanal chocolate drizzle — a royal delight!</p>
+          <div class="card-price">2,500 ৳</div>
+          <span class="card-condition">👸 Exclusive for Ladies</span>
+          <a href="Form.html?Sushi=Orchid Princess Roll" class="order-btn">Order Now →</a>
+        </div>
+      </div>
+
+      <div class="card special">
+        <div class="card-image-wrapper">
+          <img src="https://static.wixstatic.com/media/b4d207_6a6bba619a604b4faf41cb1c79359f43~mv2.jpg/v1/fill/w_640,h_254,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/b4d207_6a6bba619a604b4faf41cb1c79359f43~mv2.jpg" alt="Omakase" class="card-image">
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">Omakase</h2>
+          <p class="card-description">"Chef's Choice" — Let our sushi master create something extraordinary just for you.</p>
+          <div class="card-price">5,500 ৳</div>
+          <span class="card-condition">🏆 First 3 customers only!</span>
+          <a href="Form.html?Sushi=Omakase" class="order-btn">Order Now →</a>
+        </div>
+      </div>
     </div>
 
-
-    
-    
+    <div class="footer-note">
+      <p><strong>Note:</strong> Friday specials are for dine-in and pre-order only. Limited quantities — first come, first served!</p>
+    </div>
+  </div>
 </body>
 </html>

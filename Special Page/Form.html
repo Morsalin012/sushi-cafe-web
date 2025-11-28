@@ -3,76 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sushi Booking From</title>
+    <title>Sushi Booking Form — Haru Sora Café</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: linear-gradient(135deg, #fdf8f3 0%, #f5ebe0 50%, #fae8d8 100%);
+        min-height: 100vh;
+        color: #2d2420;
+        padding: 40px 20px;
+      }
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: 
+          radial-gradient(circle at 20% 20%, rgba(212, 163, 115, 0.15) 0%, transparent 40%),
+          radial-gradient(circle at 80% 80%, rgba(232, 168, 124, 0.1) 0%, transparent 40%);
+        pointer-events: none;
+      }
+      .container { max-width: 500px; margin: 0 auto; position: relative; z-index: 1; }
+      .page-header { text-align: center; margin-bottom: 30px; }
+      .back-btn {
+        display: inline-flex; align-items: center; gap: 8px; color: #8b6914;
+        text-decoration: none; font-weight: 600; margin-bottom: 25px; padding: 10px 20px;
+        background: rgba(212, 163, 115, 0.2); border: 1px solid rgba(212, 163, 115, 0.4);
+        border-radius: 30px; transition: all 0.3s ease;
+      }
+      .back-btn:hover { background: rgba(212, 163, 115, 0.35); transform: translateX(-5px); }
+      .page-title {
+        font-family: 'Playfair Display', serif; font-size: 2rem;
+        color: #5c4033; margin-bottom: 10px;
+      }
+      .page-subtitle { color: #7a6a5a; font-size: 0.95rem; }
+      .form-card {
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
+        border: 1px solid rgba(212, 163, 115, 0.3); border-radius: 24px;
+        padding: 35px 30px; box-shadow: 0 10px 40px rgba(139, 90, 43, 0.1);
+      }
+      .form-group { margin-bottom: 22px; }
+      .form-group label {
+        display: block; font-weight: 600; color: #5c4033; margin-bottom: 8px; font-size: 0.95rem;
+      }
+      .form-group input, .form-group select, .form-group textarea {
+        width: 100%; padding: 14px 16px; font-size: 1rem; border: 2px solid rgba(212, 163, 115, 0.3);
+        border-radius: 12px; background: rgba(253, 248, 243, 0.8); color: #2d2420;
+        font-family: inherit; transition: all 0.3s ease;
+      }
+      .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        outline: none; border-color: #d4a373; box-shadow: 0 0 0 4px rgba(212, 163, 115, 0.15);
+      }
+      .form-group textarea { resize: vertical; min-height: 100px; }
+      .orchid-section {
+        display: none; padding: 20px; background: linear-gradient(135deg, #fff5f5, #fff0eb);
+        border: 2px solid rgba(200, 90, 90, 0.2); border-radius: 16px; margin-top: 15px;
+      }
+      .orchid-section.show { display: block; animation: fadeIn 0.3s ease; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+      .orchid-title { color: #c85a5a; font-weight: 600; margin-bottom: 15px; font-size: 0.9rem; }
+      .submit-btn {
+        width: 100%; padding: 16px 28px; background: linear-gradient(135deg, #d4a373, #c08552);
+        color: white; font-weight: 700; font-size: 1.1rem; border: none; border-radius: 14px;
+        cursor: pointer; transition: all 0.3s ease; margin-top: 10px;
+        box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
+      }
+      .submit-btn:hover {
+        background: linear-gradient(135deg, #c08552, #a67040);
+        transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 163, 115, 0.4);
+      }
+      #OrderSummary {
+        margin-top: 25px; padding: 20px; background: rgba(212, 163, 115, 0.1);
+        border-radius: 16px; border: 1px solid rgba(212, 163, 115, 0.3); display: none;
+      }
+      #OrderSummary.show { display: block; }
+      .sakura-deco {
+        position: fixed; font-size: 2rem; opacity: 0.15; pointer-events: none;
+      }
+      .sakura-1 { top: 10%; left: 5%; }
+      .sakura-2 { top: 30%; right: 8%; }
+      .sakura-3 { bottom: 20%; left: 10%; }
+      .sakura-4 { bottom: 10%; right: 5%; }
 
-    <link rel="stylesheet" href="Friday.css">
-
-    <script defer src="Friday.js"></script>
-
+      /* ===== CELEBRATION OVERLAY ===== */
+      .celebration-overlay {
+        position: fixed; inset: 0; z-index: 9999;
+        background: rgba(0,0,0,0.85); display: none;
+        align-items: center; justify-content: center;
+        flex-direction: column;
+      }
+      .celebration-overlay.active { display: flex; animation: fadeInOverlay 0.5s ease; }
+      @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+      
+      .celebration-content {
+        text-align: center; padding: 50px; max-width: 500px;
+        background: linear-gradient(135deg, #fdf8f3, #f5ebe0);
+        border-radius: 30px; box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        animation: bounceIn 0.6s ease;
+        position: relative; overflow: hidden;
+      }
+      @keyframes bounceIn {
+        0% { transform: scale(0.3); opacity: 0; }
+        50% { transform: scale(1.05); }
+        70% { transform: scale(0.95); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      .celebration-content::before {
+        content: ''; position: absolute; inset: -50%;
+        background: conic-gradient(from 0deg, transparent, rgba(212,163,115,0.3), transparent, rgba(200,90,90,0.2), transparent);
+        animation: spinGlow 4s linear infinite;
+      }
+      @keyframes spinGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .celebration-inner { position: relative; z-index: 1; }
+      .celebration-emoji { font-size: 5rem; margin-bottom: 20px; animation: bounce 0.6s ease infinite alternate; }
+      @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+      .celebration-title {
+        font-family: 'Playfair Display', serif; font-size: 2rem;
+        color: #5c4033; margin-bottom: 15px;
+      }
+      .celebration-message { color: #7a6a5a; font-size: 1.1rem; line-height: 1.6; margin-bottom: 25px; }
+      .celebration-order-info {
+        background: rgba(212, 163, 115, 0.15); padding: 15px 20px;
+        border-radius: 12px; margin-bottom: 25px; text-align: left;
+      }
+      .celebration-order-info p { margin: 8px 0; color: #5c4033; font-size: 0.95rem; }
+      .celebration-order-info strong { color: #d4a373; }
+      .celebration-btn {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 16px 35px; background: linear-gradient(135deg, #d4a373, #c08552);
+        color: white; font-weight: 700; font-size: 1.1rem; border: none;
+        border-radius: 30px; cursor: pointer; text-decoration: none;
+        box-shadow: 0 8px 25px rgba(212, 163, 115, 0.4);
+        transition: all 0.3s ease;
+      }
+      .celebration-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 12px 35px rgba(212, 163, 115, 0.5);
+      }
+      
+      /* Confetti Canvas */
+      #confettiCanvas {
+        position: fixed; inset: 0; z-index: 10000;
+        pointer-events: none;
+      }
+      
+      /* Floating emojis */
+      .float-emoji {
+        position: fixed; font-size: 2.5rem; z-index: 10001;
+        animation: floatUp 3s ease-out forwards; pointer-events: none;
+      }
+      @keyframes floatUp {
+        0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+        100% { opacity: 0; transform: translateY(-400px) rotate(720deg) scale(0); }
+      }
+    </style>
 </head>
 <body>
-    <h1>Sushi Booking Form</h1>
-
-    <p><a href="Friday.html" class="btn">Back to Menu</a></p>
-
-    <form id="SushiForm">
-
-        <label for="name">Your Name:</label>
-        <input type="text" id="name" required>
-
-        <label for="gender">Gender:</label>
-        <select id="gender" required>
-            <option value="">--Select Gender--</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-
-        <label for="sushi">Choose Sushi:</label>
-        
-        <select id="sushi" required>
-            <option value="">--Select--</option>
-
-            <option value="Rainbow Dragon Roll Sushi">Rainbow Dragon Roll Sushi(Anyone)</option>
-            <option value="Kaiseki Sushi">Kaiseki Sushi(Only 20 customer can order)</option>
-            <option value="Orchid Princess Roll Sushi">Orchid Princess Roll sushi( Only Girls)</option>
-            <option value="Omakase">Omakase(Only first 3 customers)</option>
-
-        </select>
-
-
-        <div id="Orchid"style="display:none;margin-top: 15px;">
+    <canvas id="confettiCanvas"></canvas>
     
-        <label for="celebration">Reason for Celebration:</label>
-        
-        <select id="celebration">
-            <option value="">--Select--</option>
+    <span class="sakura-deco sakura-1">🌸</span>
+    <span class="sakura-deco sakura-2">🍸</span>
+    <span class="sakura-deco sakura-3">🍣</span>
+    <span class="sakura-deco sakura-4">🌸</span>
 
-            <option value="birthday">Birthday</option>
-            <option value="education">Education Success</option>
-            <option value="career">career Achievement</option>
-            <option value="mothersday">Mother's Day</option>
-            <option value="breakup">Breakup</option>
-            <option value="other">Other</option>
-        </select>
+    <div class="container">
+      <header class="page-header">
+        <a href="Friday.html" class="back-btn">← Back to Menu</a>
+        <h1 class="page-title">🍱 Sushi Booking Form</h1>
+        <p class="page-subtitle">Reserve your exclusive Friday special dish</p>
+      </header>
 
-        <label for="note">Write a Note</label>
-        <textarea id="note" rows="5"placeholder="Tell us abot your celebration.............."></textarea>
+      <div class="form-card">
+        <form id="SushiForm">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required>
+          </div>
 
-        
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" required>
+              <option value="">-- Select Gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="sushi">Choose Your Sushi</label>
+            <select id="sushi" required>
+              <option value="">-- Select Sushi --</option>
+              <option value="Rainbow Dragon Roll Sushi" data-price="850">Rainbow Dragon Roll (Anyone) - ৳850</option>
+              <option value="Kaiseki Sushi" data-price="1200">Kaiseki Sushi (Limited: 20 orders) - ৳1200</option>
+              <option value="Orchid Princess Roll Sushi" data-price="950">Orchid Princess Roll (Ladies Only) - ৳950</option>
+              <option value="Omakase" data-price="1500">Omakase (First 3 customers only) - ৳1500</option>
+            </select>
+          </div>
+
+          <div id="Orchid" class="orchid-section">
+            <p class="orchid-title">🌸 Special for Princess Roll</p>
+            <div class="form-group">
+              <label for="celebration">Reason for Celebration</label>
+              <select id="celebration">
+                <option value="">-- Select --</option>
+                <option value="birthday">Birthday</option>
+                <option value="education">Education Success</option>
+                <option value="career">Career Achievement</option>
+                <option value="mothersday">Mother's Day</option>
+                <option value="breakup">Self-Care Day</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="note">Write a Note (Optional)</label>
+              <textarea id="note" placeholder="Tell us about your celebration..."></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit Order →</button>
+        </form>
+
+        <div id="OrderSummary"></div>
+      </div>
+    </div>
+
+    <!-- Celebration Overlay -->
+    <div class="celebration-overlay" id="celebrationOverlay">
+      <div class="celebration-content">
+        <div class="celebration-inner">
+          <div class="celebration-emoji">🎉🍣🎊</div>
+          <h2 class="celebration-title">Order Placed Successfully!</h2>
+          <p class="celebration-message">Your Friday Special has been added to your cart. Get ready for an amazing culinary experience!</p>
+          <div class="celebration-order-info" id="celebrationOrderInfo"></div>
+          <a href="../Home page/cart.html" class="celebration-btn">
+            🛒 Go to Cart
+          </a>
         </div>
+      </div>
+    </div>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("SushiForm");
+      const nameInput = document.getElementById("name");
+      const genderSelect = document.getElementById("gender");
+      const sushiSelect = document.getElementById("sushi");
+      const orchidSection = document.getElementById("Orchid");
+      const summaryDiv = document.getElementById("OrderSummary");
 
-        <button type="Submit">Submit Order</button>
+      let omakaseCount = 0;
+      let kaisekiCount = 0;
 
+      // Save the Orchid option
+      let orchidOption = null;
+      for (let option of sushiSelect.options) {
+        if (option.value === "Orchid Princess Roll Sushi") {
+          orchidOption = option;
+          break;
+        }
+      }
 
+      function updateSushiOptions() {
+        const gender = genderSelect.value;
+        if (gender === "Male") {
+          if (orchidOption && orchidOption.parentElement) {
+            orchidOption.remove();
+          }
+          orchidSection.style.display = "none";
+        } else {
+          let exists = Array.from(sushiSelect.options).some((opt) => opt.value === "Orchid Princess Roll Sushi");
+          if (!exists && orchidOption) {
+            sushiSelect.add(orchidOption);
+          }
+        }
+      }
 
+      genderSelect.addEventListener("change", updateSushiOptions);
+
+      function toggleOrchidSection() {
+        const sushi = sushiSelect.value;
+        const gender = genderSelect.value;
+        if (sushi === "Orchid Princess Roll Sushi" && gender === "Female") {
+          orchidSection.style.display = "block";
+        } else {
+          orchidSection.style.display = "none";
+        }
+      }
+
+      sushiSelect.addEventListener("change", toggleOrchidSection);
+      genderSelect.addEventListener("change", toggleOrchidSection);
+      updateSushiOptions();
+      toggleOrchidSection();
+
+      // ===== CONFETTI ANIMATION =====
+      function launchConfetti() {
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const confettiColors = ['#d4a373', '#c85a5a', '#e8a87c', '#f5ebe0', '#ff6b6b', '#ffd700', '#ff69b4', '#00ced1'];
+        const confettiPieces = [];
+
+        for (let i = 0; i < 150; i++) {
+          confettiPieces.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            size: Math.random() * 10 + 5,
+            color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+            speedY: Math.random() * 3 + 2,
+            speedX: Math.random() * 4 - 2,
+            rotation: Math.random() * 360,
+            rotationSpeed: Math.random() * 10 - 5
+          });
+        }
+
+        let animationFrames = 0;
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          confettiPieces.forEach(p => {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation * Math.PI / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+            ctx.restore();
+            p.y += p.speedY;
+            p.x += p.speedX;
+            p.rotation += p.rotationSpeed;
+          });
+          animationFrames++;
+          if (animationFrames < 200) {
+            requestAnimationFrame(animate);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        }
+        animate();
+      }
+
+      // ===== FLOATING EMOJIS =====
+      function launchFloatingEmojis() {
+        const emojis = ['🍣', '🎉', '🌸', '🎊', '✨', '🍱', '🥢', '💫', '🎈', '🏆'];
+        for (let i = 0; i < 20; i++) {
+          setTimeout(() => {
+            const emoji = document.createElement('div');
+            emoji.className = 'float-emoji';
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.bottom = '-50px';
+            document.body.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 3000);
+          }, i * 150);
+        }
+      }
+
+      // ===== SHOW CELEBRATION =====
+      function showCelebration(orderData) {
+        const overlay = document.getElementById('celebrationOverlay');
+        const orderInfo = document.getElementById('celebrationOrderInfo');
         
+        orderInfo.innerHTML = `
+          <p>👤 <strong>Name:</strong> ${orderData.name}</p>
+          <p>🍱 <strong>Order:</strong> ${orderData.sushi}</p>
+          <p>💰 <strong>Price:</strong> ৳${orderData.price}</p>
+          <p>🎫 <strong>Order ID:</strong> #FRI${Date.now().toString().slice(-6)}</p>
+        `;
 
+        overlay.classList.add('active');
+        launchConfetti();
+        launchFloatingEmojis();
 
-    </form>
+        // Add item to localStorage cart for Friday specials
+        const fridayCartItem = {
+          id: 'friday-' + Date.now(),
+          name: orderData.sushi + ' (Friday Special)',
+          price: orderData.price,
+          quantity: 1,
+          customerName: orderData.name,
+          image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80',
+          type: 'friday-special'
+        };
 
-    <div id="OrderSummary"></div>
-    
+        let fridayCart = JSON.parse(localStorage.getItem('fridaySpecialOrders') || '[]');
+        fridayCart.push(fridayCartItem);
+        localStorage.setItem('fridaySpecialOrders', JSON.stringify(fridayCart));
+      }
+
+      // Form submission
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = nameInput.value.trim();
+        const gender = genderSelect.value;
+        const sushi = sushiSelect.value;
+        const selectedOption = sushiSelect.options[sushiSelect.selectedIndex];
+        const price = parseInt(selectedOption.getAttribute('data-price')) || 0;
+
+        if (!name || !gender || !sushi) {
+          alert("⚠️ Please fill out all required fields!");
+          return;
+        }
+
+        // Check limits
+        if (sushi === "Omakase") {
+          omakaseCount++;
+          if (omakaseCount >= 3) {
+            for (let option of sushiSelect.options) {
+              if (option.value === "Omakase") {
+                option.remove();
+                break;
+              }
+            }
+            alert("❗ Omakase limit reached! Only first 3 customers can order it.");
+          }
+        }
+
+        if (sushi === "Kaiseki Sushi") {
+          kaisekiCount++;
+          if (kaisekiCount >= 20) {
+            for (let option of sushiSelect.options) {
+              if (option.value === "Kaiseki Sushi") {
+                option.remove();
+                break;
+              }
+            }
+            alert("❗ Kaiseki Sushi limit reached! Only 20 customers can order it.");
+          }
+        }
+
+        // Show celebration overlay
+        showCelebration({
+          name: name,
+          gender: gender,
+          sushi: sushi,
+          price: price
+        });
+
+        form.reset();
+        orchidSection.style.display = "none";
+      });
+    });
+    </script>
 </body>
 </html>
 
