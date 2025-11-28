@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Haru Sora Café — Handcrafted Sushi & Artisan Coffee</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 
   <link rel="stylesheet" href="../CSS files/home.css">
   <style>
@@ -17,7 +18,7 @@
       justify-content: center;
       background: linear-gradient(145deg, #f5e6d3 0%, #e8d4bc 50%, #d4c4a8 100%);
       border-radius: 50%;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 2px 6px rgba(255,255,255,0.4), 0 0 15px rgba(212,163,115,0.2);
+      box-shadow: 0 4px 16px rgba(139, 90, 43, 0.2), inset 0 2px 6px rgba(255,255,255,0.4), 0 0 15px rgba(212,163,115,0.15);
       border: 1.5px solid rgba(180,140,95,0.4);
     }
     .brand-ring {
@@ -67,7 +68,7 @@
     @keyframes spin-glow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes pulse-glow { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.04); opacity: 0.7; } }
 
-    /* Icon Navigation Styles */
+    /* Icon Navigation Styles - Light Theme */
     nav {
       display: flex;
       align-items: center;
@@ -81,10 +82,10 @@
       justify-content: center;
       width: 48px;
       height: 48px;
-      background: rgba(212, 163, 115, 0.1);
-      border: 1px solid rgba(212, 163, 115, 0.2);
+      background: rgba(212, 163, 115, 0.12);
+      border: 1px solid rgba(212, 163, 115, 0.25);
       border-radius: 12px;
-      color: #ffe6dc;
+      color: #5c4033;
       text-decoration: none;
       transition: all 0.3s ease;
       cursor: pointer;
@@ -92,29 +93,27 @@
     
     .nav-icon:hover {
       background: rgba(212, 163, 115, 0.25);
-      border-color: rgba(212, 163, 115, 0.4);
+      border-color: rgba(212, 163, 115, 0.5);
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(212, 163, 115, 0.2);
     }
     
     .nav-icon.active {
-      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      background: linear-gradient(135deg, #d4a373, #c08552);
       border-color: #d4a373;
-      color: #1a120e;
+      color: #fff;
     }
     
-    /* When another icon is clicked, remove glow from page icon */
     .nav-icon.active.dimmed {
-      background: rgba(212, 163, 115, 0.1);
-      border-color: rgba(212, 163, 115, 0.2);
-      color: #ffe6dc;
+      background: rgba(212, 163, 115, 0.12);
+      border-color: rgba(212, 163, 115, 0.25);
+      color: #5c4033;
     }
     
-    /* Clicked state - the icon you just clicked */
     .nav-icon.clicked {
-      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      background: linear-gradient(135deg, #d4a373, #c08552);
       border-color: #d4a373;
-      color: #1a120e;
+      color: #fff;
     }
     
     .nav-icon svg {
@@ -124,12 +123,10 @@
       transition: transform 0.4s ease;
     }
     
-    /* Flip upside down when clicked */
     .nav-icon.flipped svg {
       transform: rotate(180deg);
     }
     
-    /* Tooltip */
     .nav-icon::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -137,7 +134,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(5px);
       padding: 6px 12px;
-      background: rgba(26, 18, 14, 0.95);
+      background: rgba(61, 44, 36, 0.95);
       color: #d4a373;
       font-size: 12px;
       font-weight: 600;
@@ -147,7 +144,7 @@
       visibility: hidden;
       transition: all 0.3s ease;
       pointer-events: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       border: 1px solid rgba(212, 163, 115, 0.2);
       z-index: 100;
     }
@@ -158,14 +155,13 @@
       transform: translateX(-50%) translateY(0);
     }
     
-    /* Cart badge */
     .nav-icon .cart-badge {
       position: absolute;
       top: -4px;
       right: -4px;
       min-width: 18px;
       height: 18px;
-      background: #e76f51;
+      background: #e07a5f;
       color: white;
       font-size: 10px;
       font-weight: 700;
@@ -176,54 +172,56 @@
       padding: 0 4px;
     }
     
-    /* Account Dropdown Styles */
+    /* Account Dropdown Styles - Light Theme */
     .nav-dropdown {
       position: relative;
       display: inline-block;
+      z-index: 9999;
     }
     
     .nav-dropdown .nav-icon {
-      background: rgba(212, 163, 115, 0.1);
-      border-color: rgba(212, 163, 115, 0.2);
-      color: #ffe6dc;
+      background: rgba(212, 163, 115, 0.12);
+      border-color: rgba(212, 163, 115, 0.25);
+      color: #5c4033;
     }
     
     .nav-dropdown .nav-icon:hover {
       background: rgba(212, 163, 115, 0.25);
-      border-color: rgba(212, 163, 115, 0.4);
-      transform: translateY(-3px);
+      border-color: rgba(212, 163, 115, 0.5);
       box-shadow: 0 8px 20px rgba(212, 163, 115, 0.2);
     }
     
     .nav-dropdown.active .nav-icon {
-      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      background: linear-gradient(135deg, #d4a373, #c08552);
       border-color: #d4a373;
-      color: #1a120e;
+      color: #fff;
+      transform: none;
     }
     
     .nav-dropdown-menu {
       position: absolute;
-      top: calc(100% + 12px);
+      top: calc(100% + 8px);
       right: 0;
       min-width: 220px;
-      background: rgba(26, 18, 14, 0.98);
+      background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(212, 163, 115, 0.2);
+      border: 1px solid rgba(212, 163, 115, 0.25);
       border-radius: 16px;
       padding: 12px;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+      transform: translateY(10px) scale(0.95);
+      transform-origin: top right;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
+      box-shadow: 0 15px 50px rgba(139, 90, 43, 0.15);
       white-space: nowrap;
     }
     
     .nav-dropdown.active .nav-dropdown-menu {
       opacity: 1;
       visibility: visible;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
     
     .nav-dropdown-menu a {
@@ -231,7 +229,7 @@
       align-items: center;
       gap: 12px;
       padding: 14px 16px;
-      color: #ffe6dc;
+      color: #5c4033;
       text-decoration: none;
       border-radius: 10px;
       transition: all 0.2s;
@@ -241,7 +239,7 @@
     
     .nav-dropdown-menu a:hover {
       background: rgba(212, 163, 115, 0.15);
-      color: #d4a373;
+      color: #c08552;
       transform: translateX(4px);
     }
     
@@ -255,30 +253,850 @@
     
     .nav-dropdown-divider {
       height: 1px;
-      background: rgba(212, 163, 115, 0.15);
+      background: rgba(212, 163, 115, 0.2);
       margin: 8px 0;
     }
     
     .nav-dropdown-menu .logout-link {
-      color: #e76f51;
+      color: #e07a5f;
     }
     
     .nav-dropdown-menu .logout-link:hover {
-      background: rgba(231, 111, 81, 0.15);
-      color: #e76f51;
+      background: rgba(224, 122, 95, 0.1);
+      color: #e07a5f;
     }
     
     .dropdown-arrow {
       position: absolute;
-      bottom: -6px;
+      top: -6px;
       right: 18px;
       width: 12px;
       height: 12px;
-      background: rgba(26, 18, 14, 0.98);
-      border-left: 1px solid rgba(212, 163, 115, 0.2);
-      border-top: 1px solid rgba(212, 163, 115, 0.2);
+      background: rgba(255, 255, 255, 0.98);
+      border-left: 1px solid rgba(212, 163, 115, 0.25);
+      border-top: 1px solid rgba(212, 163, 115, 0.25);
       transform: rotate(45deg);
-      z-index: -1;
+      z-index: 1;
+    }
+
+    /* Friday Special Button - Sakura Pink Japanese Style */
+    .btn-friday {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #f4a5c7, #e8b4b8, #f8c8d8);
+      background-size: 200% 200%;
+      animation: fridayGlow 3s ease infinite;
+      color: #5c4033;
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(244, 165, 199, 0.35), 0 0 30px rgba(248, 200, 216, 0.2);
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+    .btn-friday:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 30px rgba(244, 165, 199, 0.5), 0 0 40px rgba(248, 200, 216, 0.3);
+    }
+    @keyframes fridayGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Primary Button - Matcha Green Japanese Style */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #7d9a78, #8fb38a, #a8c4a0);
+      color: #fff;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(125, 154, 120, 0.3);
+      transition: all 0.3s ease;
+      border: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(125, 154, 120, 0.4);
+    }
+
+    /* Secondary Button - Soft Terracotta Japanese Style */
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: transparent;
+      color: #c08552;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      border: 2px solid rgba(192, 133, 82, 0.5);
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background: rgba(192, 133, 82, 0.1);
+      border-color: #c08552;
+      transform: translateY(-2px);
+    }
+
+    /* Features Section - Light Theme */
+    .features-section {
+      padding: 80px 20px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      margin: 40px 0;
+      border: 1px solid rgba(212, 163, 115, 0.15);
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      color: #5c4033;
+      margin-bottom: 50px;
+      font-family: 'Playfair Display', serif;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(212, 163, 115, 0.2);
+      border-radius: 20px;
+      padding: 35px 25px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08);
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 20px 40px rgba(139, 90, 43, 0.15);
+      border-color: rgba(212, 163, 115, 0.4);
+    }
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      color: #5c4033;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+    .feature-card p {
+      color: #7a6a5a;
+      line-height: 1.6;
+    }
+
+    /* Gallery Section - Light Theme */
+    .gallery-section {
+      padding: 60px 20px;
+      margin: 40px 0;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 200px);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(139, 90, 43, 0.12);
+    }
+    .gallery-item.large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(61, 44, 36, 0.9) 0%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    .gallery-overlay h3 {
+      color: #d4a373;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+    .gallery-overlay p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.9rem;
+    }
+
+    /* About Section - Light Theme */
+    .about-section {
+      padding: 80px 20px;
+      background: linear-gradient(135deg, rgba(212, 163, 115, 0.1) 0%, rgba(255, 255, 255, 0.7) 100%);
+      border-radius: 30px;
+      margin: 40px 0;
+      border: 1px solid rgba(212, 163, 115, 0.15);
+    }
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    .about-text .eyebrow {
+      color: #c08552;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .about-text h2 {
+      color: #5c4033;
+      font-size: 2.2rem;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 25px;
+    }
+    .about-text p {
+      color: #7a6a5a;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+    .about-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 35px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(212, 163, 115, 0.25);
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #c08552;
+    }
+    .stat-label {
+      color: #7a6a5a;
+      font-size: 0.85rem;
+    }
+    .about-image {
+      position: relative;
+    }
+    .about-image img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(139, 90, 43, 0.2);
+    }
+    .about-image-badge {
+      position: absolute;
+      bottom: -15px;
+      right: 30px;
+      background: linear-gradient(135deg, #d4a373, #c08552);
+      color: #fff;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(212, 163, 115, 0.4);
+    }
+
+    /* Testimonials Section - NEW */
+    .testimonials-section {
+      padding: 80px 20px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 30px;
+      margin: 40px 0;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .testimonial-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(212, 163, 115, 0.15);
+      box-shadow: 0 8px 30px rgba(139, 90, 43, 0.08);
+      transition: all 0.3s ease;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(139, 90, 43, 0.12);
+    }
+    .testimonial-stars {
+      color: #d4a373;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+    .testimonial-text {
+      color: #5c4033;
+      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(212, 163, 115, 0.3);
+    }
+    .testimonial-author-info h4 {
+      color: #5c4033;
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+    .testimonial-author-info span {
+      color: #7a6a5a;
+      font-size: 0.85rem;
+    }
+
+    /* Special Offers Section - NEW */
+    .offers-section {
+      padding: 60px 20px;
+      margin: 40px 0;
+    }
+    .offers-banner {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #d4a373 0%, #c08552 50%, #e07a5f 100%);
+      border-radius: 24px;
+      padding: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      box-shadow: 0 15px 50px rgba(192, 133, 82, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .offers-banner::before {
+      content: '🌸';
+      position: absolute;
+      font-size: 8rem;
+      opacity: 0.15;
+      right: 5%;
+      top: -20%;
+      animation: floatBg 6s ease-in-out infinite;
+    }
+    @keyframes floatBg {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    .offers-content h3 {
+      color: #fff;
+      font-size: 2rem;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 10px;
+    }
+    .offers-content p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+    .offers-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-block;
+    }
+    .offers-discount {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .discount-amount {
+      font-size: 4rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+    .discount-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+    }
+
+    /* Scroll Animations */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CTA Section - Light Theme */
+    .cta-section {
+      padding: 80px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(212, 163, 115, 0.15) 0%, rgba(224, 122, 95, 0.1) 100%);
+      border-radius: 30px;
+      margin: 40px 0 20px;
+      border: 1px solid rgba(212, 163, 115, 0.15);
+    }
+    .cta-content h2 {
+      color: #5c4033;
+      font-size: 2.5rem;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 15px;
+    }
+    .cta-content p {
+      color: #7a6a5a;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ========== COMPREHENSIVE RESPONSIVE STYLES ========== */
+    @media (max-width: 900px) {
+      .about-content { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+      .gallery-item.large { grid-column: span 2; }
+      .offers-banner { flex-direction: column; text-align: center; }
+      .sakura-petal, .floating-kanji, .graffiti-icons { opacity: 0.5; }
+      
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta-content h2 {
+        font-size: 28px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero {
+        padding: 24px;
+        margin-top: 14px;
+      }
+      
+      .hero-left {
+        padding: 12px 0;
+      }
+      
+      .hero-title {
+        font-size: 28px;
+        line-height: 1.15;
+      }
+      
+      .hero-sub {
+        font-size: 14px;
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .hero-cta a {
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px;
+      }
+      
+      .hero-collage {
+        gap: 8px;
+      }
+      
+      .collage-item {
+        height: 120px;
+      }
+      
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      
+      .feature-card {
+        padding: 20px;
+      }
+      
+      .gallery-section h2,
+      .about-section h2,
+      .testimonials-section h2 {
+        font-size: 24px;
+      }
+      
+      .about-image {
+        height: 300px;
+      }
+      
+      .about-stats {
+        gap: 20px;
+      }
+      
+      .testimonial-card {
+        padding: 20px;
+      }
+      
+      .offers-banner {
+        padding: 24px;
+      }
+      
+      .discount-amount {
+        font-size: 48px;
+      }
+      
+      .cta-section {
+        padding: 40px 24px;
+      }
+      
+      .cta-content h2 {
+        font-size: 24px;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .cta-buttons a {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item.large { grid-column: span 1; }
+      .about-stats { flex-direction: column; gap: 16px; }
+      .sakura-petal, .floating-kanji, .graffiti-icons { display: none; }
+      
+      .hero {
+        padding: 18px;
+        border-radius: 14px;
+      }
+      
+      .hero-title {
+        font-size: 22px;
+      }
+      
+      .eyebrow {
+        font-size: 11px;
+        padding: 5px 10px;
+      }
+      
+      .collage-item {
+        height: 100px;
+        border-radius: 10px;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .gallery-item {
+        height: 180px;
+      }
+      
+      .about-content {
+        gap: 24px;
+      }
+      
+      .about-text h2 {
+        font-size: 22px;
+      }
+      
+      .about-text p {
+        font-size: 14px;
+      }
+      
+      .stat-number {
+        font-size: 28px;
+      }
+      
+      .testimonial-text {
+        font-size: 14px;
+      }
+      
+      .offers-content h3 {
+        font-size: 20px;
+      }
+      
+      .discount-amount {
+        font-size: 40px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .hero-title {
+        font-size: 20px;
+      }
+      
+      .collage-item {
+        height: 80px;
+      }
+      
+      .feature-card h3 {
+        font-size: 14px;
+      }
+      
+      .cta-content h2 {
+        font-size: 20px;
+      }
+    }
+
+    /* ========== COOL GRAFFITI & AESTHETIC ANIMATIONS ========== */
+    
+    /* Floating Sakura Petals */
+    .sakura-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    
+    .sakura-petal {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: linear-gradient(135deg, #f4a5c7 0%, #fce4ec 50%, #f8bbd9 100%);
+      border-radius: 150% 0 150% 0;
+      opacity: 0.7;
+      animation: sakuraFall linear infinite;
+      filter: drop-shadow(0 2px 4px rgba(244, 165, 199, 0.3));
+    }
+    
+    .sakura-petal::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.5) 50%, transparent 60%);
+      border-radius: inherit;
+    }
+    
+    @keyframes sakuraFall {
+      0% {
+        transform: translateY(-20px) rotate(0deg) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg) scale(0.5);
+        opacity: 0;
+      }
+    }
+    
+    /* Floating Japanese Kanji Characters */
+    .floating-kanji {
+      position: fixed;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 60px;
+      color: rgba(212, 163, 115, 0.06);
+      pointer-events: none;
+      z-index: 0;
+      animation: kanjiFloat 20s ease-in-out infinite;
+      text-shadow: 0 0 30px rgba(212, 163, 115, 0.1);
+    }
+    
+    .floating-kanji:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+    .floating-kanji:nth-child(2) { top: 30%; right: 8%; animation-delay: -5s; font-size: 80px; }
+    .floating-kanji:nth-child(3) { top: 60%; left: 3%; animation-delay: -10s; font-size: 50px; }
+    .floating-kanji:nth-child(4) { top: 80%; right: 5%; animation-delay: -15s; font-size: 70px; }
+    .floating-kanji:nth-child(5) { top: 45%; left: 90%; animation-delay: -8s; font-size: 55px; }
+    
+    @keyframes kanjiFloat {
+      0%, 100% { transform: translateY(0) rotate(-5deg); opacity: 0.06; }
+      25% { transform: translateY(-20px) rotate(0deg); opacity: 0.1; }
+      50% { transform: translateY(-10px) rotate(5deg); opacity: 0.08; }
+      75% { transform: translateY(-30px) rotate(-3deg); opacity: 0.12; }
+    }
+    
+    /* Glowing Orbs Background */
+    .glow-orbs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: orbPulse 8s ease-in-out infinite;
+    }
+    
+    .glow-orb-1 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(244, 165, 199, 0.25) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+    
+    .glow-orb-2 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(212, 163, 115, 0.2) 0%, transparent 70%);
+      bottom: -50px;
+      left: -100px;
+      animation-delay: -3s;
+    }
+    
+    .glow-orb-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(143, 179, 138, 0.15) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -5s;
+    }
+    
+    @keyframes orbPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+    
+    /* Animated Grid Pattern */
+    .grid-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background-image: 
+        linear-gradient(rgba(212, 163, 115, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 163, 115, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridShift 30s linear infinite;
+    }
+    
+    @keyframes gridShift {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+    
+    /* Floating Food Icons - Graffiti Style */
+    .graffiti-icons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    
+    .graffiti-icon {
+      position: absolute;
+      font-size: 30px;
+      opacity: 0.15;
+      animation: graffitiFloat 15s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(212, 163, 115, 0.3));
+    }
+    
+    .graffiti-icon:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+    .graffiti-icon:nth-child(2) { top: 25%; right: 15%; animation-delay: -3s; font-size: 25px; }
+    .graffiti-icon:nth-child(3) { top: 55%; left: 8%; animation-delay: -6s; font-size: 35px; }
+    .graffiti-icon:nth-child(4) { top: 70%; right: 10%; animation-delay: -9s; }
+    .graffiti-icon:nth-child(5) { top: 40%; right: 5%; animation-delay: -12s; font-size: 28px; }
+    .graffiti-icon:nth-child(6) { top: 85%; left: 15%; animation-delay: -4s; font-size: 32px; }
+    
+    @keyframes graffitiFloat {
+      0%, 100% { 
+        transform: translateY(0) rotate(0deg) scale(1); 
+        opacity: 0.1;
+        filter: drop-shadow(0 0 5px rgba(212, 163, 115, 0.2));
+      }
+      50% { 
+        transform: translateY(-30px) rotate(10deg) scale(1.1); 
+        opacity: 0.25;
+        filter: drop-shadow(0 0 20px rgba(244, 165, 199, 0.5)) drop-shadow(0 0 40px rgba(212, 163, 115, 0.3));
+      }
+    }
+    
+    /* Sparkle Effect on Hero */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      animation: sparkle 2s ease-in-out infinite;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8), 0 0 20px 4px rgba(244, 165, 199, 0.5);
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    
+    /* Container needs higher z-index */
+    .container {
+      position: relative;
+      z-index: 1;
     }
   </style>
 
@@ -290,6 +1108,34 @@
 </head>
 
 <body>
+  <!-- Aesthetic Background Elements -->
+  <div class="grid-pattern"></div>
+  <div class="glow-orbs">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+  </div>
+  
+  <!-- Floating Japanese Kanji -->
+  <div class="floating-kanji">寿</div>
+  <div class="floating-kanji">司</div>
+  <div class="floating-kanji">茶</div>
+  <div class="floating-kanji">桜</div>
+  <div class="floating-kanji">和</div>
+  
+  <!-- Graffiti Food Icons -->
+  <div class="graffiti-icons">
+    <span class="graffiti-icon">🍣</span>
+    <span class="graffiti-icon">🍵</span>
+    <span class="graffiti-icon">🌸</span>
+    <span class="graffiti-icon">🍡</span>
+    <span class="graffiti-icon">☕</span>
+    <span class="graffiti-icon">🍙</span>
+  </div>
+  
+  <!-- Sakura Petals Container -->
+  <div class="sakura-container" id="sakuraContainer"></div>
+
   <div class="container">
 
     <header>
@@ -411,14 +1257,184 @@
         <div class="hero-cta">
           <a class="btn-primary" href="menu.html">Explore Menu</a>
           <a class="btn-secondary" href="reserve.html">Reserve a Seat</a>
+          <a class="btn-friday" href="../Special Page/Friday.html">🎉 Friday Special</a>
         </div>
       </div>
 
       <div class="hero-collage" aria-hidden="true">
-        <div class="collage-item"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80" alt="Sushi Platter"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1200&q=80" alt="Sushi Platter"></div>
         <div class="collage-item"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" alt="Mocha Latte"></div>
         <div class="collage-item"><img src="https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=1200&q=80" alt="Chef preparing sushi"></div>
-        <div class="collage-item"><img src="https://images.unsplash.com/photo-1523942839745-7848c839b661?auto=format&fit=crop&w=1200&q=80" alt="Matcha Latte"></div>
+        <div class="collage-item"><img src="https://images.unsplash.com/photo-1540648639573-8c848de23f0a?auto=format&fit=crop&w=1200&q=80" alt="Matcha Latte"></div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section fade-in-up">
+      <h2 class="section-title">Why Choose Haru Sora?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🍣</div>
+          <h3>Fresh Ingredients</h3>
+          <p>We source the finest fish daily from trusted suppliers, ensuring every bite is ocean-fresh.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👨‍🍳</div>
+          <h3>Master Chefs</h3>
+          <p>Our sushi masters bring decades of experience and passion to every roll they create.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">☕</div>
+          <h3>Artisan Coffee</h3>
+          <p>Hand-roasted beans and traditional Japanese brewing methods for the perfect cup.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌸</div>
+          <h3>Serene Ambiance</h3>
+          <p>A peaceful retreat inspired by Japanese aesthetics, perfect for any occasion.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signature Dishes Gallery -->
+    <section class="gallery-section fade-in-up">
+      <h2 class="section-title">Our Signature Creations</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item large">
+          <img src="https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&w=800&q=80" alt="Dragon Roll">
+          <div class="gallery-overlay">
+            <h3>Dragon Roll</h3>
+            <p>Our award-winning specialty</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=600&q=80" alt="Sashimi Platter">
+          <div class="gallery-overlay">
+            <h3>Sashimi Platter</h3>
+            <p>Premium cuts</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?auto=format&fit=crop&w=600&q=80" alt="Matcha Latte">
+          <div class="gallery-overlay">
+            <h3>Matcha Latte</h3>
+            <p>Ceremonial grade</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1562802378-063ec186a863?auto=format&fit=crop&w=600&q=80" alt="Nigiri Set">
+          <div class="gallery-overlay">
+            <h3>Nigiri Set</h3>
+            <p>Chef's selection</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=600&q=80" alt="Mochi Dessert">
+          <div class="gallery-overlay">
+            <h3>Mochi Dessert</h3>
+            <p>Sweet perfection</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section fade-in-up">
+      <div class="about-content">
+        <div class="about-text">
+          <span class="eyebrow">Our Story</span>
+          <h2>About Haru Sora Café</h2>
+          <p>Founded in 2024, Haru Sora Café (meaning "Spring Sky" in Japanese) was born from a passion to bring authentic Japanese culinary artistry to our community. Our name reflects the fresh, bright experience we aim to deliver with every visit.</p>
+          <p>We believe that great food is more than sustenance—it's an art form. Our master chefs, trained in traditional Edomae-style sushi preparation, combine time-honored techniques with creative innovation to craft dishes that delight all senses.</p>
+          <p>Beyond sushi, we've cultivated a unique coffee program that honors Japanese precision and hospitality. Every cup is brewed with intention, using carefully selected beans and traditional methods.</p>
+          <div class="about-stats">
+            <div class="stat">
+              <span class="stat-number">50+</span>
+              <span class="stat-label">Menu Items</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">10K+</span>
+              <span class="stat-label">Happy Customers</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">5★</span>
+              <span class="stat-label">Rating</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80" alt="Our Restaurant">
+          <div class="about-image-badge">
+            <span>Est. 2024</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section - NEW -->
+    <section class="testimonials-section fade-in-up">
+      <h2 class="section-title">What Our Guests Say</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+          <p class="testimonial-text">"The most authentic sushi experience I've had outside of Japan! The Dragon Roll is absolutely divine, and the atmosphere is perfect for a special evening."</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Sarah" class="testimonial-avatar">
+            <div class="testimonial-author-info">
+              <h4>Sarah Johnson</h4>
+              <span>Food Blogger</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+          <p class="testimonial-text">"Haru Sora has become our go-to spot for date nights. The matcha latte paired with their mochi dessert is heavenly. Service is always impeccable!"</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Michael" class="testimonial-avatar">
+            <div class="testimonial-author-info">
+              <h4>Michael Chen</h4>
+              <span>Regular Customer</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+          <p class="testimonial-text">"As a sushi chef myself, I'm extremely picky. Haru Sora exceeded all my expectations. Their fish is incredibly fresh and the knife work is masterful."</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80" alt="James" class="testimonial-avatar">
+            <div class="testimonial-author-info">
+              <h4>James Tanaka</h4>
+              <span>Professional Chef</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Special Offers Banner - NEW -->
+    <section class="offers-section fade-in-up">
+      <div class="offers-banner">
+        <div class="offers-content">
+          <h3>First-Time Visitor Special!</h3>
+          <p>Join our Haru Sora family and enjoy exclusive savings on your first order</p>
+          <span class="offers-badge">🌸 Limited Time Only</span>
+        </div>
+        <div class="offers-discount">
+          <span class="discount-amount">20%</span>
+          <span class="discount-label">OFF First Order</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section fade-in-up">
+      <div class="cta-content">
+        <h2>Ready for a Culinary Journey?</h2>
+        <p>Reserve your table today and experience the art of Japanese cuisine</p>
+        <div class="cta-buttons">
+          <a href="reserve.html" class="btn-primary">Book a Table</a>
+          <a href="menu.html" class="btn-secondary">View Full Menu</a>
+        </div>
       </div>
     </section>
 
@@ -497,6 +1513,100 @@
       localStorage.removeItem('userName');
       window.location.href = '../login.html';
     });
+
+    // ===== SCROLL ANIMATIONS =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const fadeInObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeInObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      fadeInObserver.observe(el);
+    });
+
+    // ===== PARALLAX EFFECT ON HERO =====
+    document.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const hero = document.querySelector('.hero');
+      if (hero && scrolled < 600) {
+        hero.style.transform = `translateY(${scrolled * 0.1}px)`;
+      }
+    });
+
+    // ===== SAKURA PETALS ANIMATION =====
+    function createSakuraPetals() {
+      const container = document.getElementById('sakuraContainer');
+      if (!container) return;
+      
+      const petalCount = 15;
+      
+      for (let i = 0; i < petalCount; i++) {
+        setTimeout(() => {
+          const petal = document.createElement('div');
+          petal.className = 'sakura-petal';
+          petal.style.left = Math.random() * 100 + '%';
+          petal.style.animationDuration = (8 + Math.random() * 8) + 's';
+          petal.style.animationDelay = Math.random() * 5 + 's';
+          petal.style.width = (10 + Math.random() * 10) + 'px';
+          petal.style.height = petal.style.width;
+          petal.style.opacity = 0.4 + Math.random() * 0.4;
+          container.appendChild(petal);
+          
+          // Remove and recreate petal after animation
+          setTimeout(() => {
+            petal.remove();
+          }, 20000);
+        }, i * 800);
+      }
+      
+      // Continuously create new petals
+      setInterval(() => {
+        const petal = document.createElement('div');
+        petal.className = 'sakura-petal';
+        petal.style.left = Math.random() * 100 + '%';
+        petal.style.animationDuration = (8 + Math.random() * 8) + 's';
+        petal.style.width = (10 + Math.random() * 10) + 'px';
+        petal.style.height = petal.style.width;
+        petal.style.opacity = 0.4 + Math.random() * 0.4;
+        container.appendChild(petal);
+        
+        setTimeout(() => {
+          petal.remove();
+        }, 18000);
+      }, 2000);
+    }
+    
+    // ===== SPARKLE EFFECT =====
+    function createSparkles() {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+      
+      setInterval(() => {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+        hero.appendChild(sparkle);
+        
+        setTimeout(() => {
+          sparkle.remove();
+        }, 2500);
+      }, 400);
+    }
+    
+    // Initialize animations
+    createSakuraPetals();
+    createSparkles();
   </script>
 </body>
 </html>
