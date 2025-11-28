@@ -124,6 +124,7 @@ body {
   position: relative;
   overflow: hidden;
   transition: all 0.2s ease;
+  min-height: 580px;
 }
 
 /* --- Typography & Logo --- */
@@ -541,6 +542,7 @@ a.highlight { color: var(--accent-gold); }
   .glass-card {
     padding: 24px 20px;
     border-radius: 20px;
+    min-height: 540px;
   }
   
   .brand {
@@ -645,6 +647,7 @@ a.highlight { color: var(--accent-gold); }
   .glass-card {
     padding: 20px 16px;
     border-radius: 18px;
+    min-height: 500px;
   }
   
   .brand {
@@ -722,6 +725,7 @@ a.highlight { color: var(--accent-gold); }
   
   .glass-card {
     padding: 10px 12px;
+    min-height: auto;
   }
   
   .brand {
