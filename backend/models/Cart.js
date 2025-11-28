@@ -77,7 +77,6 @@ cartSchema.pre('save', function(next) {
   next();
 });
 
-// Index for user lookup
-cartSchema.index({ user: 1 });
+// Index for user lookup (auto-created by unique:true on user field)
 
 module.exports = mongoose.model('Cart', cartSchema);

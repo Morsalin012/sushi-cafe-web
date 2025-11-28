@@ -42,8 +42,7 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpires: { type: Date }
 }, { timestamps: true });
 
-// Index for searching users
-userSchema.index({ email: 1 });
+// Index for searching users (email index is auto-created by unique:true)
 userSchema.index({ role: 1 });
 
 module.exports = mongoose.model('User', userSchema);

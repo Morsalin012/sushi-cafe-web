@@ -84,10 +84,9 @@ reservationSchema.pre('save', function(next) {
   next();
 });
 
-// Indexes
+// Indexes (confirmationCode index auto-created by unique:true)
 reservationSchema.index({ date: 1, time: 1 });
 reservationSchema.index({ user: 1 });
 reservationSchema.index({ guestEmail: 1 });
-reservationSchema.index({ confirmationCode: 1 });
 
 module.exports = mongoose.model('Reservation', reservationSchema);
