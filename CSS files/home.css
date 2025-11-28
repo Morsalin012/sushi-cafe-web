@@ -223,14 +223,15 @@ footer{margin-top:28px;text-align:center;padding:22px;border-radius:12px;color:v
   .brand {
     flex: 1;
     min-width: 0;
-    gap: 8px;
+    gap: 6px;
   }
   
   .brand h1 { 
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
-    overflow: visible;
-    text-overflow: clip;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
   
   .brand p { 
@@ -352,12 +353,15 @@ footer{margin-top:28px;text-align:center;padding:22px;border-radius:12px;color:v
   }
   
   .brand {
-    gap: 6px;
+    gap: 4px;
   }
   
   .brand h1 { 
-    font-size: 11px;
-    overflow: visible;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
   .brand p { display: none; }
   .brand-logo-container, .logo-wrap { width: 32px; height: 32px; }
