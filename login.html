@@ -352,8 +352,6 @@
       }
       
       localStorage.setItem('currentUser', JSON.stringify(user));
-      localStorage.setItem('user', JSON.stringify(user));
-      if (token) localStorage.setItem('authToken', token);
       localStorage.setItem('isLoggedIn', 'true');
       
       showMessage('login-msg', `Welcome, ${user.name}!`, 'success');

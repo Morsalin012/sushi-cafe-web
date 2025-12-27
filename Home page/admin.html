@@ -682,8 +682,7 @@
 
         // Authentication Check
         function checkAuth() {
-            // Try both storage keys for compatibility
-            const userStr = localStorage.getItem('user') || localStorage.getItem('currentUser');
+            const userStr = localStorage.getItem('currentUser');
             if (!userStr) {
                 showToast('Please login to access admin panel', 'warning');
                 setTimeout(() => {
@@ -894,11 +893,15 @@
         }
         
         function logout() {
-            localStorage.removeItem('user');
+            // Clear all auth-related storage
             localStorage.removeItem('currentUser');
+            localStorage.removeItem('user');
             localStorage.removeItem('authToken');
+            localStorage.removeItem('token');
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('isAdmin');
+            localStorage.removeItem('cart');
+            localStorage.removeItem('wishlist');
             showToast('Logging out...', 'info');
             setTimeout(() => {
                 window.location.href = 'admin-login.html';

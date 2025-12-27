@@ -8,6 +8,23 @@ const apiKey = ""; // API Key for Gemini (populated by environment)
 const $ = (id) => document.getElementById(id);
 const $$ = (selector) => document.querySelectorAll(selector);
 
+// ============================================
+// Storage Cleanup - Remove junk/duplicate keys
+// ============================================
+function cleanupStorage() {
+    // Remove duplicate/legacy keys (not used anymore)
+    // Keep: currentUser, isLoggedIn, cart, wishlist, fridaySpecialOrders, myReservations
+    const junkKeys = ['user', 'users', 'authToken', 'token', 'isAdmin', 'userEmail', 'userName'];
+    junkKeys.forEach(key => localStorage.removeItem(key));
+    
+    console.log('Storage cleaned up');
+}
+
+// Run cleanup on page load
+if (typeof window !== 'undefined') {
+    cleanupStorage();
+}
+
 // LocalStorage Helpers
 // Normalize emails on load and save (trim + lowercase) to avoid mismatch issues
 const getLocalUsers = () => {
@@ -169,7 +186,6 @@ function setupAuthLogic() {
                     }
                     console.log('User found in localStorage:', user.name);
                     localStorage.setItem('currentUser', JSON.stringify(user));
-                    localStorage.setItem('user', JSON.stringify(user));
                     localStorage.setItem('isLoggedIn', 'true');
                     showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
                     setTimeout(() => {
@@ -195,7 +211,6 @@ function setupAuthLogic() {
                 }
                 
                 localStorage.setItem('currentUser', JSON.stringify(user));
-                localStorage.setItem('user', JSON.stringify(user)); // For admin page compatibility
                 localStorage.setItem('isLoggedIn', 'true');
                 showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
                 
@@ -339,8 +354,15 @@ function setupAuthLogic() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            // Clear all auth-related storage
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('currentUser');
+            localStorage.removeItem('user');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('token');
+            localStorage.removeItem('isAdmin');
+            localStorage.removeItem('cart');
+            localStorage.removeItem('wishlist');
             window.location.href = 'login.html';
         });
     }

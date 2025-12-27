@@ -1058,8 +1058,15 @@
     
     document.getElementById('logoutBtn').addEventListener('click', function(e) {
       e.preventDefault();
+      // Clear all auth-related storage
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('user');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
+      localStorage.removeItem('isAdmin');
+      localStorage.removeItem('cart');
+      localStorage.removeItem('wishlist');
       window.location.href = '../login.html';
     });
     

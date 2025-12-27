@@ -436,10 +436,9 @@
                     throw new Error('Access denied. Admin privileges required.');
                 }
 
-                // Store user data
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.token || '');
-                localStorage.setItem('isAdmin', 'true');
+                // Store user data (use currentUser for consistency)
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                localStorage.setItem('isLoggedIn', 'true');
 
                 // Redirect to admin dashboard
                 window.location.href = 'admin.html';
@@ -456,7 +455,7 @@
 
         // Check if already logged in as admin
         window.addEventListener('DOMContentLoaded', function() {
-            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
             if (user && user.role === 'admin') {
                 window.location.href = 'admin.html';
             }
