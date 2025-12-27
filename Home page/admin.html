@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Haru Sora Café</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../CSS files/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="https://img.icons8.com/color/48/sushi.png" alt="Haru Sora" class="logo-img">
+                <span>Haru Sora</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-section="products">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </li>
+                <li class="nav-item" data-section="orders">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </li>
+                <li class="nav-item" data-section="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </li>
+                <li class="nav-item" data-section="reservations">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Reservations</span>
+                </li>
+                <li class="nav-item" data-section="reviews">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews</span>
+                </li>
+                <li class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="home.html" class="back-to-site">
+                <i class="fas fa-external-link-alt"></i>
+                <span>View Site</span>
+            </a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search..." id="globalSearch">
+                </div>
+                <div class="notifications" id="notificationsDropdown">
+                    <button class="notification-btn" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">0</span>
+                    </button>
+                    <div class="notifications-dropdown" id="notificationsPanel">
+                        <div class="dropdown-header">
+                            <h4>Notifications</h4>
+                            <button class="mark-all-read" id="markAllRead">Mark all read</button>
+                        </div>
+                        <div class="notifications-list" id="notificationsList">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-profile" id="adminProfileDropdown">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=e74c3c&color=fff" alt="Admin" id="adminAvatar">
+                    <span id="adminName">Admin</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="profile-dropdown" id="profilePanel">
+                        <div class="profile-header">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=e74c3c&color=fff" alt="Admin" id="dropdownAvatar">
+                            <div class="profile-info">
+                                <span class="profile-name" id="dropdownName">Admin</span>
+                                <span class="profile-email" id="dropdownEmail">admin@harusora.cafe</span>
+                                <span class="profile-role" id="dropdownRole">Administrator</span>
+                            </div>
+                        </div>
+                        <ul class="profile-menu">
+                            <li><a href="profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                            <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" id="profileLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section class="content-section active" id="dashboardSection">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon revenue">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Total Revenue</h3>
+                        <p class="kpi-value" id="totalRevenue">৳0</p>
+                        <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> 12.5%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon orders">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Total Orders</h3>
+                        <p class="kpi-value" id="totalOrders">0</p>
+                        <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> 8.2%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon customers">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Total Customers</h3>
+                        <p class="kpi-value" id="totalCustomers">0</p>
+                        <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> 5.1%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon products">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <h3>Total Products</h3>
+                        <p class="kpi-value" id="totalProducts">0</p>
+                        <span class="kpi-change neutral"><i class="fas fa-minus"></i> 0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card recent-orders">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> Recent Orders</h3>
+                        <button class="view-all-btn" data-section="orders">View All</button>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrdersTable">
+                                <tr>
+                                    <td colspan="4" class="loading">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-card top-products">
+                    <div class="card-header">
+                        <h3><i class="fas fa-fire"></i> Top Selling Products</h3>
+                        <button class="view-all-btn" data-section="products">View All</button>
+                    </div>
+                    <div class="card-body">
+                        <ul class="top-products-list" id="topProductsList">
+                            <li class="loading">Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dashboard-card pending-reservations">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar"></i> Pending Reservations</h3>
+                        <button class="view-all-btn" data-section="reservations">View All</button>
+                    </div>
+                    <div class="card-body">
+                        <ul class="reservations-list" id="pendingReservationsList">
+                            <li class="loading">Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dashboard-card recent-reviews">
+                    <div class="card-header">
+                        <h3><i class="fas fa-comment"></i> Recent Reviews</h3>
+                        <button class="view-all-btn" data-section="reviews">View All</button>
+                    </div>
+                    <div class="card-body">
+                        <ul class="reviews-list" id="recentReviewsList">
+                            <li class="loading">Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="content-section" id="productsSection">
+            <div class="section-header">
+                <div class="section-actions">
+                    <select id="productCategoryFilter" class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="Sushi">Sushi</option>
+                        <option value="Rolls">Rolls</option>
+                        <option value="Coffee">Coffee</option>
+                        <option value="Desserts">Desserts</option>
+                        <option value="Drinks">Drinks</option>
+                        <option value="Specials">Specials</option>
+                    </select>
+                    <button class="btn btn-primary" id="addProductBtn">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+            </div>
+            <div class="data-card">
+                <table class="data-table" id="productsTable">
+                    <colgroup>
+                        <col style="width: 70px;">
+                        <col>
+                        <col style="width: 110px;">
+                        <col style="width: 90px;">
+                        <col style="width: 95px;">
+                        <col style="width: 90px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" id="productsPagination"></div>
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section class="content-section" id="ordersSection">
+            <div class="section-header">
+                <div class="section-actions">
+                    <select id="orderStatusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="date" id="orderDateFilter" class="filter-input">
+                </div>
+            </div>
+            <div class="data-card">
+                <table class="data-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" id="ordersPagination"></div>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section class="content-section" id="usersSection">
+            <div class="section-header">
+                <div class="section-actions">
+                    <select id="userRoleFilter" class="filter-select">
+                        <option value="">All Roles</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <input type="text" id="userSearchFilter" class="filter-input" placeholder="Search by name or email...">
+                </div>
+            </div>
+            <div class="data-card">
+                <table class="data-table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" id="usersPagination"></div>
+            </div>
+        </section>
+
+        <!-- Reservations Section -->
+        <section class="content-section" id="reservationsSection">
+            <div class="section-header">
+                <div class="section-actions">
+                    <select id="reservationStatusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="date" id="reservationDateFilter" class="filter-input">
+                </div>
+            </div>
+            <div class="data-card">
+                <table class="data-table" id="reservationsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Guests</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reservationsTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" id="reservationsPagination"></div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="content-section" id="reviewsSection">
+            <div class="section-header">
+                <div class="section-actions">
+                    <select id="reviewRatingFilter" class="filter-select">
+                        <option value="">All Ratings</option>
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Star</option>
+                    </select>
+                </div>
+            </div>
+            <div class="data-card">
+                <div class="reviews-grid" id="reviewsGrid">
+                    <div class="loading">Loading...</div>
+                </div>
+                <div class="pagination" id="reviewsPagination"></div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="content-section" id="settingsSection">
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3><i class="fas fa-store"></i> Store Information</h3>
+                    <form id="storeInfoForm">
+                        <div class="form-group">
+                            <label>Store Name</label>
+                            <input type="text" id="storeName" value="Haru Sora Café">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="storeEmail" value="contact@harusora.cafe">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="storePhone" value="+1 (555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea id="storeAddress">123 Sakura Street, Tokyo District</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <h3><i class="fas fa-clock"></i> Business Hours</h3>
+                    <form id="businessHoursForm">
+                        <div class="hours-grid">
+                            <div class="form-group">
+                                <label>Monday - Friday</label>
+                                <div class="time-inputs">
+                                    <input type="time" value="09:00"> to <input type="time" value="22:00">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Saturday</label>
+                                <div class="time-inputs">
+                                    <input type="time" value="10:00"> to <input type="time" value="23:00">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Sunday</label>
+                                <div class="time-inputs">
+                                    <input type="time" value="10:00"> to <input type="time" value="21:00">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Hours</button>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <h3><i class="fas fa-palette"></i> Appearance</h3>
+                    <form id="appearanceForm">
+                        <div class="form-group">
+                            <label>Primary Color</label>
+                            <input type="color" id="primaryColor" value="#e74c3c">
+                        </div>
+                        <div class="form-group">
+                            <label>Theme</label>
+                            <select id="themeSelect">
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply Theme</button>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <h3><i class="fas fa-bell"></i> Notifications</h3>
+                    <form id="notificationsForm">
+                        <div class="toggle-group">
+                            <label class="toggle-label">
+                                <span>Email Notifications</span>
+                                <input type="checkbox" checked>
+                                <span class="toggle-switch"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-group">
+                            <label class="toggle-label">
+                                <span>Order Alerts</span>
+                                <input type="checkbox" checked>
+                                <span class="toggle-switch"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-group">
+                            <label class="toggle-label">
+                                <span>Reservation Alerts</span>
+                                <input type="checkbox" checked>
+                                <span class="toggle-switch"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-group">
+                            <label class="toggle-label">
+                                <span>Review Notifications</span>
+                                <input type="checkbox">
+                                <span class="toggle-switch"></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">Add New Product</h3>
+                <button class="modal-close" data-modal="productModal">&times;</button>
+            </div>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="Sushi">Sushi</option>
+                            <option value="Rolls">Rolls</option>
+                            <option value="Coffee">Coffee</option>
+                            <option value="Desserts">Desserts</option>
+                            <option value="Drinks">Drinks</option>
+                            <option value="Specials">Specials</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price *</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="productImage">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description</label>
+                        <textarea id="productDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="productAvailable" checked>
+                            Available
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal="productModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Order Details</h3>
+                <button class="modal-close" data-modal="orderModal">&times;</button>
+            </div>
+            <div class="modal-body" id="orderModalBody">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal="orderModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Edit Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit User</h3>
+                <button class="modal-close" data-modal="userModal">&times;</button>
+            </div>
+            <form id="userForm">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="editUserName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editUserEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="editUserRole">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal="userModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reservation Modal -->
+    <div class="modal" id="reservationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reservation Details</h3>
+                <button class="modal-close" data-modal="reservationModal">&times;</button>
+            </div>
+            <div class="modal-body" id="reservationModalBody">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <select id="reservationStatusSelect" class="filter-select">
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <button type="button" class="btn btn-secondary" data-modal="reservationModal">Close</button>
+                <button type="button" class="btn btn-primary" id="updateReservationBtn">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="modal-close" data-modal="deleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">Are you sure you want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal="deleteModal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Configuration
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:4000/api'
+            : 'https://sushi-cafe-api.onrender.com/api';
+        
+        let currentUser = null;
+        let currentSection = 'dashboard';
+        let deleteCallback = null;
+        let notifications = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            initNavigation();
+            initModals();
+            initFilters();
+            initNotifications();
+            initProfileDropdown();
+            loadDashboard();
+        });
+
+        // Authentication Check
+        function checkAuth() {
+            // Try both storage keys for compatibility
+            const userStr = localStorage.getItem('user') || localStorage.getItem('currentUser');
+            if (!userStr) {
+                showToast('Please login to access admin panel', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'admin-login.html';
+                }, 2000);
+                return;
+            }
+            
+            currentUser = JSON.parse(userStr);
+            
+            // Update admin info in header
+            const adminName = currentUser.name || 'Admin';
+            const adminEmail = currentUser.email || 'admin@harusora.cafe';
+            const adminRole = currentUser.role === 'admin' ? 'Administrator' : 'User';
+            const avatarUrl = currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(adminName)}&background=e74c3c&color=fff`;
+            
+            document.getElementById('adminName').textContent = adminName;
+            document.getElementById('adminAvatar').src = avatarUrl;
+            document.getElementById('dropdownName').textContent = adminName;
+            document.getElementById('dropdownEmail').textContent = adminEmail;
+            document.getElementById('dropdownRole').textContent = adminRole;
+            document.getElementById('dropdownAvatar').src = avatarUrl;
+            
+            // Check if user is admin
+            if (currentUser.role !== 'admin') {
+                showToast('Access denied. Admin privileges required.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 2000);
+            }
+        }
+
+        // Initialize Notifications
+        function initNotifications() {
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationsPanel = document.getElementById('notificationsPanel');
+            const markAllRead = document.getElementById('markAllRead');
+            
+            // Toggle notifications panel
+            notificationBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationsPanel.classList.toggle('open');
+                document.getElementById('profilePanel').classList.remove('open');
+                loadNotifications();
+            });
+            
+            // Mark all as read
+            markAllRead.addEventListener('click', () => {
+                notifications.forEach(n => n.read = true);
+                updateNotificationBadge();
+                renderNotifications();
+                showToast('All notifications marked as read', 'success');
+            });
+            
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#notificationsDropdown')) {
+                    notificationsPanel.classList.remove('open');
+                }
+            });
+            
+            // Load initial notifications
+            loadNotifications();
+        }
+        
+        async function loadNotifications() {
+            try {
+                // Generate notifications from recent activity
+                const [orders, reservations] = await Promise.all([
+                    fetchAPI('/orders').catch(() => []),
+                    fetchAPI('/reservations').catch(() => [])
+                ]);
+                
+                notifications = [];
+                
+                // Add order notifications
+                const recentOrders = orders.filter(o => {
+                    const orderDate = new Date(o.createdAt);
+                    const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                    return orderDate > dayAgo;
+                }).slice(0, 5);
+                
+                recentOrders.forEach(order => {
+                    notifications.push({
+                        id: order._id,
+                        type: 'order',
+                        icon: 'shopping-bag',
+                        title: 'New Order',
+                        message: `Order #${order._id?.slice(-6)} - ৳${(order.total || 0).toFixed(2)}`,
+                        time: new Date(order.createdAt),
+                        read: false
+                    });
+                });
+                
+                // Add reservation notifications
+                const pendingReservations = reservations.filter(r => r.status === 'pending').slice(0, 5);
+                pendingReservations.forEach(res => {
+                    notifications.push({
+                        id: res._id,
+                        type: 'reservation',
+                        icon: 'calendar-check',
+                        title: 'New Reservation',
+                        message: `${res.name} - ${new Date(res.date).toLocaleDateString()} at ${res.time}`,
+                        time: new Date(res.createdAt || res.date),
+                        read: false
+                    });
+                });
+                
+                // Sort by time
+                notifications.sort((a, b) => b.time - a.time);
+                
+                updateNotificationBadge();
+                renderNotifications();
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
+        }
+        
+        function updateNotificationBadge() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            const badge = document.getElementById('notificationBadge');
+            badge.textContent = unreadCount;
+            badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+        }
+        
+        function renderNotifications() {
+            const list = document.getElementById('notificationsList');
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<div class="no-notifications"><i class="fas fa-bell-slash"></i><p>No notifications</p></div>';
+                return;
+            }
+            
+            list.innerHTML = notifications.map(n => `
+                <div class="notification-item ${n.read ? 'read' : ''}" data-id="${n.id}">
+                    <div class="notification-icon ${n.type}">
+                        <i class="fas fa-${n.icon}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <span class="notification-title">${n.title}</span>
+                        <span class="notification-message">${n.message}</span>
+                        <span class="notification-time">${formatTimeAgo(n.time)}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add click handlers
+            list.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = item.dataset.id;
+                    const notification = notifications.find(n => n.id === id);
+                    if (notification) {
+                        notification.read = true;
+                        updateNotificationBadge();
+                        item.classList.add('read');
+                        
+                        // Navigate to relevant section
+                        if (notification.type === 'order') {
+                            switchSection('orders');
+                        } else if (notification.type === 'reservation') {
+                            switchSection('reservations');
+                        }
+                    }
+                });
+            });
+        }
+        
+        function formatTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            return `${Math.floor(seconds / 86400)}d ago`;
+        }
+
+        // Initialize Profile Dropdown
+        function initProfileDropdown() {
+            const profileDropdown = document.getElementById('adminProfileDropdown');
+            const profilePanel = document.getElementById('profilePanel');
+            const profileLogoutBtn = document.getElementById('profileLogoutBtn');
+            
+            // Toggle profile dropdown
+            profileDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profilePanel.classList.toggle('open');
+                document.getElementById('notificationsPanel').classList.remove('open');
+            });
+            
+            // Settings link in dropdown
+            profilePanel.querySelector('[data-section="settings"]').addEventListener('click', (e) => {
+                e.preventDefault();
+                profilePanel.classList.remove('open');
+                switchSection('settings');
+            });
+            
+            // Logout from dropdown
+            profileLogoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+            
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#adminProfileDropdown')) {
+                    profilePanel.classList.remove('open');
+                }
+            });
+        }
+        
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('isAdmin');
+            showToast('Logging out...', 'info');
+            setTimeout(() => {
+                window.location.href = 'admin-login.html';
+            }, 500);
+        }
+
+        // Navigation
+        function initNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const viewAllBtns = document.querySelectorAll('.view-all-btn');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const section = item.dataset.section;
+                    switchSection(section);
+                });
+            });
+
+            viewAllBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const section = btn.dataset.section;
+                    switchSection(section);
+                });
+            });
+
+            // Mobile menu
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('open');
+            });
+
+            document.getElementById('sidebarToggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                logout();
+            });
+        }
+
+        function switchSection(section) {
+            currentSection = section;
+            
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === section);
+            });
+
+            // Update sections
+            document.querySelectorAll('.content-section').forEach(s => {
+                s.classList.toggle('active', s.id === section + 'Section');
+            });
+
+            // Update title
+            const titles = {
+                dashboard: 'Dashboard',
+                products: 'Products Management',
+                orders: 'Orders Management',
+                users: 'Users Management',
+                reservations: 'Reservations',
+                reviews: 'Reviews',
+                settings: 'Settings'
+            };
+            document.getElementById('pageTitle').textContent = titles[section];
+
+            // Load section data
+            loadSectionData(section);
+
+            // Close mobile menu
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function loadSectionData(section) {
+            switch(section) {
+                case 'dashboard': loadDashboard(); break;
+                case 'products': loadProducts(); break;
+                case 'orders': loadOrders(); break;
+                case 'users': loadUsers(); break;
+                case 'reservations': loadReservations(); break;
+                case 'reviews': loadReviews(); break;
+            }
+        }
+
+        // Dashboard
+        async function loadDashboard() {
+            try {
+                // Load KPIs
+                const [products, orders, users, reservations, reviews] = await Promise.all([
+                    fetchAPI('/products'),
+                    fetchAPI('/orders').catch(() => []),
+                    fetchAPI('/admin/users').catch(() => []),
+                    fetchAPI('/reservations').catch(() => []),
+                    fetchAPI('/reviews').catch(() => [])
+                ]);
+
+                // Update KPIs
+                document.getElementById('totalProducts').textContent = products.length || 0;
+                document.getElementById('totalOrders').textContent = orders.length || 0;
+                document.getElementById('totalCustomers').textContent = users.length || 0;
+
+                // Calculate revenue
+                const revenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+                document.getElementById('totalRevenue').textContent = '৳' + revenue.toFixed(2);
+
+                // Recent Orders
+                const recentOrders = orders.slice(0, 5);
+                const ordersHtml = recentOrders.length ? recentOrders.map(order => `
+                    <tr>
+                        <td>#${order._id?.slice(-6) || 'N/A'}</td>
+                        <td>${order.user?.name || order.customerName || 'Guest'}</td>
+                        <td>৳${(order.total || 0).toFixed(2)}</td>
+                        <td><span class="status-badge ${order.status}">${order.status || 'pending'}</span></td>
+                    </tr>
+                `).join('') : '<tr><td colspan="4" class="empty">No recent orders</td></tr>';
+                document.getElementById('recentOrdersTable').innerHTML = ordersHtml;
+
+                // Top Products
+                const topProducts = products.slice(0, 5);
+                const productsHtml = topProducts.length ? topProducts.map((p, i) => `
+                    <li>
+                        <span class="rank">#${i + 1}</span>
+                        <img src="${p.image || 'https://via.placeholder.com/40'}" alt="${p.name}">
+                        <div class="product-info">
+                            <span class="name">${p.name}</span>
+                            <span class="category">${p.category}</span>
+                        </div>
+                        <span class="price">৳${p.price.toFixed(2)}</span>
+                    </li>
+                `).join('') : '<li class="empty">No products</li>';
+                document.getElementById('topProductsList').innerHTML = productsHtml;
+
+                // Pending Reservations
+                const pendingRes = reservations.filter(r => r.status === 'pending').slice(0, 5);
+                const resHtml = pendingRes.length ? pendingRes.map(r => `
+                    <li>
+                        <div class="res-info">
+                            <span class="name">${r.name}</span>
+                            <span class="details">${new Date(r.date).toLocaleDateString()} at ${r.time} • ${r.guests} guests</span>
+                        </div>
+                        <span class="status-badge pending">Pending</span>
+                    </li>
+                `).join('') : '<li class="empty">No pending reservations</li>';
+                document.getElementById('pendingReservationsList').innerHTML = resHtml;
+
+                // Recent Reviews
+                const recentReviews = reviews.slice(0, 5);
+                const reviewsHtml = recentReviews.length ? recentReviews.map(r => `
+                    <li>
+                        <div class="review-header">
+                            <span class="name">${r.user?.name || 'Anonymous'}</span>
+                            <span class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                        </div>
+                        <p class="review-text">${r.comment?.slice(0, 100) || 'No comment'}...</p>
+                    </li>
+                `).join('') : '<li class="empty">No reviews yet</li>';
+                document.getElementById('recentReviewsList').innerHTML = reviewsHtml;
+
+            } catch (error) {
+                console.error('Dashboard error:', error);
+                showToast('Error loading dashboard data', 'error');
+            }
+        }
+
+        // Products Management
+        async function loadProducts() {
+            try {
+                console.log('Loading products...');
+                document.getElementById('productsTableBody').innerHTML = '<tr><td colspan="6" class="loading">Loading products...</td></tr>';
+                
+                const category = document.getElementById('productCategoryFilter').value;
+                let url = '/products';
+                if (category) url += `?category=${category}`;
+                
+                const response = await fetchAPI(url);
+                console.log('Products API response:', response);
+                
+                // Handle both array and { products: [] } response formats
+                const products = Array.isArray(response) ? response : (response?.products || []);
+                console.log('Products loaded:', products.length, 'items');
+                
+                if (!Array.isArray(products)) {
+                    console.error('Products response is not an array:', response);
+                    document.getElementById('productsTableBody').innerHTML = '<tr><td colspan="6" class="empty">Error: Invalid response format</td></tr>';
+                    return;
+                }
+                
+                const html = products.length ? products.map(p => {
+                    // Image fallback mapping for broken images
+                    const fallbackImages = {
+                        'Sushi': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
+                        'Rolls': 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&w=800&q=80',
+                        'Coffee': 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80',
+                        'Desserts': 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80',
+                        'Drinks': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=800&q=80',
+                        'Specials': 'https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&w=800&q=80'
+                    };
+                    const fallbackImg = fallbackImages[p.category] || fallbackImages['Sushi'];
+                    
+                    return `
+                    <tr>
+                        <td><img src="${p.image || fallbackImg}" alt="${p.name}" class="product-thumb" onerror="this.src='${fallbackImg}'"></td>
+                        <td><strong>${p.name}</strong><br><small>${p.description?.slice(0, 50) || ''}...</small></td>
+                        <td>${p.category}</td>
+                        <td>৳${(p.price || 0).toFixed(2)}</td>
+                        <td><span class="status-badge ${p.available !== false ? 'available' : 'unavailable'}">${p.available !== false ? 'Available' : 'Unavailable'}</span></td>
+                        <td><div class="actions">
+                            <button class="btn-icon edit" onclick="editProduct('${p._id}')" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon delete" onclick="deleteProduct('${p._id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div></td>
+                        </td>
+                    </tr>
+                `}).join('') : '<tr><td colspan="6" class="empty">No products found. Add some products!</td></tr>';
+                
+                document.getElementById('productsTableBody').innerHTML = html;
+            } catch (error) {
+                console.error('Products error:', error);
+                document.getElementById('productsTableBody').innerHTML = `<tr><td colspan="6" class="empty">Error loading products: ${error.message}. Make sure the server is running at ${API_BASE}</td></tr>`;
+                showToast('Error loading products. Check console for details.', 'error');
+            }
+        }
+
+        document.getElementById('addProductBtn').addEventListener('click', () => {
+            document.getElementById('productModalTitle').textContent = 'Add New Product';
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            openModal('productModal');
+        });
+
+        async function editProduct(id) {
+            try {
+                const response = await fetchAPI('/products');
+                const products = Array.isArray(response) ? response : (response?.products || []);
+                const product = products.find(p => p._id === id);
+                if (!product) throw new Error('Product not found');
+
+                document.getElementById('productModalTitle').textContent = 'Edit Product';
+                document.getElementById('productId').value = product._id;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productImage').value = product.image || '';
+                document.getElementById('productDescription').value = product.description || '';
+                document.getElementById('productAvailable').checked = product.available !== false;
+                
+                openModal('productModal');
+            } catch (error) {
+                showToast('Error loading product', 'error');
+            }
+        }
+
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('productId').value;
+            const data = {
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                image: document.getElementById('productImage').value,
+                description: document.getElementById('productDescription').value,
+                available: document.getElementById('productAvailable').checked
+            };
+
+            try {
+                if (id) {
+                    await fetchAPI(`/products/${id}`, 'PUT', data);
+                    showToast('Product updated successfully', 'success');
+                } else {
+                    await fetchAPI('/products', 'POST', data);
+                    showToast('Product added successfully', 'success');
+                }
+                closeModal('productModal');
+                loadProducts();
+            } catch (error) {
+                showToast('Error saving product', 'error');
+            }
+        });
+
+        function deleteProduct(id) {
+            document.getElementById('deleteMessage').textContent = 'Are you sure you want to delete this product?';
+            deleteCallback = async () => {
+                try {
+                    await fetchAPI(`/products/${id}`, 'DELETE');
+                    showToast('Product deleted', 'success');
+                    loadProducts();
+                } catch (error) {
+                    showToast('Error deleting product', 'error');
+                }
+            };
+            openModal('deleteModal');
+        }
+
+        // Orders Management
+        async function loadOrders() {
+            try {
+                const status = document.getElementById('orderStatusFilter').value;
+                const date = document.getElementById('orderDateFilter').value;
+                
+                let orders = await fetchAPI('/orders').catch(() => []);
+                
+                if (status) orders = orders.filter(o => o.status === status);
+                if (date) orders = orders.filter(o => new Date(o.createdAt).toISOString().split('T')[0] === date);
+                
+                const html = orders.length ? orders.map(o => `
+                    <tr>
+                        <td>#${o._id?.slice(-6) || 'N/A'}</td>
+                        <td>${o.user?.name || o.customerName || 'Guest'}</td>
+                        <td>${o.items?.length || 0} items</td>
+                        <td>৳${(o.total || 0).toFixed(2)}</td>
+                        <td>${new Date(o.createdAt).toLocaleDateString()}</td>
+                        <td><span class="status-badge ${o.status}">${o.status || 'pending'}</span></td>
+                        <td class="actions">
+                            <button class="btn-icon view" onclick="viewOrder('${o._id}')" title="View"><i class="fas fa-eye"></i></button>
+                            <select class="status-select" onchange="updateOrderStatus('${o._id}', this.value)">
+                                <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>Processing</option>
+                                <option value="completed" ${o.status === 'completed' ? 'selected' : ''}>Completed</option>
+                                <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="7" class="empty">No orders found</td></tr>';
+                
+                document.getElementById('ordersTableBody').innerHTML = html;
+            } catch (error) {
+                console.error('Orders error:', error);
+                showToast('Error loading orders', 'error');
+            }
+        }
+
+        async function viewOrder(id) {
+            try {
+                const orders = await fetchAPI('/orders');
+                const order = orders.find(o => o._id === id);
+                if (!order) throw new Error('Order not found');
+
+                const html = `
+                    <div class="order-detail">
+                        <div class="order-info">
+                            <p><strong>Order ID:</strong> #${order._id.slice(-6)}</p>
+                            <p><strong>Customer:</strong> ${order.user?.name || order.customerName || 'Guest'}</p>
+                            <p><strong>Email:</strong> ${order.user?.email || order.email || 'N/A'}</p>
+                            <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+                            <p><strong>Status:</strong> <span class="status-badge ${order.status}">${order.status}</span></p>
+                        </div>
+                        <div class="order-items">
+                            <h4>Items</h4>
+                            <table class="items-table">
+                                <thead>
+                                    <tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    ${order.items?.map(item => `
+                                        <tr>
+                                            <td>${item.product?.name || item.name || 'Unknown'}</td>
+                                            <td>${item.quantity}</td>
+                                            <td>৳${(item.price || 0).toFixed(2)}</td>
+                                            <td>৳${((item.price || 0) * item.quantity).toFixed(2)}</td>
+                                        </tr>
+                                    `).join('') || '<tr><td colspan="4">No items</td></tr>'}
+                                </tbody>
+                                <tfoot>
+                                    <tr><td colspan="3"><strong>Total</strong></td><td><strong>$${(order.total || 0).toFixed(2)}</strong></td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('orderModalBody').innerHTML = html;
+                openModal('orderModal');
+            } catch (error) {
+                showToast('Error loading order details', 'error');
+            }
+        }
+
+        async function updateOrderStatus(id, status) {
+            try {
+                await fetchAPI(`/orders/${id}`, 'PUT', { status });
+                showToast('Order status updated', 'success');
+            } catch (error) {
+                showToast('Error updating order', 'error');
+                loadOrders();
+            }
+        }
+
+        // Users Management
+        async function loadUsers() {
+            try {
+                const role = document.getElementById('userRoleFilter').value;
+                const search = document.getElementById('userSearchFilter').value.toLowerCase();
+                
+                let users = await fetchAPI('/admin/users').catch(() => []);
+                
+                if (role) users = users.filter(u => u.role === role);
+                if (search) users = users.filter(u => 
+                    u.name?.toLowerCase().includes(search) || 
+                    u.email?.toLowerCase().includes(search)
+                );
+                
+                const html = users.length ? users.map(u => `
+                    <tr>
+                        <td><img src="${u.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || 'User')}&background=e74c3c&color=fff`}" alt="${u.name}" class="user-avatar"></td>
+                        <td>${u.name || 'N/A'}</td>
+                        <td>${u.email}</td>
+                        <td><span class="role-badge ${u.role}">${u.role || 'user'}</span></td>
+                        <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+                        <td class="actions">
+                            <button class="btn-icon edit" onclick="editUser('${u._id}')" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon delete" onclick="deleteUser('${u._id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="6" class="empty">No users found</td></tr>';
+                
+                document.getElementById('usersTableBody').innerHTML = html;
+            } catch (error) {
+                console.error('Users error:', error);
+                showToast('Error loading users', 'error');
+            }
+        }
+
+        async function editUser(id) {
+            try {
+                const users = await fetchAPI('/admin/users');
+                const user = users.find(u => u._id === id);
+                if (!user) throw new Error('User not found');
+
+                document.getElementById('editUserId').value = user._id;
+                document.getElementById('editUserName').value = user.name || '';
+                document.getElementById('editUserEmail').value = user.email;
+                document.getElementById('editUserRole').value = user.role || 'user';
+                
+                openModal('userModal');
+            } catch (error) {
+                showToast('Error loading user', 'error');
+            }
+        }
+
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('editUserId').value;
+            const data = {
+                name: document.getElementById('editUserName').value,
+                email: document.getElementById('editUserEmail').value,
+                role: document.getElementById('editUserRole').value
+            };
+
+            try {
+                await fetchAPI(`/admin/users/${id}`, 'PUT', data);
+                showToast('User updated successfully', 'success');
+                closeModal('userModal');
+                loadUsers();
+            } catch (error) {
+                showToast('Error updating user', 'error');
+            }
+        });
+
+        function deleteUser(id) {
+            document.getElementById('deleteMessage').textContent = 'Are you sure you want to delete this user?';
+            deleteCallback = async () => {
+                try {
+                    await fetchAPI(`/admin/users/${id}`, 'DELETE');
+                    showToast('User deleted', 'success');
+                    loadUsers();
+                } catch (error) {
+                    showToast('Error deleting user', 'error');
+                }
+            };
+            openModal('deleteModal');
+        }
+
+        // Reservations Management
+        async function loadReservations() {
+            try {
+                const status = document.getElementById('reservationStatusFilter').value;
+                const date = document.getElementById('reservationDateFilter').value;
+                
+                let reservations = await fetchAPI('/reservations').catch(() => []);
+                
+                if (status) reservations = reservations.filter(r => r.status === status);
+                if (date) reservations = reservations.filter(r => new Date(r.date).toISOString().split('T')[0] === date);
+                
+                const html = reservations.length ? reservations.map(r => `
+                    <tr>
+                        <td>#${r._id?.slice(-6) || 'N/A'}</td>
+                        <td>${r.name}<br><small>${r.email}</small></td>
+                        <td>${new Date(r.date).toLocaleDateString()}</td>
+                        <td>${r.time}</td>
+                        <td>${r.guests}</td>
+                        <td><span class="status-badge ${r.status}">${r.status || 'pending'}</span></td>
+                        <td class="actions">
+                            <button class="btn-icon view" onclick="viewReservation('${r._id}')" title="View"><i class="fas fa-eye"></i></button>
+                            <select class="status-select" onchange="updateReservationStatus('${r._id}', this.value)">
+                                <option value="pending" ${r.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="confirmed" ${r.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                <option value="cancelled" ${r.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="7" class="empty">No reservations found</td></tr>';
+                
+                document.getElementById('reservationsTableBody').innerHTML = html;
+            } catch (error) {
+                console.error('Reservations error:', error);
+                showToast('Error loading reservations', 'error');
+            }
+        }
+
+        let currentReservationId = null;
+
+        function viewReservation(id) {
+            fetchAPI('/reservations').then(reservations => {
+                const res = reservations.find(r => r._id === id);
+                if (!res) return showToast('Reservation not found', 'error');
+                
+                currentReservationId = id;
+                document.getElementById('reservationStatusSelect').value = res.status || 'pending';
+                
+                document.getElementById('reservationModalBody').innerHTML = `
+                    <div class="reservation-detail">
+                        <p><strong>Name:</strong> ${res.name}</p>
+                        <p><strong>Email:</strong> ${res.email}</p>
+                        <p><strong>Phone:</strong> ${res.phone || 'N/A'}</p>
+                        <p><strong>Date:</strong> ${new Date(res.date).toLocaleDateString()}</p>
+                        <p><strong>Time:</strong> ${res.time}</p>
+                        <p><strong>Guests:</strong> ${res.guests}</p>
+                        <p><strong>Special Requests:</strong> ${res.specialRequests || 'None'}</p>
+                        <p><strong>Status:</strong> <span class="status-badge ${res.status}">${res.status}</span></p>
+                    </div>
+                `;
+                openModal('reservationModal');
+            });
+        }
+
+        document.getElementById('updateReservationBtn').addEventListener('click', () => {
+            if (currentReservationId) {
+                updateReservationStatus(currentReservationId, document.getElementById('reservationStatusSelect').value);
+                closeModal('reservationModal');
+            }
+        });
+
+        async function updateReservationStatus(id, status) {
+            try {
+                await fetchAPI(`/reservations/${id}`, 'PUT', { status });
+                showToast('Reservation updated', 'success');
+                loadReservations();
+            } catch (error) {
+                showToast('Error updating reservation', 'error');
+            }
+        }
+
+        // Reviews Management
+        async function loadReviews() {
+            try {
+                const rating = document.getElementById('reviewRatingFilter').value;
+                
+                let reviews = await fetchAPI('/reviews').catch(() => []);
+                
+                if (rating) reviews = reviews.filter(r => r.rating === parseInt(rating));
+                
+                const html = reviews.length ? reviews.map(r => `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img src="${r.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.user?.name || 'User')}&background=e74c3c&color=fff`}" alt="User">
+                            <div class="review-user">
+                                <span class="name">${r.user?.name || 'Anonymous'}</span>
+                                <span class="date">${new Date(r.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <div class="review-rating">
+                                ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}
+                            </div>
+                        </div>
+                        <p class="review-product">${r.product?.name || 'General Review'}</p>
+                        <p class="review-comment">${r.comment || 'No comment'}</p>
+                        <div class="review-actions">
+                            <button class="btn-icon delete" onclick="deleteReview('${r._id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('') : '<div class="empty">No reviews found</div>';
+                
+                document.getElementById('reviewsGrid').innerHTML = html;
+            } catch (error) {
+                console.error('Reviews error:', error);
+                showToast('Error loading reviews', 'error');
+            }
+        }
+
+        function deleteReview(id) {
+            document.getElementById('deleteMessage').textContent = 'Are you sure you want to delete this review?';
+            deleteCallback = async () => {
+                try {
+                    await fetchAPI(`/reviews/${id}`, 'DELETE');
+                    showToast('Review deleted', 'success');
+                    loadReviews();
+                } catch (error) {
+                    showToast('Error deleting review', 'error');
+                }
+            };
+            openModal('deleteModal');
+        }
+
+        // Filters
+        function initFilters() {
+            document.getElementById('productCategoryFilter').addEventListener('change', loadProducts);
+            document.getElementById('orderStatusFilter').addEventListener('change', loadOrders);
+            document.getElementById('orderDateFilter').addEventListener('change', loadOrders);
+            document.getElementById('userRoleFilter').addEventListener('change', loadUsers);
+            document.getElementById('userSearchFilter').addEventListener('input', debounce(loadUsers, 300));
+            document.getElementById('reservationStatusFilter').addEventListener('change', loadReservations);
+            document.getElementById('reservationDateFilter').addEventListener('change', loadReservations);
+            document.getElementById('reviewRatingFilter').addEventListener('change', loadReviews);
+        }
+
+        // Modals
+        function initModals() {
+            document.querySelectorAll('.modal-close, [data-modal]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const modalId = btn.dataset.modal;
+                    if (modalId) closeModal(modalId);
+                });
+            });
+
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModal(modal.id);
+                });
+            });
+
+            document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+                if (deleteCallback) {
+                    deleteCallback();
+                    deleteCallback = null;
+                }
+                closeModal('deleteModal');
+            });
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // API Helper
+        async function fetchAPI(endpoint, method = 'GET', data = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-admin-id': currentUser?._id || currentUser?.id || 'admin'
+                }
+            };
+
+            if (data) options.body = JSON.stringify(data);
+
+            console.log(`📡 API Request: ${method} ${API_BASE}${endpoint}`);
+            
+            try {
+                const response = await fetch(API_BASE + endpoint, options);
+                
+                if (!response.ok) {
+                    console.error(`❌ API Error: ${response.status} ${response.statusText}`);
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log(`✅ API Response for ${endpoint}:`, result);
+                return result;
+            } catch (error) {
+                console.error(`❌ Fetch error for ${endpoint}:`, error);
+                throw error;
+            }
+        }
+
+        // Toast Notifications
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Utility
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Settings Forms
+        document.getElementById('storeInfoForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Store information saved', 'success');
+        });
+
+        document.getElementById('businessHoursForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Business hours saved', 'success');
+        });
+
+        document.getElementById('appearanceForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const color = document.getElementById('primaryColor').value;
+            document.documentElement.style.setProperty('--primary-color', color);
+            showToast('Theme applied', 'success');
+        });
+
+        document.getElementById('notificationsForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Notification preferences saved', 'success');
+        });
+    </script>
+</body>
+</html>
