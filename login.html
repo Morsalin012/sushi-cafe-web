@@ -202,13 +202,25 @@
     document.getElementById('googleSignInBtn').addEventListener('click', async function() {
       console.log('Google button clicked');
       
+      // Check if running from file:// protocol - Google OAuth won't work
+      if (window.location.protocol === 'file:') {
+        showMessage('login-msg', '⚠️ Google Sign-In requires running from a server. Please access via http://localhost:4000/login.html or use email login.', 'error');
+        return;
+      }
+      
       // Make sure google is loaded
       if (typeof google === 'undefined') {
-        showMessage('login-msg', 'Google Sign-In is still loading. Please wait and try again.', 'error');
+        showMessage('login-msg', 'Google Sign-In is still loading. Please wait and try again...', 'error');
+        setTimeout(() => {
+          if (typeof google !== 'undefined') {
+            showMessage('login-msg', 'Ready! Click the button again.', 'success');
+          }
+        }, 2000);
         return;
       }
 
       initGoogleSignIn(); // Ensure initialized
+      showMessage('login-msg', 'Opening Google sign-in...', 'success');
 
       // Use the token client for OAuth popup (more reliable)
       try {
@@ -217,28 +229,45 @@
           scope: 'email profile',
           callback: async (tokenResponse) => {
             console.log('Token response:', tokenResponse);
+            if (tokenResponse.error) {
+              console.error('Token error:', tokenResponse);
+              showMessage('login-msg', 'Google authorization failed: ' + (tokenResponse.error_description || tokenResponse.error), 'error');
+              return;
+            }
             if (tokenResponse.access_token) {
-              // Get user info from Google
-              const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-              });
-              const userInfo = await userInfoRes.json();
-              console.log('User info:', userInfo);
-              handleGoogleUser(userInfo);
-            } else if (tokenResponse.error) {
-              console.error('Token error:', tokenResponse.error);
-              showMessage('login-msg', 'Google sign-in was cancelled or failed.', 'error');
+              showMessage('login-msg', 'Verifying with Google...', 'success');
+              try {
+                // Get user info from Google
+                const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                });
+                if (!userInfoRes.ok) {
+                  throw new Error('Failed to get user info from Google');
+                }
+                const userInfo = await userInfoRes.json();
+                console.log('User info:', userInfo);
+                handleGoogleUser(userInfo);
+              } catch (fetchError) {
+                console.error('Fetch user info error:', fetchError);
+                showMessage('login-msg', 'Failed to get Google user info. Please try again.', 'error');
+              }
             }
           },
           error_callback: (error) => {
             console.error('OAuth error:', error);
-            showMessage('login-msg', 'Google sign-in error. Please try again.', 'error');
+            if (error.type === 'popup_closed') {
+              showMessage('login-msg', 'Sign-in popup was closed. Please try again.', 'error');
+            } else if (error.type === 'popup_failed_to_open') {
+              showMessage('login-msg', 'Popup blocked! Please allow popups for this site.', 'error');
+            } else {
+              showMessage('login-msg', 'Google sign-in error: ' + (error.message || error.type || 'Unknown error'), 'error');
+            }
           }
         });
-        tokenClient.requestAccessToken();
+        tokenClient.requestAccessToken({ prompt: 'select_account' });
       } catch (e) {
         console.error('Google OAuth error:', e);
-        showMessage('login-msg', 'Failed to start Google sign-in.', 'error');
+        showMessage('login-msg', 'Failed to start Google sign-in: ' + e.message, 'error');
       }
     });
 
@@ -314,14 +343,22 @@
 
     // Centralized login success handler
     function loginSuccess(user, token) {
-      console.log('Login success:', user.email);
+      console.log('Login success:', user.email, 'Role:', user.role);
+      
+      // Block admin login from regular login page
+      if (user.role === 'admin') {
+        showMessage('login-msg', 'Admin accounts must use the admin login portal.', 'error');
+        return;
+      }
+      
       localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
       if (token) localStorage.setItem('authToken', token);
       localStorage.setItem('isLoggedIn', 'true');
       
       showMessage('login-msg', `Welcome, ${user.name}!`, 'success');
       
-      // Redirect after brief delay to show success message
+      // Regular users go to home page
       setTimeout(() => {
         window.location.href = 'Home%20page/home.html';
       }, 500);

@@ -158,12 +158,18 @@ function setupAuthLogic() {
             
             if (result === null) {
                 // Network error -> fallback to localStorage
-                console.log('Backend unavailable, using localStorage');
+                console.log('Backend unavailable, using localStorage fallback');
                 const users = getLocalUsers();
                 const user = users.find(u => u.email === email && u.password === password);
                 if (user) {
+                    // Block admin login from regular login page
+                    if (user.role === 'admin' || email === 'admin@harusora.cafe') {
+                        showMsg('login-msg', 'Admin accounts must use the admin login portal.', 'error');
+                        return;
+                    }
                     console.log('User found in localStorage:', user.name);
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('user', JSON.stringify(user));
                     localStorage.setItem('isLoggedIn', 'true');
                     showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
                     setTimeout(() => {
@@ -172,27 +178,31 @@ function setupAuthLogic() {
                     }, 800);
                     return;
                 }
-                // No user found - create one for easy testing
-                console.log('No user found, creating new account');
-                const newUser = { name: email.split('@')[0], email, password };
-                const allUsers = getLocalUsers();
-                allUsers.push(newUser);
-                setLocalUsers(allUsers);
-                localStorage.setItem('currentUser', JSON.stringify(newUser));
-                localStorage.setItem('isLoggedIn', 'true');
-                showMsg('login-msg', `Welcome, ${newUser.name}! Account created.`, 'success');
-                setTimeout(() => {
-                    window.location.href = 'Home page/home.html';
-                }, 800);
+                // No user found - show error about backend
+                showMsg('login-msg', '⚠️ Cannot connect to server. Please ensure the backend is running at http://localhost:4000 and access the site via http://localhost:4000/login', 'error');
                 return;
             }
 
             if (result.ok) {
                 const user = result.body.user || { name: 'Guest', email };
+                console.log('Login successful! User data:', JSON.stringify(user));
+                console.log('User role:', user.role);
+                
+                // Block admin login from regular login page
+                if (user.role === 'admin') {
+                    showMsg('login-msg', 'Admin accounts must use the admin login portal.', 'error');
+                    return;
+                }
+                
                 localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('user', JSON.stringify(user)); // For admin page compatibility
                 localStorage.setItem('isLoggedIn', 'true');
                 showMsg('login-msg', `Welcome back, ${user.name}!`, 'success');
-                setTimeout(() => window.location.href = 'Home page/home.html', 800);
+                
+                setTimeout(() => {
+                    console.log('Redirecting to home page...');
+                    window.location.href = 'Home page/home.html';
+                }, 800);
             } else if (result.status === 401) {
                 showMsg('login-msg', 'Invalid email or password.', 'error');
             } else {

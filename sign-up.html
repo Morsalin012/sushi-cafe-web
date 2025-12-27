@@ -141,43 +141,82 @@
       ? 'http://localhost:4000/api'
       : 'https://sushi-cafe-api.onrender.com/api';
 
+    // Check if running from file:// protocol
+    const isFileProtocol = window.location.protocol === 'file:';
+    
     // Google Sign Up button click
     const googleBtn = document.getElementById('googleSignUpBtn');
     if (googleBtn) {
       googleBtn.addEventListener('click', async function() {
+        // Check if opening from file system - Google OAuth won't work
+        if (isFileProtocol) {
+          showMessage('signup-msg', '⚠️ Google Sign-In requires running from a server. Please access via http://localhost:4000/sign-up.html or use email signup.', 'error');
+          return;
+        }
+
         if (typeof google === 'undefined') {
-          showMessage('signup-msg', 'Google Sign-In is loading. Please wait...', 'error');
+          showMessage('signup-msg', 'Google Sign-In is loading. Please wait and try again...', 'error');
+          // Try again after a short delay
+          setTimeout(() => {
+            if (typeof google !== 'undefined') {
+              showMessage('signup-msg', 'Ready! Click the button again.', 'success');
+            }
+          }, 2000);
           return;
         }
 
         try {
+          showMessage('signup-msg', 'Opening Google sign-in...', 'success');
+          
           const tokenClient = google.accounts.oauth2.initTokenClient({
             client_id: GOOGLE_CLIENT_ID,
             scope: 'email profile',
             callback: async (tokenResponse) => {
+              if (tokenResponse.error) {
+                console.error('Token error:', tokenResponse);
+                showMessage('signup-msg', 'Google authorization failed: ' + (tokenResponse.error_description || tokenResponse.error), 'error');
+                return;
+              }
               if (tokenResponse.access_token) {
-                const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-                });
-                const userInfo = await userInfoRes.json();
-                handleGoogleUser(userInfo);
+                showMessage('signup-msg', 'Verifying with Google...', 'success');
+                try {
+                  const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                  });
+                  if (!userInfoRes.ok) {
+                    throw new Error('Failed to get user info from Google');
+                  }
+                  const userInfo = await userInfoRes.json();
+                  handleGoogleUser(userInfo);
+                } catch (fetchError) {
+                  console.error('Fetch user info error:', fetchError);
+                  showMessage('signup-msg', 'Failed to get Google user info. Please try again.', 'error');
+                }
               }
             },
             error_callback: (error) => {
               console.error('OAuth error:', error);
-              showMessage('signup-msg', 'Google sign-up error. Please try again.', 'error');
+              if (error.type === 'popup_closed') {
+                showMessage('signup-msg', 'Sign-in popup was closed. Please try again.', 'error');
+              } else if (error.type === 'popup_failed_to_open') {
+                showMessage('signup-msg', 'Popup blocked! Please allow popups for this site.', 'error');
+              } else {
+                showMessage('signup-msg', 'Google sign-up error: ' + (error.message || error.type || 'Unknown error'), 'error');
+              }
             }
           });
-          tokenClient.requestAccessToken();
+          tokenClient.requestAccessToken({ prompt: 'select_account' });
         } catch (e) {
           console.error('Google OAuth error:', e);
-          showMessage('signup-msg', 'Failed to start Google sign-up.', 'error');
+          showMessage('signup-msg', 'Failed to start Google sign-up: ' + e.message, 'error');
         }
       });
     }
 
     async function handleGoogleUser(userInfo) {
       try {
+        showMessage('signup-msg', 'Creating your account...', 'success');
+        
         const result = await fetch(`${API_BASE}/auth/google-userinfo`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -196,16 +235,16 @@
           if (data.token) localStorage.setItem('authToken', data.token);
           localStorage.setItem('isLoggedIn', 'true');
           
-          showMessage('signup-msg', `Welcome, ${data.user.name}!`, 'success');
+          showMessage('signup-msg', `Welcome, ${data.user.name}! Redirecting...`, 'success');
           setTimeout(() => {
             window.location.href = 'Home%20page/home.html';
-          }, 500);
+          }, 800);
         } else {
           showMessage('signup-msg', data.message || 'Google sign-up failed', 'error');
         }
       } catch (error) {
         console.error('Google signup error:', error);
-        // Fallback: create user locally
+        // Fallback: create user locally if backend is unavailable
         const user = {
           id: userInfo.sub,
           name: userInfo.name,
@@ -215,10 +254,10 @@
         localStorage.setItem('currentUser', JSON.stringify(user));
         localStorage.setItem('isLoggedIn', 'true');
         
-        showMessage('signup-msg', `Welcome, ${user.name}!`, 'success');
+        showMessage('signup-msg', `Welcome, ${user.name}! (Offline mode)`, 'success');
         setTimeout(() => {
           window.location.href = 'Home%20page/home.html';
-        }, 500);
+        }, 800);
       }
     }
 
