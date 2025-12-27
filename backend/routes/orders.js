@@ -10,6 +10,33 @@ const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const User = require('../models/User');
 
+// GET /api/orders - Get all orders (for admin)
+router.get('/', async (req, res) => {
+  try {
+    const { status, page = 1, limit = 50 } = req.query;
+    
+    const query = {};
+    if (status) query.status = status;
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const [orders, total] = await Promise.all([
+      Order.find(query)
+        .populate('user', 'name email')
+        .populate('items.product', 'name image price')
+        .sort('-createdAt')
+        .skip(skip)
+        .limit(Number(limit)),
+      Order.countDocuments(query)
+    ]);
+
+    res.json(orders);
+  } catch (error) {
+    console.error('Get all orders error:', error);
+    res.status(500).json({ message: 'Error fetching orders' });
+  }
+});
+
 // GET /api/orders/user/:userId - Get user's orders
 router.get('/user/:userId', async (req, res) => {
   try {

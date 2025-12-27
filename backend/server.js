@@ -274,6 +274,34 @@ app.get('/reserve', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'Home page', 'reserve.html'));
 });
 
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Home page', 'admin.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Home page', 'admin.html'));
+});
+
+app.get('/admin-login', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Home page', 'admin-login.html'));
+});
+
+app.get('/admin-login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Home page', 'admin-login.html'));
+});
+
+app.get('/cart', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Home page', 'cart.html'));
+});
+
+app.get('/orders', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Home page', 'orders.html'));
+});
+
+app.get('/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Home page', 'profile.html'));
+});
+
 // ============================================
 // Start Server
 // ============================================

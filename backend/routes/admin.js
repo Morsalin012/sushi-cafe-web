@@ -1,8 +1,3 @@
-/**
- * Admin Routes
- * API endpoints for admin dashboard and management
- */
-
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
@@ -10,6 +5,25 @@ const Product = require('../models/Product');
 const Order = require('../models/Order');
 const Reservation = require('../models/Reservation');
 const Review = require('../models/Review');
+
+// Simple admin auth header
+const adminAuth = async (req, res, next) => {
+  const adminId = req.header('x-admin-id');
+  if (!adminId) {
+    return res.status(401).json({ message: 'Missing admin identifier' });
+  }
+  const user = await User.findById(adminId);
+  if (!user) {
+    return res.status(401).json({ message: 'Admin user not found' });
+  }
+  if (!['admin', 'owner'].includes(user.role)) {
+    return res.status(403).json({ message: 'Admin privileges required' });
+  }
+  req.currentAdmin = user;
+  next();
+};
+
+router.use(adminAuth);
 
 // ============================================
 // Dashboard Statistics
@@ -219,18 +233,25 @@ router.put('/users/:id/role', async (req, res) => {
       return res.status(400).json({ message: 'Invalid role' });
     }
 
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      { role },
-      { new: true }
-    ).select('-password');
-
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    if (role === 'owner' && req.currentAdmin.role !== 'owner') {
+      return res.status(403).json({ message: 'Only owner may assign owner role' });
+    }
+    if (user.role === 'owner' && req.currentAdmin.role !== 'owner') {
+      return res.status(403).json({ message: 'Cannot modify owner account' });
+    }
+
+    user.role = role;
+    await user.save();
+
     console.log(`✅ User role updated: ${user.email} -> ${role}`);
-    res.json(user);
+    const safeUser = user.toObject ? user.toObject() : user;
+    delete safeUser.password;
+    res.json(safeUser);
   } catch (error) {
     console.error('Update user role error:', error);
     res.status(500).json({ message: 'Error updating user role' });
@@ -256,6 +277,47 @@ router.put('/users/:id/status', async (req, res) => {
   } catch (error) {
     console.error('Toggle user status error:', error);
     res.status(500).json({ message: 'Error updating user status' });
+  }
+});
+
+// ============================================
+// Product Management
+// ============================================
+
+router.get('/products', async (_req, res) => {
+  try {
+    const products = await Product.find().select('name price isAvailable stock category');
+    res.json({ products });
+  } catch (error) {
+    console.error('Admin get products error:', error);
+    res.status(500).json({ message: 'Error fetching products' });
+  }
+});
+
+router.patch('/products/:productId', async (req, res) => {
+  try {
+    const { price, stock, isAvailable } = req.body;
+    const updates = {};
+    if (price !== undefined) updates.price = price;
+    if (stock !== undefined) updates.stock = stock;
+    if (isAvailable !== undefined) updates.isAvailable = isAvailable;
+
+    if (!Object.keys(updates).length) {
+      return res.status(400).json({ message: 'At least one field required' });
+    }
+
+    const product = await Product.findById(req.params.productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    Object.assign(product, updates);
+    await product.save();
+
+    res.json({ message: 'Product updated', product });
+  } catch (error) {
+    console.error('Admin update product error:', error);
+    res.status(500).json({ message: 'Error updating product' });
   }
 });
 
@@ -378,8 +440,9 @@ router.put('/reviews/:id/visibility', async (req, res) => {
     review.isVisible = !review.isVisible;
     await review.save();
 
-    // Recalculate product rating
-    await Review.calculateAverageRating(review.product);
+    if (typeof Review.calculateAverageRating === 'function') {
+      await Review.calculateAverageRating(review.product);
+    }
 
     res.json({ 
       message: `Review ${review.isVisible ? 'shown' : 'hidden'}`,
@@ -394,7 +457,7 @@ router.put('/reviews/:id/visibility', async (req, res) => {
 // POST /api/admin/reviews/:id/respond - Respond to a review
 router.post('/reviews/:id/respond', async (req, res) => {
   try {
-    const { adminId, response } = req.body;
+    const { response } = req.body;
 
     const review = await Review.findById(req.params.id);
     if (!review) {
@@ -404,7 +467,7 @@ router.post('/reviews/:id/respond', async (req, res) => {
     review.response = {
       text: response,
       respondedAt: new Date(),
-      respondedBy: adminId
+      respondedBy: req.currentAdmin._id
     };
 
     await review.save();
