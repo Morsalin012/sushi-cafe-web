@@ -350,16 +350,196 @@
       position: relative;
     }
     
-    /* Category filter active state */
+    /* Override default card img styles for image-container */
+    .card .image-container .wishlist-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+    }
+    
+    /* Category filter - Professional Box Style */
+    .cats {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .cat {
+      padding: 10px 24px;
+      background: #fff;
+      border: 2px solid #e8dcd0;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #5c4033;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    
+    .cat:hover {
+      border-color: #d4a373;
+      background: rgba(212, 163, 115, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 163, 115, 0.15);
+    }
+    
     .cat.active {
-      background: linear-gradient(135deg, #d4a373, #bc8c5f);
-      color: #1a120e;
+      background: linear-gradient(135deg, #c08552, #a67040);
+      color: #fff;
+      border-color: #c08552;
+      box-shadow: 0 4px 16px rgba(192, 133, 82, 0.35);
     }
     
     /* Loading state */
     .menu-grid.loading {
       opacity: 0.5;
       pointer-events: none;
+    }
+    
+    /* Toast Notification Popup */
+    .toast-notification {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: white;
+      border-radius: 20px;
+      padding: 0;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.15);
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 380px;
+      width: 90%;
+      overflow: hidden;
+    }
+    
+    .toast-notification.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    
+    .toast-notification.success .toast-header {
+      background: linear-gradient(135deg, #2e7d32, #388e3c);
+    }
+    
+    .toast-notification.error .toast-header {
+      background: linear-gradient(135deg, #c62828, #d32f2f);
+    }
+    
+    .toast-notification.warning .toast-header {
+      background: linear-gradient(135deg, #f57c00, #ff9800);
+    }
+    
+    .toast-header {
+      padding: 24px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .toast-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: iconPop 0.5s ease 0.2s both;
+    }
+    
+    @keyframes iconPop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    .toast-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: white;
+      stroke-width: 2.5;
+      fill: none;
+    }
+    
+    .toast-title {
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+    }
+    
+    .toast-body {
+      padding: 20px 24px 24px;
+      text-align: center;
+    }
+    
+    .toast-message {
+      color: #5c4033;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .toast-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 32px;
+      background: linear-gradient(135deg, #d4a373, #bc8c5f);
+      color: #1a120e;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .toast-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 163, 115, 0.4);
+    }
+    
+    .toast-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .toast-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .card .image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .card .image-container img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    
+    .card:hover .image-container img {
+      transform: scale(1.05);
     }
     
     /* Stock info */
@@ -672,7 +852,10 @@
       try {
         const filters = category !== 'All' ? { category } : {};
         const data = await window.HaruSora.Products.getAll(filters);
-        allProducts = data.products || [];
+        let products = data.products || [];
+        // Filter out Specials category
+        products = products.filter(p => p.category !== 'Specials');
+        allProducts = products;
         renderProducts(allProducts);
       } catch (error) {
         console.error('Error loading products:', error);
@@ -688,11 +871,14 @@
         const container = document.getElementById('categoryFilters');
         container.innerHTML = '<span class="cat active" data-category="All">All</span>';
         
-        categories.forEach(cat => {
+        // Filter out Specials category
+        const filteredCategories = categories.filter(cat => cat.name !== 'Specials');
+        
+        filteredCategories.forEach(cat => {
           const btn = document.createElement('span');
           btn.className = 'cat';
           btn.dataset.category = cat.name;
-          btn.textContent = `${cat.name} (${cat.count})`;
+          btn.textContent = cat.name; // Just the name, no count
           container.appendChild(btn);
         });
         
@@ -712,19 +898,37 @@
     function renderProducts(products) {
       const grid = document.getElementById('menuGrid');
       
-      if (!products.length) {
+      // Filter out Specials category products
+      const filteredProducts = products.filter(p => p.category !== 'Specials');
+      
+      if (!filteredProducts.length) {
         grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No items found.</div>';
         return;
       }
       
-      grid.innerHTML = products.map(product => `
-        <article class="card" data-product-id="${product._id}">
-          <button class="wishlist-btn" data-wishlist="${product._id}" title="Add to wishlist">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-          </button>
-          <img src="${product.image}" alt="${product.name}" loading="lazy">
+      // Image fallback mapping for broken images
+      const fallbackImages = {
+        'Sushi': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
+        'Rolls': 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&w=800&q=80',
+        'Coffee': 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80',
+        'Desserts': 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80',
+        'Drinks': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=800&q=80'
+      };
+      
+      grid.innerHTML = filteredProducts.map(product => {
+        const isAvailable = product.isAvailable && product.stock > 0;
+        const fallbackImg = fallbackImages[product.category] || fallbackImages['Sushi'];
+        
+        return `
+        <article class="card" data-product-id="${product._id}" data-available="${isAvailable}">
+          <div class="image-container">
+            <button class="wishlist-btn" data-wishlist="${product._id}" title="Add to wishlist">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+            <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='${fallbackImg}'">
+          </div>
           <h3>${product.name} ${product.isFeatured ? '<span class="tag">Chef\'s Pick</span>' : ''}</h3>
           <p>${product.description}</p>
           <div class="product-tags">
@@ -739,21 +943,30 @@
           ` : ''}
           <div class="price">৳ ${product.price}</div>
           ${product.stock < 10 && product.stock > 0 ? `<div class="stock-info low">Only ${product.stock} left!</div>` : ''}
-          ${product.isAvailable && product.stock > 0 ? `
-            <button class="add-to-cart" data-product="${product._id}">🛒 Add to Cart</button>
-          ` : `
-            <button class="add-to-cart" disabled>Out of Stock</button>
-          `}
+          <button class="add-to-cart" data-product="${product._id}" data-name="${product.name}" data-available="${isAvailable}">🛒 Add to Cart</button>
         </article>
-      `).join('');
+      `}).join('');
       
-      grid.querySelectorAll('.add-to-cart:not([disabled])').forEach(btn => {
-        btn.addEventListener('click', async () => {
+      grid.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const isAvailable = btn.dataset.available === 'true';
+          const productName = btn.dataset.name;
+          
+          console.log('Click detected:', productName, 'Available:', isAvailable);
+          
+          if (!isAvailable) {
+            console.log('Showing unavailable popup for:', productName);
+            showUnavailablePopup(productName);
+            return;
+          }
+          
           btn.disabled = true;
           btn.textContent = 'Adding...';
           await window.HaruSora.Cart.add(btn.dataset.product);
           btn.disabled = false;
           btn.textContent = '🛒 Add to Cart';
+          showSuccessPopup(productName);
         });
       });
       
@@ -849,6 +1062,104 @@
       localStorage.removeItem('currentUser');
       window.location.href = '../login.html';
     });
+    
+    // Professional Popup Functions
+    function showUnavailablePopup(productName) {
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'toast-overlay';
+      overlay.id = 'toastOverlay';
+      
+      // Create popup
+      const popup = document.createElement('div');
+      popup.className = 'toast-notification error';
+      popup.id = 'toastPopup';
+      popup.innerHTML = `
+        <div class="toast-header">
+          <div class="toast-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div class="toast-title">Not Available</div>
+        </div>
+        <div class="toast-body">
+          <p class="toast-message">Sorry, <strong>${productName}</strong> is currently unavailable. Please check back later or try another delicious item from our menu!</p>
+          <button class="toast-btn" onclick="closePopup()">Got It</button>
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+      document.body.appendChild(popup);
+      
+      // Trigger animation
+      setTimeout(() => {
+        overlay.classList.add('show');
+        popup.classList.add('show');
+      }, 10);
+      
+      // Close on overlay click
+      overlay.addEventListener('click', closePopup);
+    }
+    
+    function showSuccessPopup(productName) {
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'toast-overlay';
+      overlay.id = 'toastOverlay';
+      
+      // Create popup
+      const popup = document.createElement('div');
+      popup.className = 'toast-notification success';
+      popup.id = 'toastPopup';
+      popup.innerHTML = `
+        <div class="toast-header">
+          <div class="toast-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="toast-title">Added to Cart!</div>
+        </div>
+        <div class="toast-body">
+          <p class="toast-message"><strong>${productName}</strong> has been added to your cart successfully.</p>
+          <button class="toast-btn" onclick="closePopup()">Continue Shopping</button>
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+      document.body.appendChild(popup);
+      
+      // Trigger animation
+      setTimeout(() => {
+        overlay.classList.add('show');
+        popup.classList.add('show');
+      }, 10);
+      
+      // Auto close after 3 seconds
+      setTimeout(closePopup, 3000);
+      
+      // Close on overlay click
+      overlay.addEventListener('click', closePopup);
+    }
+    
+    function closePopup() {
+      const overlay = document.getElementById('toastOverlay');
+      const popup = document.getElementById('toastPopup');
+      
+      if (overlay && popup) {
+        overlay.classList.remove('show');
+        popup.classList.remove('show');
+        
+        setTimeout(() => {
+          overlay.remove();
+          popup.remove();
+        }, 300);
+      }
+    }
   </script>
 </body>
 </html>
