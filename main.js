@@ -197,8 +197,24 @@ function setupAuthLogic() {
                     }, 800);
                     return;
                 }
-                // No user found - show error about backend
-                showMsg('login-msg', '⚠️ Cannot connect to server. Please ensure the backend is running at http://localhost:4000 and access the site via http://localhost:4000/login', 'error');
+                // No user found - try demo login or show helpful message
+                if (email === 'demo@harusora.cafe' && password === 'demo123') {
+                    // Demo account for testing without backend
+                    const demoUser = { 
+                        _id: 'demo-user', 
+                        name: 'Demo User', 
+                        email: 'demo@harusora.cafe',
+                        role: 'customer'
+                    };
+                    localStorage.setItem('currentUser', JSON.stringify(demoUser));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    showMsg('login-msg', '🎉 Welcome to Demo Mode!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'Home page/home.html';
+                    }, 800);
+                    return;
+                }
+                showMsg('login-msg', '⚠️ Server is offline. Use demo@harusora.cafe / demo123 to explore!', 'error');
                 return;
             }
 

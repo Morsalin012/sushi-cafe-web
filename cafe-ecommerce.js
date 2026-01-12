@@ -454,30 +454,89 @@ const Wishlist = {
 // Products System
 // ============================================
 
+// Fallback static products data when backend is unavailable
+const FALLBACK_PRODUCTS = [
+  { _id: 'f1', name: 'Salmon Nigiri', description: 'Fresh Atlantic salmon over seasoned rice', price: 280, category: 'Sushi', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 50, rating: 4.8 },
+  { _id: 'f2', name: 'Tuna Sashimi', description: 'Premium bluefin tuna slices', price: 450, category: 'Sushi', image: 'https://images.unsplash.com/photo-1534482421-64566f976cfa?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 30, rating: 4.9 },
+  { _id: 'f3', name: 'Dragon Roll', description: 'Eel, cucumber topped with avocado', price: 380, category: 'Rolls', image: 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 40, rating: 4.7 },
+  { _id: 'f4', name: 'Rainbow Roll', description: 'California roll topped with assorted fish', price: 420, category: 'Rolls', image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 35, rating: 4.6 },
+  { _id: 'f5', name: 'Spicy Tuna Roll', description: 'Spicy tuna with cucumber and sriracha mayo', price: 320, category: 'Rolls', image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 45, rating: 4.5 },
+  { _id: 'f6', name: 'Matcha Latte', description: 'Premium Japanese matcha with steamed milk', price: 180, category: 'Coffee', image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 100, rating: 4.8 },
+  { _id: 'f7', name: 'Iced Americano', description: 'Double shot espresso over ice', price: 150, category: 'Coffee', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 100, rating: 4.4 },
+  { _id: 'f8', name: 'Mochi Ice Cream', description: 'Assorted flavors of Japanese rice cake dessert', price: 220, category: 'Desserts', image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 60, rating: 4.7 },
+  { _id: 'f9', name: 'Green Tea Cheesecake', description: 'Creamy matcha cheesecake with graham crust', price: 280, category: 'Desserts', image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 25, rating: 4.9 },
+  { _id: 'f10', name: 'Yuzu Soda', description: 'Refreshing Japanese citrus sparkling drink', price: 120, category: 'Drinks', image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 80, rating: 4.3 },
+  { _id: 'f11', name: 'Edamame', description: 'Steamed soybeans with sea salt', price: 150, category: 'Appetizers', image: 'https://images.unsplash.com/photo-1564894809611-1742fc40ed80?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 70, rating: 4.2 },
+  { _id: 'f12', name: 'Miso Soup', description: 'Traditional Japanese soup with tofu and seaweed', price: 120, category: 'Appetizers', image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', isAvailable: true, stock: 90, rating: 4.5 }
+];
+
+const FALLBACK_CATEGORIES = [
+  { name: 'Sushi', count: 2 },
+  { name: 'Rolls', count: 3 },
+  { name: 'Coffee', count: 2 },
+  { name: 'Desserts', count: 2 },
+  { name: 'Drinks', count: 1 },
+  { name: 'Appetizers', count: 2 }
+];
+
 const Products = {
   // Get all products
   async getAll(filters = {}) {
     const params = new URLSearchParams(filters).toString();
     const result = await api('GET', `/products${params ? '?' + params : ''}`);
-    return result.ok ? result.data : { products: [] };
+    
+    // If API fails, use fallback data
+    if (!result.ok || !result.data?.products?.length) {
+      console.log('📦 Using fallback product data (backend unavailable)');
+      let products = [...FALLBACK_PRODUCTS];
+      
+      // Apply category filter if specified
+      if (filters.category && filters.category !== 'All') {
+        products = products.filter(p => p.category === filters.category);
+      }
+      
+      return { products, total: products.length, usingFallback: true };
+    }
+    
+    return result.data;
   },
 
   // Get single product
   async getById(id) {
     const result = await api('GET', `/products/${id}`);
+    
+    // Fallback: find in static data
+    if (!result.ok) {
+      const product = FALLBACK_PRODUCTS.find(p => p._id === id);
+      return product || null;
+    }
+    
     return result.ok ? result.data : null;
   },
 
   // Get categories
   async getCategories() {
     const result = await api('GET', '/products/categories');
-    return result.ok ? result.data : [];
+    
+    // If API fails, use fallback categories
+    if (!result.ok || !result.data?.length) {
+      console.log('📂 Using fallback category data');
+      return FALLBACK_CATEGORIES;
+    }
+    
+    return result.data;
   },
 
   // Get featured products
   async getFeatured() {
     const result = await api('GET', '/products/featured');
-    return result.ok ? result.data : [];
+    
+    // Fallback: return top rated products
+    if (!result.ok || !result.data?.length) {
+      return FALLBACK_PRODUCTS.filter(p => p.rating >= 4.7).slice(0, 4);
+    }
+    
+    return result.data;
   }
 };
 
