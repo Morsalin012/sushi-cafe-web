@@ -137,7 +137,10 @@ window.switchView = function(viewId) {
 // For GitHub Pages without a backend, set to empty string ''
 // For local development with backend, use 'http://localhost:4000/api'
 // For deployed backend, use something like 'https://your-app.onrender.com/api'
-const API_BASE = 'http://localhost:4000/api'; // Connect to local backend
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocalhost 
+    ? 'http://localhost:4000/api' 
+    : 'https://sushi-cafe-api.onrender.com/api';
 
 async function apiPost(path, body) {
     // If no backend configured, return null to trigger localStorage fallback
